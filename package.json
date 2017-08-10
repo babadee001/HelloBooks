@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --exec babel-node ./bin/www.js",
     "lint": "./node_modules/.bin/eslint .",
-    "test": "mocha"
+    "test": " --exec babel-node mocha"
   },
   "keywords": [
     "library"
