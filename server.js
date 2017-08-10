@@ -1,4 +1,5 @@
-import http from 'http';
+//import http from 'http';
+import dotenv from 'dotenv';
 import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
@@ -6,6 +7,7 @@ import validator from 'express-validator';
 import UserRouter from './server/routes/users';
 import BookRouter from './server/routes/books';
 
+dotenv.load();
 const app = express();
 
 app.use(logger('dev'));
@@ -19,10 +21,10 @@ app.get('/api', (req, res) => {
   res.send('Welcome to Hello-Books API');
 });
 
-const port = +process.env.PORT || 3000;
-app.set('port', port);
+const port = process.env.PORT || 3000;
+// app.set('port', port);
 
-http.createServer(app).listen(port, () => {
+app.listen(port, () => {
   console.log(`The server is listening on port ${port}`);
 });
 export default app;
