@@ -75,7 +75,7 @@ module.exports = {
    * @param  {object} resonse
    * Route: GET: /
    */
-  // Modify a book information (Only admin)
+  // Modify a book information 
   edit(req, res) {
     return Books
       .findOne({
