@@ -4,7 +4,7 @@
   "description": "Simple application that helps manage a library and its processes",
   "main": "../server/server",
   "scripts": {
-    "start:dev": "nodemon --exec babel-node ./bin/www.js",
+    "start:dev": "nodemon --exec babel-node server.js",
     "start": "babel-node server.js",
     "lint": "./node_modules/.bin/eslint .",
     "test": "mocha --compilers js:babel-core/register"
