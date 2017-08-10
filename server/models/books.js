@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        Books.hasMany(models.RentedBook, {
+        Books.hasMany(models.Borrowed, {
           foreignKey: 'bookId',
         });
       },
