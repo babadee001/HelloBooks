@@ -37,9 +37,9 @@ export default {
           errorMessage: 'Enter a valid email',
         },
         membership: {
-          isAlphanumeric: true,
+          isAlpha: false,
           notEmpty: true,
-          errorMessage: 'Membership is required and can not be empty',
+          errorMessage: 'Membership is required, can not be empty and must be alphabet',
         },
       },
     );
