@@ -3,8 +3,8 @@ import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import validator from 'express-validator';
-import UserRouter from '../server/routes/users';
-import BookRouter from '../server/routes/books';
+import UserRouter from './server/routes/users';
+import BookRouter from './server/routes/books';
 
 const app = express();
 
