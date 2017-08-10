@@ -2,7 +2,7 @@
   "name": "hello-books",
   "version": "1.0.0",
   "description": "Simple application that helps manage a library and its processes",
-  "main": "../server/server",
+  "main": "server.js",
   "scripts": {
     "start:dev": "nodemon --exec babel-node server.js",
     "start": "babel-node server.js",
