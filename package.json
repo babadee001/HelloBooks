@@ -5,7 +5,7 @@
   "main": "../server/server",
   "scripts": {
     "start:dev": "nodemon --exec babel-node server.js",
-    "start": "babel-node server.js",
+    "start": "--exec babel-node server.js",
     "lint": "./node_modules/.bin/eslint .",
     "test": "mocha --compilers js:babel-core/register"
   },
@@ -37,7 +37,8 @@
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.4.2",
     "sql": "^0.77.0",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "webpack": "^3.5.3"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^15.1.0",
