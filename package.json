@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --exec babel-node ./bin/www.js",
     "lint": "./node_modules/.bin/eslint .",
-    "test": " --exec babel-node mocha"
+    "test": "mocha --compilers js:babel-core/register"
   },
   "keywords": [
     "library"
@@ -21,6 +21,8 @@
     "babel-preset-stage-0": "^6.24.1",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
+    "chai": "^4.1.1",
+    "chai-http": "^3.0.0",
     "dotenv": "^4.0.0",
     "eslint": "^4.3.0",
     "express": "^4.15.3",
