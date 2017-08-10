@@ -1,4 +1,4 @@
-import http from 'http';
+//import http from 'http';
 import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
@@ -19,10 +19,10 @@ app.get('/api', (req, res) => {
   res.send('Welcome to Hello-Books API');
 });
 
-const port = +process.env.PORT || 3000;
-app.set('port', port);
+const port = process.env.PORT || 3000;
+// app.set('port', port);
 
-http.createServer(app).listen(port, () => {
+app.listen(port, () => {
   console.log(`The server is listening on port ${port}`);
 });
 export default app;
