@@ -9,7 +9,7 @@
     "start": "nodemon --exec babel-node server.js",
     "lint": "./node_modules/.bin/eslint .",
     "test": "mocha --compilers js:babel-core/register",
-    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
   "keywords": [
     "library"
