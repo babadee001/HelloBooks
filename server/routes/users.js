@@ -8,16 +8,16 @@ dotenv.load();
 const adminRoute = process.env.route;
 const app = express.Router();
 
-app.route('/signup')
+app.route('/api/v1/users/signup')
   .post(Check.validateInput, UsersController.create);
-app.route('/signin')
+app.route('/api/v1/users/signin')
   .post(Check.validateLogin, UsersController.signin);
 app.route(adminRoute)
   .post(Check.validateInput, UsersController.admin);
-app.route('/:userId/books/:bookId')
+app.route('/api/v1/users/:userId/books/:bookId')
   .post(Check.isLoggedIn, BooksController.borrow);
-app.route('/:userId/books/:bookId')
+app.route('/api/v1/users/:userId/books/:bookId')
   .put(Check.isLoggedIn, BooksController.returnBook);
-app.route('/:userId/books')
+app.route('/api/v1/users/:userId/books')
   .get(Check.isLoggedIn, BooksController.showBorrowed);
 export default app;
