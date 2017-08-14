@@ -112,6 +112,10 @@ export default {
         quantity: {
           notEmpty: true,
           isNumeric: false,
+          isInt: {
+            options: [{ min: 1 }],
+            errorMessage: "quantity can't be zero",
+          },
           errorMessage: 'Enter a valid quantity',
         },
         author: {
