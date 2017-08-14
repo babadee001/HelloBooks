@@ -38,7 +38,7 @@
     "pg": "^7.0.2",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.4.2",
-    "supertest": "^3.0.0",
+    "supertest": "^3.0.0"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^15.1.0",
@@ -49,10 +49,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/babadee001/babadee001.github.io.git"
+    "url": "git+https://github.com/babadee001/hellobooks.git"
   },
   "bugs": {
-    "url": "https://github.com/babadee001/babadee001.github.io/issues"
+    "url": "https://github.com/babadee001/hellobooks/issues"
   },
-  "homepage": "https://github.com/babadee001/babadee001.github.io#readme"
+  "homepage": "https://github.com/babadee001/hellobooks#readme"
 }
