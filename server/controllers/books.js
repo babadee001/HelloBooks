@@ -52,16 +52,12 @@ module.exports = {
         attributes: ['id'],
       })
       .then((book) => {
-        if (!book) {
-          return res.status(404).send({
-            message: 'Book Not Found',
-          });
-        }
         return Borrowed
           .create({
             bookId: req.params.bookId,
             userId: req.params.userId,
             expires: due,
+            returned: false,
           })
           .then(() => res.status(201).send({
             message: 'You have successfully borrowed the book',
