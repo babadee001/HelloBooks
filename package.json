@@ -11,6 +11,9 @@
     "test": "mocha --compilers js:babel-core/register",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
+  "engines": {
+    "node": "6.10.1"
+  },
   "keywords": [
     "library"
   ],
