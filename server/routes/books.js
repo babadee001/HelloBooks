@@ -1,8 +1,10 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import BooksController from '../controllers/books';
 import Check from '../helpers/validation';
 
 const app = express.Router();
+dotenv.load();
 // Routes for books api
 app.route('/books') // Get all books
   .get(Check.isLoggedIn, BooksController.list);
