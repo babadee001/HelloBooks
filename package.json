@@ -9,7 +9,8 @@
     "start": "nodemon --exec babel-node server.js",
     "lint": "./node_modules/.bin/eslint .",
     "test": "mocha --compilers js:babel-core/register",
-    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+    "coverage": "./node_modules/.bin/nyc --reporter=lcov mocha --reporter spec --timeout 40000 --compilers js:babel-core/register test"
   },
   "engines": {
     "node": "6.10.1"
@@ -49,6 +50,7 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.1.0",
+    "istanbul": "^0.4.5",
     "mocha-lcov-reporter": "^1.3.0",
     "sequelize-cli": "^2.7.0"
   },
