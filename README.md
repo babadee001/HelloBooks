@@ -1,3 +1,5 @@
+https://travis-ci.org/babadee001/HelloBooks.svg?branch=add-jwt-feature
+
 # Hello-Books
 Hello-Books is a simple RESTFUL application that helps manage a book library and its processes like updating, borrowing and adding books. The application has an admin who updates book information, add new books etc. 
 Registered users can view available books, borrow books, view borrowed history and return books.
