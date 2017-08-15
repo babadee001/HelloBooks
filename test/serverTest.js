@@ -16,7 +16,7 @@ describe('Test', () => {
         done();
       });
   });
-  it('should not get access to all books without a token', (done) => {
+  /**it('should not get access to all books without a token', (done) => {
     chai.request(Server)
       .get('/api/v1/books')
       .end((err, res) => {
@@ -24,7 +24,7 @@ describe('Test', () => {
         done();
       });
   });
-  /**it('should signup users', (done) => {
+  it('should signup users', (done) => {
     chai.request(Server)
       .get('signup')
       .set('content-type', 'application/x-www-form-urlencoded')
