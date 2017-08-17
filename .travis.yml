@@ -8,7 +8,7 @@ services:
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
 script: 
-  - "npm run-script test-travis"
+  - "npm run-script coverage"
 # Send coverage data to Coveralls
 after_script: 
   -"cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
