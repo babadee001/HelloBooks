@@ -4,7 +4,7 @@
   "description": "Simple application that helps manage a library and its processes",
   "main": "server.js",
   "scripts": {
-    "coveralls": "npm run cover --report lcovonly && cat ./coverage/lcov.info | coveralls",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "coverage": "./node_modules/.bin/nyc --reporter=lcov mocha --reporter spec --timeout 40000 --compilers js:babel-core/register test",
     "start": "nodemon --exec babel-node server.js",
     "lint": "./node_modules/.bin/eslint .",
