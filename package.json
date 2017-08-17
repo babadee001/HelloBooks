@@ -7,7 +7,7 @@
     "coverage": "./node_modules/.bin/nyc --reporter=lcov mocha --reporter spec --timeout 40000 --compilers js:babel-core/register test",
     "start": "nodemon --exec babel-node server.js",
     "lint": "./node_modules/.bin/eslint .",
-    "test": "./node_modules/mocha/bin/mocha ./test/*",
+    "test": "./node_modules/.bin/mocha --timeout 40000 --compilers js:babel-core/register",
     "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha -- -R spec",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
