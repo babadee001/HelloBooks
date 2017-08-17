@@ -6,9 +6,9 @@ import Check from '../helpers/validation';
 const app = express.Router();
 dotenv.load();
 // Routes for books api
-app.route('/books') // Get all books
+app.route('/') // Get all books
   .get(Check.isLoggedIn, BooksController.list);
-app.route('/books')
+app.route('/')
   .post(Check.validateBook, Check.isAdmin,
     BooksController.create);
 app.route('/books/:bookId')
