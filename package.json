@@ -9,7 +9,7 @@
     "start": "nodemon --exec babel-node server.js",
     "lint": "./node_modules/.bin/eslint .",
     "test": "./node_modules/.bin/mocha --timeout 40000 --compilers js:babel-core/register",
-    "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha -- -R spec"
+    "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha  -- -R spec --timeout 40000"
   },
   "engines": {
     "node": "6.10.1"
