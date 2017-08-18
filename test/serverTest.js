@@ -1,10 +1,14 @@
 import chai from 'chai';
+import dotenv from 'dotenv';
 import chaiHttp from 'chai-http';
 import Server from '../server';
 import models from '../server/models';
 
+dotenv.load();
 process.env.NODE_ENV = 'test';
 const should = chai.should();
+const adminToken = process.env.adminToken;
+const userToken = process.env.userToken;
 
 chai.use(chaiHttp);
 before((done) => {
@@ -34,7 +38,7 @@ describe('Test', () => {
         done();
       });
   });
-  it('POST /api/v1/users/signup/ does create new user', (done) => {
+  it('creates new user', (done) => {
     chai.request(Server)
       .post('/api/v1/users/signup/')
       .send({
@@ -46,6 +50,46 @@ describe('Test', () => {
       .end((err, res) => {
         res.body.message.should.equal('Signed up successfully');
         res.should.have.status(201);
+        done();
+      });
+  });
+  it('Does not signup without email', (done) => {
+    chai.request(Server)
+      .post('/api/v1/users/signup/')
+      .send({
+        password: 'testpassword',
+        username: 'testusername2',
+      })
+      .end((err, res) => {
+        res.should.have.status(409);
+        res.body.message.should.equals('Enter a valid email');
+        done();
+      });
+  });
+  it('Does not signup without username', (done) => {
+    chai.request(Server)
+      .post('/api/v1/users/signup/')
+      .send({
+        password: 'testpassword',
+        email: 'test@yag.com',
+      })
+      .end((err, res) => {
+        res.should.have.status(409);
+        res.body.message.should.equals('username is required and should contain no spaces or special characters');
+        done();
+      });
+  });
+  it('should login user with correct details', (done) => {
+    chai.request(Server)
+      .post('/api/v1/users/signin/')
+      .type('form')
+      .send({
+        password: 'testpassworde',
+        username: 'testusernamew',
+      })
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.Token.should.not.equals(null);
         done();
       });
   });
@@ -61,6 +105,186 @@ describe('Test', () => {
       .end((err, res) => {
         res.body.message.should.equal('Enter a valid email');
         res.should.have.status(409);
+        done();
+      });
+  });
+  it('should reject signin without correct details', (done) => {
+    chai.request(Server)
+      .post('/api/v1/users/signin/')
+      .send({
+        username: 'testusernamee',
+        password: 'wrongpassword',
+      })
+      .end((err, res) => {
+        res.body.message.should.equal('Invalid username or password');
+        res.should.have.status(401);
+        done();
+      });
+  });
+  it('Admin should be able to add books', (done) => {
+    chai.request(Server)
+      .post('/api/v1/books/')
+      .set('x-access-token', adminToken)
+      // .type('form')
+      .send({
+        title: 'HarryPorter',
+        author: 'babadee',
+        description: 'A film about magic',
+        category: 'Magic and fantasy',
+        quantity: '5',
+      })
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.message.should.equal('Book added successfully');
+        done();
+      });
+  });
+  it('Logged in users should not be able to add books', (done) => {
+    chai.request(Server)
+      .post('/api/v1/books/')
+      .set('x-access-token', userToken)
+      // .type('form')
+      .send({
+        title: 'HarryPorter',
+        author: 'babadee',
+        description: 'A film about magic',
+        category: 'Magic and fantasy',
+        quantity: '5',
+      })
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.message.should.equal('Operation failed. Admin privileges needed.');
+        done();
+      });
+  });
+  it('Users not logged in should not be able to add books', (done) => {
+    chai.request(Server)
+      .post('/api/v1/books/')
+      // .set('x-access-token', userToken)
+      .send({
+        title: 'HarryPorter',
+        author: 'babadee',
+        description: 'A film about magic',
+        category: 'Magic and fantasy',
+        quantity: '5',
+      })
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.message.should.equal('Access denied, you have to be logged in to perform this operation');
+        done();
+      });
+  });
+  it('Get all books in the library', (done) => {
+    chai.request(Server)
+      .get('/api/v1/books/')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.status.should.equals(200);
+        res.body.should.be.a('array');
+        res.body.length.should.equals(1);
+        done();
+      });
+  });
+  it('Users not logged in cant get all books in the library', (done) => {
+    chai.request(Server)
+      .get('/api/v1/books/')
+      .end((err, res) => {
+        res.status.should.equals(401);
+        res.body.message.should.equal('Access denied, you have to be logged in to perform this operation');
+        done();
+      });
+  });
+  it('Cant get all books in the library with invalid token', (done) => {
+    chai.request(Server)
+      .get('/api/v1/books/')
+      .set('x-access-token', 'faketoken')
+      .end((err, res) => {
+        res.status.should.equals(401);
+        res.body.message.should.equal('Failed to Authenticate Token');
+        done();
+      });
+  });
+  it('Allows logged in users to borrow books', (done) => {
+    chai.request(Server)
+      .post('/api/v1/users/1/books/1')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.message.should.equal('You have successfully borrowed the book');
+        done();
+      });
+  });
+  it('Users not logged in cant borrow a book', (done) => {
+    chai.request(Server)
+      .post('/api/v1/users/1/books/1')
+      // .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.message.should.equal('Access denied, you have to be logged in to perform this operation');
+        done();
+      });
+  });
+  it('Users cant borrow a book with invalid token', (done) => {
+    chai.request(Server)
+      .post('/api/v1/users/1/books/1')
+      .set('x-access-token', 'wrongtoken')
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.message.should.equal('Failed to Authenticate Token');
+        done();
+      });
+  });
+  it('Users can return borrowed books', (done) => {
+    chai.request(Server)
+      .put('/api/v1/users/1/books/1')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.message.should.equal('Book returned!');
+        done();
+      });
+  });
+  it('Users can get all books borrowed and not returned', (done) => {
+    chai.request(Server)
+      .get('/api/v1/users/1/books')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.status.should.equals(201);
+        res.body.message.should.equal('All books returned');
+        done();
+      });
+  });
+  it('Admin should be able to modify books', (done) => {
+    chai.request(Server)
+      .put('/api/v1/books/1')
+      .set('x-access-token', adminToken)
+      .send({
+        title: 'HarryPorterrrr',
+        author: 'babadeewwww',
+        description: 'A film about magic',
+        category: 'Magic and fantasy',
+        quantity: '25',
+      })
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.message.should.equal('Book updated successfully');
+        done();
+      });
+  });
+  it('Non Admin should not be able to modify books', (done) => {
+    chai.request(Server)
+      .put('/api/v1/books/1')
+      .set('x-access-token', userToken)
+      .send({
+        title: 'HarryPorterrrr',
+        author: 'babadeewwww',
+        description: 'A film about magic',
+        category: 'Magic and fantasy',
+        quantity: '25',
+      })
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.message.should.equal('Operation failed. Admin privileges needed.');
         done();
       });
   });
