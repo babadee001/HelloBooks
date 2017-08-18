@@ -11,7 +11,7 @@ app.route('/') // Get all books
 app.route('/')
   .post(Check.validateBook, Check.isAdmin,
     BooksController.create);
-app.route('/books/:bookId')
+app.route('/:bookId')
   .put(Check.isAdmin, Check.validateBook,
     BooksController.edit);// modify book
 export default app;
