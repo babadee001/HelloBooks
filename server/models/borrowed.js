@@ -9,14 +9,14 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        Borrowed.BelongsTo(models.Books, {
+        /**Borrowed.BelongsTo(models.Books, {
           foreignKey: 'bookId',
           onDelete: 'CASCADE',
         });
         Borrowed.BelongsTo(models.Users, {
           foreignKey: 'userId',
           onDelete: 'CASCADE',
-        });
+        });**/
       },
     },
   });
