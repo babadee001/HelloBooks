@@ -101,7 +101,7 @@ export default {
       {
         title: {
           notEmpty: true,
-          isAlphanumeric: true,
+          // isAlphanumeric: true,
           errorMessage: 'Enter a valid title',
         },
         description: {
