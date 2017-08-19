@@ -14,4 +14,6 @@ app.route('/')
 app.route('/:bookId')
   .put(Check.isAdmin, Check.validateBook,
     BooksController.edit);// modify book
+app.route('/:bookId')
+  .delete(Check.isAdmin, BooksController.erase);
 export default app;
