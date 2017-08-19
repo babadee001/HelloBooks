@@ -214,6 +214,26 @@ describe('Test', () => {
         done();
       });
   });
+  it('Doesnt allows logged in users to borrow books they already borrowed without returning', (done) => {
+    chai.request(Server)
+      .post('/api/v1/users/1/books/1')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.message.should.equal('You cant borrow this book again till you return');
+        done();
+      });
+  });
+  it('Logged in users cant borrow books not in the library', (done) => {
+    chai.request(Server)
+      .post('/api/v1/users/1/books/100')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.message.should.equal('Wrong book id. Not in database.');
+        done();
+      });
+  });
   it('Users not logged in cant borrow a book', (done) => {
     chai.request(Server)
       .post('/api/v1/users/1/books/1')
@@ -285,6 +305,66 @@ describe('Test', () => {
       .end((err, res) => {
         res.should.have.status(401);
         res.body.message.should.equal('Operation failed. Admin privileges needed.');
+        done();
+      });
+  });
+  it('Admin should be able to GET all users', (done) => {
+    chai.request(Server)
+      .get('/api/v1/users/')
+      .set('x-access-token', adminToken)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('array');
+        done();
+      });
+  });
+  it('Non Admin should not be able to GET all users', (done) => {
+    chai.request(Server)
+      .get('/api/v1/users/')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.message.should.equals('Operation failed. Admin privileges needed.');
+        done();
+      });
+  });
+  it('Admin should be able to delete book', (done) => {
+    chai.request(Server)
+      .delete('/api/v1/books/1')
+      .set('x-access-token', adminToken)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.message.should.equals('book deleted');
+        done();
+      });
+  });
+  it('Non Admin should not be able to delete book', (done) => {
+    chai.request(Server)
+      .delete('/api/v1/books/1')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.message.should.equals('Operation failed. Admin privileges needed.');
+        done();
+      });
+  });
+  it('Users can view their borrowing history, returned or not', (done) => {
+    chai.request(Server)
+      .get('/api/v1/users/1')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('array');
+        done();
+      });
+  });
+  it('Users with no borrowing history should be notified', (done) => {
+    chai.request(Server)
+      .get('/api/v1/users/100')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.message.should.equals('You have never borrowed a book');
         done();
       });
   });

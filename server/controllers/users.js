@@ -118,7 +118,7 @@ export default {
       .then((books) => {
         if (books.length < 1) {
           res.status(200).send({
-            message: 'You have never rent a book',
+            message: 'You have never borrowed a book',
           });
         } else {
           res.status(200).send(books);
