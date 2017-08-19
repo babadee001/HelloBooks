@@ -83,7 +83,7 @@ module.exports = {
                     returnDate: due,
                   })
                   .then(() => res.status(201).send({
-                    message: 'Book borrowed succesfully',
+                    message: 'You have successfully borrowed the book',
                   }))
                   .catch(error => res.status(400).send(error));
               })
