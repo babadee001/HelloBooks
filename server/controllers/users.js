@@ -8,6 +8,7 @@ const secret = process.env.secretKey;
 const adminSecret = process.env.adminSecret;
 
 const { Users } = db;
+const { Borrowed } = db;
 
 export default {
   /** new user
@@ -44,6 +45,12 @@ export default {
       .catch(() => res.status(400).send({
         message: 'Username or email already exists',
       }));
+  },
+  list(req, res) {
+    return Users
+      .all()
+      .then(users => res.status(200).send(users))
+      .catch(error => res.status(400).send(error));
   },
   // Create an admin 
   admin(req, res) {
@@ -100,5 +107,23 @@ export default {
             Token: token,
           });
       });
+  },
+  userHistory(req, res) {
+    return Borrowed
+      .findAll({
+        where: {
+          userId: req.params.userId,
+        },
+      })
+      .then((books) => {
+        if (books.length < 1) {
+          res.status(200).send({
+            message: 'You have never rent a book',
+          });
+        } else {
+          res.status(200).send(books);
+        }
+      })
+      .catch(error => res.status(404).send(error));
   },
 };

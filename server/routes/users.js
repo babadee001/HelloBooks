@@ -8,6 +8,10 @@ dotenv.load();
 const adminRoute = process.env.route;
 const app = express.Router();
 
+app.route('/') // Get all users
+  .get(Check.isAdmin, UsersController.list);
+app.route('/:userId') // Get all users
+  .get(Check.isLoggedIn, UsersController.userHistory);
 app.route('/signup')
   .post(Check.validateInput, UsersController.create);
 app.route('/signin')
