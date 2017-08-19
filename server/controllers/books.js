@@ -48,21 +48,47 @@ module.exports = {
     const due = now.setDate(now.getDate() + 15);
     return Borrowed
       .findOne({
-        where: { id: req.params.bookId },
-        attributes: ['id'],
+        where: { bookId: req.params.bookId, userId: req.params.userId, returned: false },
+        attributes: ['bookId', 'userId', 'returned'],
       })
-      .then((book) => {
-        return Borrowed
-          .create({
-            bookId: req.params.bookId,
-            userId: req.params.userId,
-            expires: due,
-            returned: false,
-          })
-          .then(() => res.status(201).send({
-            message: 'You have successfully borrowed the book',
-          }))
-          .catch(error => res.status(400).send(error));
+      .then((bk) => {
+        if (bk) {
+          return res.status(401).send({
+            message: 'You cant borrow this book again till you return',
+          });
+        }
+        return Books
+          .findOne({ where: { id: req.params.bookId } })
+          .then((books) => {
+            if (!books) {
+              return res.status(404).send({
+                message: 'Wrong book id. Not in database.',
+              });
+            }
+            return Books
+              .update({
+                quantity: books.quantity - 1,
+              }, {
+                where: {
+                  id: req.params.bookId,
+                },
+              })
+              .then(() => {
+                return Borrowed
+                  .create({
+                    bookId: req.params.bookId,
+                    userId: req.params.userId,
+                    expires: due,
+                    returned: false,
+                    returnDate: due,
+                  })
+                  .then(() => res.status(201).send({
+                    message: 'Book borrowed succesfully',
+                  }))
+                  .catch(error => res.status(400).send(error));
+              })
+              .catch(error => res.status(400).send(error));
+          });
       })
       .catch(error => res.status(400).send(error));
   },
@@ -141,6 +167,24 @@ module.exports = {
           message: 'Book returned!',
         },
       ))
+      .catch(error => res.status(400).send(error));
+  },
+  erase(req, res) {
+    return Books
+      .findById(req.params.bookId)
+      .then((book) => {
+        if (!book) {
+          return res.status(400).send({
+            message: 'Book Not Found',
+          });
+        }
+        return book
+          .destroy()
+          .then(() => res.status(200).send({
+            message: 'book deleted',
+          }))
+          .catch(error => res.status(400).send(error));
+      })
       .catch(error => res.status(400).send(error));
   },
 };
