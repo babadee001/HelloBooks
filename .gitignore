@@ -58,6 +58,8 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-
-
+.env
+swagger
+test/api
+node-swagger-api
 # End of https://www.gitignore.io/api/node
