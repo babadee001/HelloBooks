@@ -31,7 +31,7 @@ const userSeeder = {
   },
   noEmail: {
     username: 'moyosore sosan',
-    password: 'bfalfa',
+    password: 'bfalfa ',
   },
 };
 

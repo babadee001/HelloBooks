@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/babadee001/HelloBooks.svg?branch=add-jwt-feature)](https://travis-ci.org/babadee001/HelloBooks)
+[![Build Status](https://travis-ci.org/babadee001/HelloBooks.svg?branch=production-tests)](https://travis-ci.org/babadee001/HelloBooks)
+[![Coverage Status](https://coveralls.io/repos/github/babadee001/HelloBooks/badge.svg?branch=production-tests)](https://coveralls.io/github/babadee001/HelloBooks?branch=production-tests)
 
 # Hello-Books
 Hello-Books is a simple RESTFUL application that helps manage a book library and its processes like updating, borrowing and adding books. The application has an admin who updates book information, add new books etc. 

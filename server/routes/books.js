@@ -1,15 +1,17 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import BooksController from '../controllers/books';
 import Check from '../helpers/validation';
 
 const app = express.Router();
+dotenv.load();
 // Routes for books api
-app.route('/api/v1/books') // Get all books
+app.route('/') // Get all books
   .get(Check.isLoggedIn, BooksController.list);
-app.route('/api/v1/books')
+app.route('/')
   .post(Check.validateBook, Check.isAdmin,
     BooksController.create);
-app.route('/api/v1/books/:bookId')
+app.route('/:bookId')
   .put(Check.isAdmin, Check.validateBook,
     BooksController.edit);// modify book
 export default app;

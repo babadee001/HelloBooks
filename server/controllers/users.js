@@ -38,6 +38,7 @@ export default {
         return res.status(201).send({
           message: 'Signed up successfully',
           Token: token,
+          success: true,
         });
       })
       .catch(() => res.status(400).send({

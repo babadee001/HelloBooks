@@ -20,9 +20,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        Users.hasMany(models.borrowed, {
+        /**Users.hasMany(models.borrowed, {
           foreignKey: 'userId',
-        });
+        });**/
       },
     },
   });

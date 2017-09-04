@@ -101,12 +101,12 @@ export default {
       {
         title: {
           notEmpty: true,
-          isAlphanumeric: false,
+          isAlphanumeric: true,
           errorMessage: 'Enter a valid title',
         },
         description: {
           notEmpty: true,
-          isAlphanumeric: false,
+          // isAlphanumeric: true,
           errorMessage: 'Enter a valid description',
         },
         quantity: {
@@ -114,18 +114,18 @@ export default {
           isNumeric: false,
           isInt: {
             options: [{ min: 1 }],
-            errorMessage: "quantity can't be zero",
+            errorMessage: "quantity can't be less than 1",
           },
           errorMessage: 'Enter a valid quantity',
         },
         author: {
           notEmpty: true,
-          isAlpha: false,
+          // isAlpha: false,
           errorMessage: 'Enter valid author name',
         },
         category: {
           notEmpty: true,
-          isAlphanumeric: false,
+          // isAlphanumeric: false,
           errorMessage: 'Enter valid category name',
         },
       });
