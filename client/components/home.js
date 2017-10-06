@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 //import { Navbar, NavItem} from 'react-materialize';
 // import Check from './components/container.js'
 
-export default class Signup extends Component {
+export default class Home extends Component {
   render() {
     return (
         <h1>Home</h1>
