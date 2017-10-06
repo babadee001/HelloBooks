@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(validator());
 app.use('/api/v1/users', UserRouter);
 app.use('/api/v1/books', BookRouter);
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/index.html'));
 });
 app.get('/api', (req, res) => {
