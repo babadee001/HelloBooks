@@ -1,9 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { Router, browserHistory } from 'react-router';
+import routes from './routes';
+// import App from './components/app';
 
-const intro = <h1>Welcome to Hello-Books</h1>
-
-ReactDOM.render(
-  intro,
-  document.getElementById('container'),
+render (
+    <Router history={browserHistory} routes={routes} />,
+    document.getElementById('container')
 );
