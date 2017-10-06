@@ -1,11 +1,11 @@
-// var webpack = require('webpack');
-import path from 'path';
+var path = require('path');
 
-export default {
+module.exports = {
+  devtool: 'cheap-module-source-map',
   entry: './client/index.js',
   output: {
     path: path.join(__dirname, 'client/dist/'),
-    filename: 'myCode.js',
+    filename: 'output.js',
   },
   module: {
     loaders: [{
