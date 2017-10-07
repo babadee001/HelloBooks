@@ -8,11 +8,16 @@ module.exports = {
     filename: 'output.js',
   },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loader: 'babel-loader',
-      include: path.join(__dirname, 'client/'),
-      exclude: /node_modules/,
-    }],
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: path.join(__dirname, 'client/'),
+        exclude: /node_modules/,
+    },
+    { test: /(\.s?css)$/,
+      loader: ['style-loader', 'css-loader', 'sass-loader']
+    },
+  ],
   },
 };
