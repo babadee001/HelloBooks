@@ -10,14 +10,14 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.js?$/,
         loader: 'babel-loader',
         include: path.join(__dirname, 'client/'),
-        exclude: /node_modules/,
-    },
-    { test: /(\.s?css)$/,
-      loader: ['style-loader', 'css-loader', 'sass-loader']
-    },
-  ],
+        exclude: path.join(__dirname, '/node_modules/asx/js'),
+      },
+      { test: /(\.s?css)$/,
+        loader: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+    ],
   },
 };
