@@ -10,6 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     category: DataTypes.STRING,
     quantity: DataTypes.INTEGER,
+    isbn: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
   }, {
     classMethods: {
       associate: (models) => {
