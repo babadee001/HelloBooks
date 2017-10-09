@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 import { Col, Input, Button , SideNav, SideNavItem} from 'react-materialize';
 
 export default class Signup extends Component {
@@ -21,7 +22,28 @@ export default class Signup extends Component {
 //   }
   render() {
     return (
-        <h1>Profile</h1>
+        <div>
+            <div className="side-bar">
+                <ul className="nav nav-pills nav-stacked">
+                <li role="presentation" className="active">
+                    <Link to="/#"><i className="glyphicon glyphicon-th" />
+                    <span className="nav-item">Borrowing history</span>
+                    </Link>
+                </li>
+                <li role="presentation">
+                    <a href="#"><i className="glyphicon glyphicon-bell not-active" />
+                    <span className="nav-item not-active">Contact Admin</span>
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#"><i className="glyphicon glyphicon-cog not-active" />
+                    <span className="nav-item not-active">Account Settings</span>
+                    </a>
+                </li>
+                </ul>
+            </div>
+            <h1>Contents...</h1>
+        </div>
     );
   }
 }
