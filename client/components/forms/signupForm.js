@@ -23,7 +23,7 @@ export default class SignupForm extends Component {
       () => {
         this.context.router.push('/');
       },
-    )
+    );
     console.log(this.state);
   }
   render() {
@@ -49,8 +49,8 @@ export default class SignupForm extends Component {
             <option value='Bronze'>Bronze</option>
             </select>
         </div>
-        <div className='form-group'>
-          <button className='btn btn-primary btn-lg'>Sign up </button>
+        <div className="form-group text-center">    
+        <button type="button" id="" className="btn btn-block btn-raised darkBtn"> Sign up</button>
         </div>
       </form>
     );

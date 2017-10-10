@@ -13,18 +13,19 @@
     color: white;
     padding: 5px; 
 }
-.side-bar {
-    padding: 40px 20px;
-  }
+
   .nav-item {
     margin: 5px 10px;
   }
 
   form {
-    margin: 10px;
-    width: 60%;
-    //padding: 70px;
-    position: fixed;
+    padding: 10px;
+    position: relative;
     align-content: center;
+    padding: 5%;
+  }
+  form button {
+    margin: 15px;
+    width: 30px;
   }
 
