@@ -9,7 +9,7 @@ class Signup extends Component {
     const { userSignupRequest } = this.props;
     return (
       <div>
-        <SignupForm userSignupRequest={userSignupRequest} />
+        <SignupForm userSignupRequest={ userSignupRequest } />
       </div>
     );
   }
@@ -19,4 +19,4 @@ Signup.propTypes = {
   userSignupRequest: React.PropTypes.func.isRequired,
 };
 
-export default connect((state) => { return {}; }, { userSignupRequest })(Signup);
+export default connect(state => ({}), { userSignupRequest })(Signup);

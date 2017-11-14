@@ -1,22 +1,76 @@
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
-  devtool: 'cheap-module-source-map',
-  entry: './client/index.js',
+  // debug: true,
+  devtool: 'cheap-module-eval-source-map',
+  // noInfo: false,
+  entry: ['webpack-hot-middleware/client?reload=true', path.join(__dirname, '/client/index.jsx')],
   output: {
-    path: path.join(__dirname, 'client/dist/'),
+    path: path.join(__dirname, '/client/public'),
     filename: 'output.js',
+    publicPath: '/',
   },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
+  plugins: [
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.$': 'jquery',
+      'window.jQuery': 'jquery',
+    }),
+  ],
   module: {
     loaders: [
       {
-        test: /\.js?$/,
-        loader: 'babel-loader',
+        test: /\.js(x)$/,
         include: path.join(__dirname, 'client/'),
-        exclude: path.join(__dirname, '/node_modules/asx/js'),
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015', 'react'],
+        },
       },
-      { test: /(\.s?css)$/,
-        loader: ['style-loader', 'css-loader', 'sass-loader'],
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
+      {
+        test: /\.(ttf|woff|woff2|eot|otf)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'fonts/',
+            publicPath: './',
+          },
+        },
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/i,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'images/',
+            publicPath: './',
+          },
+        },
+      },
+      {
+        test: /\.scss$/,
+        use: [{
+          loader: 'style-loader',
+        }, {
+          loader: 'css-loader',
+        }, {
+          loader: 'sass-loader',
+        }],
       },
     ],
   },

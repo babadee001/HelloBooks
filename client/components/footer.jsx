@@ -6,10 +6,10 @@ export default class Foot extends Component {
     return (
       <div>
         <footer className="navbar-fixed-bottom text-center">
-        <em>           
-          <p className="fa fa-book"> Just Books!  . . . </p>         
-        </em>       
-      </footer>    
+          <em>
+            <p className="fa fa-book"> Just Books!  . . . </p>
+          </em>
+        </footer>
       </div>
     );
   }
