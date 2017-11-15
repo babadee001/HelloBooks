@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { userSigninRequest } from '../../actions/signupActions';
+import { userSigninRequest } from '../../actions/authActions';
 
 export default class SigninForm extends Component {
   constructor(props) {

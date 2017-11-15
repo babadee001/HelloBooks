@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import SigninForm from '../forms/signinForm';
-import { userSigninRequest } from '../../actions/signupActions';
+import { userSigninRequest } from '../../actions/authActions';
 
 class Signin extends Component {
   render() {
