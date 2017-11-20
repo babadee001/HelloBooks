@@ -14,6 +14,11 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx']
   },
+  node: {
+    dns: 'empty',
+    net: 'empty',
+    fs: 'empty'
+  },
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
@@ -28,7 +33,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js(x)$/,
+        test: /\.jsx?$/,
         include: path.join(__dirname, 'client/'),
         exclude: /node_modules/,
         loader: 'babel-loader',

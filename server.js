@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import swagger from 'swagger-jsdoc';
 import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
@@ -12,6 +13,26 @@ import webpackConfig from './webpack.config';
 
 dotenv.load();
 const app = express();
+const swaggerDefinition = {
+  info: {
+    title: 'Node Swagger API',
+    version: '1.0.0',
+    description: 'Documentation of Hello Books API',
+  },
+  host: 'localhost:8000',
+  basePath: '/',
+};
+
+// options for the swagger docs
+const options = {
+  // import swaggerDefinitions
+  swaggerDefinition,
+  // path to the API docs
+  apis: ['./routes/*.js'],
+};
+
+// initialize swagger-jsdoc
+const swaggerSpec = swagger(options);
 
 app.use(logger('dev'));
 app.use(webpackMiddleware(webpack(webpackConfig)));
@@ -26,6 +47,10 @@ app.get('*', (req, res) => {
 app.get('/api', (req, res) => {
   res.header(200);
   res.send('Welcome to Hello-Books API');
+});
+app.get('/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
 });
 
 const port = process.env.PORT || 8000;
