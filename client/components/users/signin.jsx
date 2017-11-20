@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Navbar from '../navbar';
 
 import SigninForm from '../forms/signinForm';
 import { userSigninRequest } from '../../actions/authActions';
@@ -9,6 +10,7 @@ class Signin extends Component {
     const { userSigninRequest } = this.props;
     return (
       <div>
+        <Navbar />
         <SigninForm userSigninRequest={ userSigninRequest } />
       </div>
     );

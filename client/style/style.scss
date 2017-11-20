@@ -43,4 +43,43 @@
     padding: 10px;
     border-radius: 10px;
   }
+  .background {
+    background-image: url('http://res.cloudinary.com/babadee30/image/upload/q_100/v1507808251/books6_ih8rqm.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    min-height: 100vh;
+  }
+
+  .bookswrapper {
+    margin: 0 auto;
+    padding: 38px;
+    border-bottom: 1px #ccc solid;
+  }
+  
+  .mg-btm {
+    margin-bottom: 20px;
+  }
+  .book {
+    width: 100px;
+  }
+  .row-centered {
+    text-align: center;
+  }
+  .col-centered {
+    display: inline-block;
+    float: none;
+    top: 300px;
+    color: white;
+  }
+  .col-centered a {
+    margin: 5px;
+    width: 20%;
+  }
+  .navbar a {
+    margin: 15px;
+  }
+  .navitems {
+    margin-bottom: 5px;
+  }
   
