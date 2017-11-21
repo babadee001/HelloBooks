@@ -13,9 +13,10 @@ import webpackConfig from './webpack.config';
 
 dotenv.load();
 const app = express();
+
 const swaggerDefinition = {
   info: {
-    title: 'Node Swagger API',
+    title: 'Hello-Books Swagger API',
     version: '1.0.0',
     description: 'Documentation of Hello Books API',
   },
@@ -28,7 +29,7 @@ const options = {
   // import swaggerDefinitions
   swaggerDefinition,
   // path to the API docs
-  apis: ['./routes/*.js'],
+  apis: ['./server/routes/*.js'],
 };
 
 // initialize swagger-jsdoc
@@ -48,8 +49,7 @@ app.get('/api', (req, res) => {
   res.header(200);
   res.send('Welcome to Hello-Books API');
 });
-app.get('/swagger.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
+app.get('/docs', (req, res) => {
   res.send(swaggerSpec);
 });
 

@@ -21,6 +21,6 @@ export default (
     {/* <Route path="/add" component={ AdminAuthentication(AddBook) } /> */}
     <Route path="/admin" component={ AdminAuthentication(Admin) } />
     <Route exact path="/dashboard" component={ Authentication(Dashboard) } />
-    <Route path="/borrowed" component={ Authentication(BorrowedBooks) } />
+    <Route path="/history" component={ Authentication(BorrowedBooks) } />
   </Route>
 );

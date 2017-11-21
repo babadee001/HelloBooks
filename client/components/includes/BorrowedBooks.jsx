@@ -33,6 +33,7 @@ export default class BorrowedBooks extends Component {
     });
   }
   render() {
+    console.log(this.props.cover);
     return (
       <div className="book col s12 m3 l3">
         <div className="card">

@@ -55,12 +55,12 @@ class Profile extends Component {
         <div className="profile-usermenu col-md-3">
           <ul className="nav">
             <li className="active">
-              <a href="/Profile">
+              <a href="/dashboard">
                 <i className="glyphicon glyphicon-home" />
 							View All Books </a>
             </li>
             <li>
-              <a href="/borrowed">
+              <a href="/history">
                 <i className="glyphicon glyphicon-user" />
 							Borrowing history </a>
             </li>

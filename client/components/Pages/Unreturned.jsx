@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getBorrowed } from '../../actions/booksActions';
+import { getHistory } from '../../actions/booksActions';
 import AllBorrowed from '../includes/BorrowedBooks';
 import Navbar from '../navbar';
 
@@ -16,7 +16,7 @@ class Dashboard extends Component {
     this
       .props
       .actions
-      .getBorrowed(this.props.user.userId);
+      .getHistory(this.props.user.userId);
   }
 
   renderBooks() {
@@ -71,7 +71,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
-      getBorrowed
+      getHistory
     }, dispatch)
   };
 }

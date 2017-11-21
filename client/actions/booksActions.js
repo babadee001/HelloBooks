@@ -24,7 +24,7 @@ export function deleteBook(book) {
   return { type: DELETE_BOOK, book };
 }
 export function getBorrowed(userId) {
-  return dispatch => axios.get(`api/v1/users/${userId}`, {
+  return dispatch => axios.get(`api/v1/users/${userId}/books/?returned=false`, {
     headers: { xaccesstoken: localStorage.getItem('token') }
   })
     .then((res) => {
@@ -37,6 +37,19 @@ export function getBorrowed(userId) {
     .catch(error => error);
 }
 
+export function getHistory(userId) {
+  return dispatch => axios.get(`api/v1/users/${userId}`, {
+    headers: { xaccesstoken: localStorage.getItem('token') }
+  })
+    .then((res) => {
+      dispatch({
+        type: GET_BORROWED_BOOKS,
+        data: res.data
+      });
+      return res.data;
+    })
+    .catch(error => error);
+}
 export function editBook(book) {
   return { type: EDIT_BOOK, book };
 }

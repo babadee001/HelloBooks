@@ -47,12 +47,12 @@ class AllBooks extends Component {
 
   handleClick() {
     swal({ title: 'Are you sure?',
-      text: 'Once deleted, you will not be able to recover it back!',
+      text: 'This is permanent!',
       icon: 'warning',
       buttons: true,
       dangerMode: true })
-      .then((willDelete) => {
-        if (willDelete) {
+      .then((Delete) => {
+        if (Delete) {
           this
             .props
             .actions
@@ -79,33 +79,16 @@ class AllBooks extends Component {
   }
 
   render() {
-    const style = {
-      file: {
-        backgroundColor: 'white'
-      },
-      edit: {
-        backgroundColor: 'rgb(10, 89, 79)',
-        color: '#fff',
-        float: 'right'
-      },
-      cancel: {
-        backgroundColor: 'rgb(10, 89, 79)',
-        color: '#fff',
-        float: 'left'
-      }
-    };
     return (
-      <div className="col s12 m3 l3" style={ style.file }>
+      <div className="col s12 m3 l3">
         {this.state.edit && <div className="modal-content">
-          <h4 style={{
-            alignContent: 'center'
-          }}
-          >Edit Book</h4>
+          <h4>
+           Edit Book</h4>
           <div className="row">
             <form name="edit_book" className="col s12" onSubmit={ this.handleFormSubmit }>
               <div className="add-book">
                 <div className="row">
-                  <div className="input-field col s12">
+                  <div className="col s12">
                     <b>Title</b>
                     <input
                       id="title"
@@ -119,7 +102,7 @@ class AllBooks extends Component {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="input-field col s12">
+                  <div className="col s12">
                     <b>Author</b>
                     <input
                       id="author"
@@ -133,7 +116,7 @@ class AllBooks extends Component {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="input-field col s6">
+                  <div className="col s6">
                     <b>Quantity</b>
                     <input
                       id="quantity"
@@ -147,7 +130,7 @@ class AllBooks extends Component {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="input-field col s12">
+                  <div className="col s12">
                     <b>ISBN</b>
                     <input
                       id="isbn"
@@ -161,7 +144,7 @@ class AllBooks extends Component {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="input-field col s12">
+                  <div className="col s12">
                     <b>Description</b>
                     <textarea
                       id="description"
@@ -181,7 +164,6 @@ class AllBooks extends Component {
               </button>
               <div>
                 <button
-                  style={ style.cancel }
                   onClick={ this.changeView }
                   id="edit_button"
                 >Cancel</button>
@@ -193,15 +175,15 @@ class AllBooks extends Component {
 
         {this.state.displayBook && <div className="card" id="book_card">
           <div className="card-image">
-            <img height="250px" src={ this.props.cover } alt="loading image..." />
+            <img height="250px" src={ this.props.cover } alt="loading pix..." />
             <span className="card-title">{this.props.title}</span>
           </div>
           <div className="card-content">
             <p>{this.props.description}</p>
           </div>
           <div className="card-action">
-            <a onClick={ this.handleClick } id="delete_button">Delete</a>
-            <a onClick={ this.onClick } id="edit_button">Edit</a>
+            <button className="btn-danger" onClick={ this.handleClick } >Delete</button>
+            <button className="btn-primary" onClick={ this.onClick } id="edit_button">Edit</button>
           </div>
         </div>}
       </div>
