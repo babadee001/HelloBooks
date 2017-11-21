@@ -7,5 +7,6 @@ export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const UNAUTH_USER = 'UNAUTH_USER';
 export const BORROW_BOOK = 'BORROW_BOOK';
 export const ADD_CATEGORY = 'ADD_CATEGORY';
-export const GET_RENTED_BOOKS = 'GET_RENTED_BOOKS';
+export const GET_BORROWED_BOOKS = 'GET_BORROWED_BOOKS';
+export const RETURN_BOOK = 'RETURN_BOOK';
 

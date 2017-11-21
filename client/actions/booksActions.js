@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { addNewBook, GET_BOOKS, DELETE_BOOK, EDIT_BOOK, ADD_BOOK, ADD_CATEGORY, BORROW_BOOK } from './types';
+import { addNewBook, GET_BOOKS, DELETE_BOOK, EDIT_BOOK, ADD_BOOK, ADD_CATEGORY, BORROW_BOOK, GET_BORROWED_BOOKS } from './types';
 
 dotenv.load();
 export function addBook(book) {
@@ -23,6 +23,19 @@ export function getBooks() {
 export function deleteBook(book) {
   return { type: DELETE_BOOK, book };
 }
+export function getBorrowed(userId) {
+  return dispatch => axios.get(`api/v1/users/${userId}`, {
+    headers: { xaccesstoken: localStorage.getItem('token') }
+  })
+    .then((res) => {
+      dispatch({
+        type: GET_BORROWED_BOOKS,
+        data: res.data
+      });
+      return res.data;
+    })
+    .catch(error => error);
+}
 
 export function editBook(book) {
   return { type: EDIT_BOOK, book };
@@ -30,6 +43,14 @@ export function editBook(book) {
 
 export function borrowBook(userId, bookId) {
   return axios.post(`api/v1/users/${userId}/books/${bookId.bookId}`, {
+    headers: { xaccesstoken: localStorage.getItem('token') }
+  })
+    .then(res => res.data.message)
+    .catch(error => error.data.message);
+}
+
+export function returnBook(userId, bookId) {
+  return axios.put(`api/v1/users/${userId}/books/${bookId.bookId}`, {
     headers: { xaccesstoken: localStorage.getItem('token') }
   })
     .then(res => res.data.message)
@@ -66,19 +87,6 @@ export function deleteBookAction(bookId) {
         data: Number(res.data.id)
       });
       return res.data.message;
-    })
-    .catch(error => error);
-}
-export function getRentedBooksAction(userId) {
-  return dispatch => axios.get(`api/v1/users/${userId}`, {
-    headers: { xaccesstoken: localStorage.getItem('token') }
-  })
-    .then((res) => {
-      dispatch({
-        type: 'GET_RENTED_BOOKS',
-        data: res.data
-      });
-      return res.data;
     })
     .catch(error => error);
 }
