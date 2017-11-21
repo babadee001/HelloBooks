@@ -145,7 +145,7 @@ export default {
   },
   // Check if a user is logged in. Requires jwt token
   isLoggedIn(req, res, next) {
-    const token = req.headers['x-access-token'];
+    const token = req.headers['xaccesstoken'];
     if (token) {
       jwt.verify(token, secret, (error) => {
         if (error) {
@@ -167,7 +167,7 @@ export default {
   },
   // Check if user is an admin. Requires jwt token for admin.
   isAdmin(req, res, next) {
-    const token = req.headers['x-access-token'];
+    const token = req.headers['xaccesstoken'];
     if (token) {
       jwt.verify(token, adminSecret, (error) => {
         if (error) {

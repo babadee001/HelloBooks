@@ -29,7 +29,7 @@ export default {
         const currentUser = {
           username: user.username,
           password: user.password,
-          isAdmn: user.isAdmin,
+          isAdmin: user.isAdmin,
           email: user.email,
           membership: user.membership };
         const token = jwt.sign(
@@ -68,7 +68,7 @@ export default {
           username: user.username,
           password: user.password,
           email: user.email,
-          isAdmn: user.isAdmin,
+          isAdmin: user.isAdmin,
           membership: user.membership,
         };
         const token = jwt.sign(
@@ -94,6 +94,7 @@ export default {
           userId: user.id,
           username: user.username,
           password: user.password,
+          isAdmin: user.isAdmin,
           membership: user.membership };
         const token = jwt.sign(
           {

@@ -65,7 +65,20 @@ module.exports = {
                 message: 'Wrong book id. Not in database.',
               });
             }
-            return Books
+            return Borrowed
+            .create({
+              bookId: req.params.bookId,
+              userId: req.params.userId,
+              description: books.description,
+              title: books.title,
+              expires: due,
+              returned: false,
+              returnDate: due,
+            })
+            .then(() => res.status(201).json({
+              message: 'You have successfully borrowed the book',
+            }))
+            .then(() => Books
               .update({
                 quantity: books.quantity - 1,
               }, {
@@ -73,21 +86,7 @@ module.exports = {
                   id: req.params.bookId,
                 },
               })
-              .then(() => {
-                return Borrowed
-                  .create({
-                    bookId: req.params.bookId,
-                    userId: req.params.userId,
-                    expires: due,
-                    returned: false,
-                    returnDate: due,
-                  })
-                  .then(() => res.status(201).json({
-                    message: 'You have successfully borrowed the book',
-                  }))
-                  .catch(error => res.status(400).send(error));
-              })
-              .catch(error => res.status(400).send(error));
+              .catch(error => error))
           });
       })
       .catch(error => res.status(400).send(error));

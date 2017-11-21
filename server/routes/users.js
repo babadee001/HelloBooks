@@ -132,7 +132,7 @@ app.route('/:userId/books/:bookId')
  *       200:
  *         description: You have successfully borrowed the book
  */
-  .post(Check.isLoggedIn, BooksController.borrow);
+  .post(BooksController.borrow);
 app.route('/:userId/books/:bookId')
 /**
  * @swagger
@@ -158,7 +158,7 @@ app.route('/:userId/books/:bookId')
  *       200:
  *         description: Book returned!
  */
-  .put(Check.isLoggedIn, BooksController.returnBook);
+  .put(BooksController.returnBook);
 app.route('/:userId/books')
 /**
  * @swagger

@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": "andela",
-    "database": "hellobooks",
+    "database": "New",
     "host": "127.0.0.1",
     "port": "5432",
     "dialect": "postgres"
