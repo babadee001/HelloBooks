@@ -30,6 +30,16 @@ const options = {
   swaggerDefinition,
   // path to the API docs
   apis: ['./server/routes/*.js'],
+  securityDefinitions: {
+    jwt: {
+      type: 'apiKey',
+      name: 'Authorization',
+      in: 'header'
+    }
+  },
+  security: [
+    { jwt: [] }
+  ]
 };
 
 // initialize swagger-jsdoc
@@ -39,18 +49,23 @@ app.use(logger('dev'));
 app.use(webpackMiddleware(webpack(webpackConfig)));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(validator());
 app.use('/api/v1/users', UserRouter);
 app.use('/api/v1/books', BookRouter);
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/index.html'));
+
+app.get('/docs', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
 });
+
 app.get('/api', (req, res) => {
   res.header(200);
   res.send('Welcome to Hello-Books API');
 });
-app.get('/docs', (req, res) => {
-  res.send(swaggerSpec);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './client/index.html'));
 });
 
 const port = process.env.PORT || 8000;

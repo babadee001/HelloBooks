@@ -4,8 +4,7 @@ import BooksController from '../controllers/books';
 import Check from '../helpers/validation';
 
 const app = express.Router();
-dotenv.load();
-app.route('/') // Get all books
+dotenv.load(); // Get all books
 /**
  * @swagger
  * definition:
@@ -32,10 +31,21 @@ app.route('/') // Get all books
  *     description: Returns all books
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - name: xaccesstoken
+ *         description: Authorization token for this request
+ *         in: header
+ *         required: true
+ *         type: string
+ *         schema:
+ *           $ref: '#/definitions/books'
  *     responses:
  *       200:
  *         description: An array of books
+ *       401:
+ *         description: Invalid token provided or User not logged in
  */
+app.route('/')
   .get(Check.isLoggedIn, BooksController.list);
 app.route('/')
 /**
@@ -58,17 +68,21 @@ app.route('/')
  *     responses:
  *       200:
  *         description: Book added successfully
+ *       401:
+ *         description: User not logged in, User not an admin
+ *       400:
+ *         description: Invalid or missing details supplied
  */
   .post(Check.validateBook, Check.isAdmin,
     BooksController.create);
 app.route('/:bookId')
 /**
  * @swagger
- * /api/v1/books/bookId:
+ * /api/v1/books/{bookId}:
  *   put:
  *     tags:
  *       - books
- *     description: Modifies a single books
+ *     description: Modifies a single book
  *     produces:
  *       - application/json
  *     parameters:
@@ -77,31 +91,51 @@ app.route('/:bookId')
  *         in: path
  *         required: true
  *         type: integer
+ *         schema:
+ *           $ref: '#/definitions/books'
+ *       - name: xaccesstoken
+ *         description: Authorization token for this request
+ *         in: header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Book updated successfully
+ *       401:
+ *         description: User not logged in, User not an admin
+ *       400:
+ *         description: Invalid or missing bookId supplied
  */
   .put(Check.isAdmin, Check.validateBook,
     BooksController.edit);// modify book
 app.route('/:bookId')
 /**
  * @swagger
- * /api/v1/books/bookId:
+ * /api/v1/books/{bookId}:
  *   delete:
  *     tags:
  *       - books
- *     description: Deletes a single books
+ *     description: Deletes a single book
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: bookId
- *         description: The id of the book to modify
+ *         description: The id of the book to be deleted
  *         in: path
  *         required: true
  *         type: integer
+ *       - name: xaccesstoken
+ *         description: Authorization token for this request
+ *         in: header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: book deleted
+ *       401:
+ *         description: User not logged in, User not an admin
+ *       400:
+ *         description: Invalid or missing bookId supplied
  */
   .delete(Check.isAdmin, BooksController.erase);
 export default app;
