@@ -8,8 +8,8 @@ module.exports = {
   /** Admin add new book
    * @param  {object} req request
    * @param  {object} res response
-   * Route: POST: /books  
-   */ 
+   * Route: POST: /books
+   */
   // Add new book (by admin)
   create(req, res) {
     return Books
@@ -30,7 +30,7 @@ module.exports = {
    * @param  {object} res response
    *  Route: GET: api/books
    */
-  // Get all books 
+  // Get all books
   list(req, res) {
     return Books
       .all()
@@ -66,27 +66,27 @@ module.exports = {
               });
             }
             return Borrowed
-            .create({
-              bookId: req.params.bookId,
-              userId: req.params.userId,
-              description: books.description,
-              title: books.title,
-              expires: due,
-              returned: false,
-              returnDate: due,
-            })
-            .then(() => res.status(201).json({
-              message: 'You have successfully borrowed the book',
-            }))
-            .then(() => Books
-              .update({
-                quantity: books.quantity - 1,
-              }, {
-                where: {
-                  id: req.params.bookId,
-                },
+              .create({
+                bookId: req.params.bookId,
+                userId: req.params.userId,
+                description: books.description,
+                title: books.title,
+                expires: due,
+                returned: false,
+                returnDate: due,
               })
-              .catch(error => error))
+              .then(() => res.status(201).json({
+                message: 'You have successfully borrowed the book',
+              }))
+              .then(() => Books
+                .update({
+                  quantity: books.quantity - 1,
+                }, {
+                  where: {
+                    id: req.params.bookId,
+                  },
+                })
+                .catch(error => error));
           });
       })
       .catch(error => res.status(400).send(error));
@@ -96,7 +96,7 @@ module.exports = {
    * @param  {object} resonse
    * Route: GET: /
    */
-  // Modify a book information 
+  // Modify a book information
   edit(req, res) {
     return Books
       .findOne({
@@ -124,11 +124,6 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   },
-  /** Dislay users rented books
-   * @param  {object} req request
-   * @param  {0bject} res response
-   * Route: GET: //api/users/:UserId/books?returned=false
-   */
   showBorrowed(req, res) {
     return Borrowed
       .findAll({
@@ -139,12 +134,11 @@ module.exports = {
       })
       .then((books) => {
         if (books.length < 1) {
-          res.status(201).send({
-            success: false,
+          res.status(200).send({
             message: 'All books returned',
           });
         } else {
-          res.status(201).send(books);
+          res.status(200).send(books);
         }
       })
       .catch(error => res.status(404).send(error));
@@ -161,10 +155,10 @@ module.exports = {
           userId: req.params.userId,
         },
       })
-      .then(() => res.status(200).send(
+      .then(() => res.status(201).send(
         {
           message: 'Book returned!',
-        },
+        }
       ))
       .catch(error => res.status(400).send(error));
   },
@@ -173,13 +167,13 @@ module.exports = {
       .findById(req.params.bookId)
       .then((book) => {
         if (!book) {
-          return res.status(400).send({
+          return res.status(404).send({
             message: 'Book Not Found',
           });
         }
         return book
           .destroy()
-          .then(() => res.status(200).send({
+          .then(() => res.status(201).send({
             message: 'book deleted',
           }))
           .catch(error => res.status(400).send(error));

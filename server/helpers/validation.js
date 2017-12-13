@@ -5,7 +5,7 @@ import db from '../models/';
 
 dotenv.load();
 const secret = process.env.secretKey;
-const adminSecret = process.env.adminSecret; // Load admin secret key from .env. Admin route is hidden
+const adminSecret = process.env.adminSecret;
 const { Users } = db;
 
 export default {
@@ -41,7 +41,7 @@ export default {
           notEmpty: true,
           errorMessage: 'Membership is required, can not be empty and must be alphabet',
         },
-      },
+      }
     );
     const errors = req.validationErrors();
     if (errors) {
@@ -50,7 +50,7 @@ export default {
         const errorMessage = error.msg;
         allErrors.push(errorMessage);
       });
-      return res.status(409)
+      return res.status(400)
         .json({
           message: allErrors[0],
         });
@@ -86,8 +86,7 @@ export default {
       .then((user) => {
         if (user && bcrypt.compareSync(req.body.password, user.password)) {
           next();
-        }
-        else {
+        } else {
           return res.status(401)
             .json({
               message: 'Invalid username or password',
@@ -136,7 +135,7 @@ export default {
         const errorMessage = error.msg;
         allErrors.push(errorMessage);
       });
-      return res.status(409)
+      return res.status(400)
         .json({
           message: allErrors[0],
         });
@@ -145,14 +144,13 @@ export default {
   },
   // Check if a user is logged in. Requires jwt token
   isLoggedIn(req, res, next) {
-    const token = req.headers['xaccesstoken'];
+    const token = req.headers.xaccesstoken;
     if (token) {
       jwt.verify(token, secret, (error) => {
         if (error) {
           res.status(401)
             .send({
-              message: 'Failed to Authenticate Token',
-              error,
+              message: 'Access Denied. You are not authorized.'
             });
         } else {
           next();
@@ -167,14 +165,13 @@ export default {
   },
   // Check if user is an admin. Requires jwt token for admin.
   isAdmin(req, res, next) {
-    const token = req.headers['xaccesstoken'];
+    const token = req.headers.xaccesstoken;
     if (token) {
       jwt.verify(token, adminSecret, (error) => {
         if (error) {
           res.status(401)
             .send({
-              message: 'Operation failed. Admin privileges needed.',
-              error,
+              message: 'Operation failed. Invalid token provided.'
             });
         } else {
           next();

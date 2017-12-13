@@ -34,7 +34,7 @@ export default {
           membership: user.membership };
         const token = jwt.sign(
           { currentUser,
-          }, secret,
+          }, secret
         );
         return res.status(201).send({
           message: 'Signed up successfully',
@@ -42,7 +42,7 @@ export default {
           success: true,
         });
       })
-      .catch(() => res.status(400).send({
+      .catch(() => res.status(409).send({
         message: 'Username or email already exists',
       }));
   },
