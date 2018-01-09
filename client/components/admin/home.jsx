@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import AllBooks from './allBooks';
-// import AddBook from './addBook';
-import { getBooks, deleteBook } from '../../actions/booksActions';
-import { logout } from '../../actions/authActions';
-import AdminSideBar from './adminSideBar';
-import { Navbar } from '../navbar';
+import { browserHistory } from 'react-router';
+import AllBooks from './AllBooks';
+import { getBooks, deleteBook } from '../../actions/BooksActions';
+import { logout } from '../../actions/AuthActions';
+import AdminSideBar from '../includes/Sidebar';
+import Navbar from '../Navbar';
 
 class AdminHome extends Component {
   constructor(props) {
@@ -32,20 +32,9 @@ class AdminHome extends Component {
       .props
       .actions
       .logout();
-    window.location.href = '/';
+    browserHistory.push('/');
   }
 
-  handleClick(bookId) {
-    swal({ title: 'Are you sure?', text: 'Once deleted, you will not be able to recover it back!', icon: 'warning', buttons: true, dangerMode: true }).then((willDelete) => {
-      if (willDelete) {
-        deleteBook(bookId).then((res) => {
-          swal(res, { icon: 'success' });
-        });
-      } else {
-        swal('Book not deleted!');
-      }
-    });
-  }
 
   renderBooks() {
     const { username } = this.props.user;
@@ -64,22 +53,35 @@ class AdminHome extends Component {
     }
 
     return (
-      <div className="row">
-        <AdminSideBar fullname={ this.props.user.username } />
-
-        <div className="col s12 l9" id="list_boy">
-          {allbooks.map(book => (<AllBooks
-            key={ book.id }
-            prodYear={ book.prodYear }
-            total={ book.total }
-            isbn={ book.isbn }
-            author={ book.author }
-            description={ book.description }
-            id={ book.id }
-            title={ book.title }
-            cover={ book.cover }
-          />))
-          }
+      <div className="container">
+        <div className="card-panel headcard">
+            <center>Available Books</center>
+          </div>
+        <div className="row">
+          <AdminSideBar 
+          fullname={ this.props.user.username }
+          link1={'Add New Book'} 
+          route1={'/add'}
+          link2={'User dashboard'} 
+          route2={'/dashboard'}
+          link3={'Logs'} 
+          route3={''}
+          />
+          <div className="col s12 l9" id="list_boy">
+            {allbooks.map(book => (<AllBooks
+              deleteBook={ deleteBook }
+              key={ book.id }
+              prodYear={ book.prodYear }
+              total={ book.quantity }
+              isbn={ book.isbn }
+              author={ book.author }
+              description={ book.description }
+              id={ book.id }
+              title={ book.title }
+              cover={ book.cover }
+            />))
+            }
+          </div>
         </div>
       </div>
 
@@ -89,6 +91,7 @@ class AdminHome extends Component {
     const { username, id } = this.props.user;
     return (
       <div>
+        <Navbar route1="/admin" link1="Admin dashboard" route2="" link2="Contact Us" />
         {this.renderBooks()}
       </div>
     );

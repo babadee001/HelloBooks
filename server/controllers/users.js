@@ -73,7 +73,7 @@ export default {
         };
         const token = jwt.sign(
           { currentUser,
-          }, adminSecret,
+          }, adminSecret
         );
         return res.status(201).send({
           message: 'Admin Signed up successfully',
@@ -100,7 +100,7 @@ export default {
           {
             currentUser,
           },
-          secret,
+          secret
         );
         res.status(200)
           .json({

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
 import Navbar from '../Navbar';
-import { borrowBook } from '../../actions/BooksActions';
+import { returnBook } from '../../actions/BooksActions';
 
 export default class AllBooks extends Component {
   constructor(props) {
@@ -13,29 +13,18 @@ export default class AllBooks extends Component {
 
   handleClick() {
     const userId = this.props.userId;
-    const bookId = { bookId: this.props.id };
-    const currentDate = new Date(),
-      after30days = currentDate.setDate(currentDate.getDate() + 20),
-      deadline = new Date(after30days);
-    swal({
-      title: 'Are you sure?',
-      text: `You ware required to return this book on or before ${deadline}`,
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true
-    }).then((willBorrow) => {
-      if (willBorrow) {
-        borrowBook(userId, bookId)
-          .then((res) => {
-            if (res === 'You have successfully borrowed the book') {
-              swal(res, { icon: 'success' });
-            } else {
-              swal(res, { icon: 'warning' });
-            }
-          });
+      const bookId = { bookId: this.props.id };
+      swal({
+        title: 'Are you sure?',
+        text: 'Do you really want to return this book?',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then((toReturn) => {
+        if (toReturn) {
+          this.props.actions.returnBook(userId, bookId)
       }
-    });
-  }
+      })}
 
   render() {
     return (
@@ -49,7 +38,7 @@ export default class AllBooks extends Component {
               <span className="card-title">{this.props.title}</span>
               <span>{this.props.description}</span>
               <p>
-                <button onClick={ this.handleClick } className="btn">Borrow</button>
+                <button onClick={ this.handleClick } className="btn">Return</button>
               </p>
             </div>
           </div>

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import ImageUploader from 'react-firebase-image-uploader';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { getCategory } from '../../actions/booksActions';
 import firebase from 'firebase';
+import Materialize from 'materialize-css';
+import ImageUploader from 'react-firebase-image-uploader';
+import swal from 'sweetalert';
 
 class AddBook extends Component {
   constructor(props) {
@@ -11,7 +10,6 @@ class AddBook extends Component {
     this.state = {
       titleError: '',
       authorError: '',
-      prodYearError: '',
       isbnError: '',
       descError: '',
       title: '',
@@ -20,8 +18,7 @@ class AddBook extends Component {
       cover: '',
       author: '',
       catId: '',
-      total: 5,
-      prodYear: '',
+      quantity: 5,
       isLoading: '',
       isUploading: '',
       progress: 0
@@ -29,17 +26,8 @@ class AddBook extends Component {
     this.handleSubmit = this
       .handleSubmit
       .bind(this);
-    this.renderCategory = this
-      .renderCategory
-      .bind(this);
     this.onChange = this
       .onChange
-      .bind(this);
-    this.onBlur = this
-      .onBlur
-      .bind(this);
-    this.onFocus = this
-      .onFocus
       .bind(this);
     this.handleUploadSuccess = this
       .handleUploadSuccess
@@ -55,14 +43,41 @@ class AddBook extends Component {
       .bind(this);
   }
 
+  onChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+ 
   handleProgress(progress) {
     this.setState({ progress });
   }
-  handleUploadError(error) {
-    this.setState({ isUploading: false });
-    console.error(error);
+  handleUploadStart() {
+    this.setState({ isUploading: true, progress: 0 });
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    this
+      .props
+      .add(this.state)
+      .then((res) => {
+        if (res) {
+          swal(res.data.message);
+        } else {
+          Materialize.toast('Book added Successfully', 2000, '#15b39d', () => {
+            this.setState({ isLoading: false });
+          });
+          window.location.href = '/admin';
+        }
+      })
+      .catch(err => swal(err));
+  }
+
+  handleUploadError(error) {
+    this.setState({ isUploading: false });
+    console.error(error);}
+  
   handleUploadSuccess(filename) {
     firebase
       .storage()
@@ -74,133 +89,9 @@ class AddBook extends Component {
       });
   }
 
-  componentDidMount() {
-    this
-      .props
-      .actions
-      .getCategory();
-  }
-
-  onChange(event) {
-    const name = event.target.name,
-      value = event.target.value;
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  }
-
-  onFocus(event) {
-    const value = event.target.value,
-      name = event.target.name;
-
-    switch (name) {
-      case 'title':
-        this.setState({ titleError: '' });
-        break;
-      case 'author':
-        this.setState({ authorError: '' });
-        break;
-      case 'prodYear':
-        this.setState({ prodYearError: '' });
-        break;
-      case 'description':
-        this.setState({ descError: '' });
-        break;
-      case 'isbn':
-        this.setState({ isbnError: '' });
-        break;
-      default:
-        this.setState(this.state);
-    }
-  }
-
-  onBlur(event) {
-    const value = event.target.value,
-      name = event.target.name;
-
-    switch (name) {
-      case 'title':
-        if (value.length < 2 || !value) {
-          this.setState({ titleError: 'Book title must be greater than 2 characters' });
-          break;
-        }
-
-      case 'author':
-        if (value.length < 2 || !value) {
-          this.setState({ authorError: 'Book author name must be greater than 2 characters' });
-          break;
-        }
-      case 'prodYear':
-        if (value.length < 4 || !value) {
-          this.setState({ prodYearError: 'Production year is not valid' });
-          return false;
-          break;
-        }
-      case 'description':
-        if (value.length < 5 || !value) {
-          this.setState({ descError: 'Book description is required' });
-          break;
-        }
-      case 'isbn':
-        if (value.length < 5 || !value) {
-          this.setState({ isbnError: 'Book ISBN must be a minimum of 5 characters' });
-          break;
-        }
-      default:
-        this.setState(this.state);
-    }
-  }
-  handleUploadStart() {
-    this.setState({ isUploading: true, progress: 0 });
-  }
-
-  renderCategory() {
-    const allCat = [];
-    const category = this.props.category;
-    if (!category || category.length < 1) {
-      return '...loading';
-    }
-    category.map((cat) => {
-      allCat.push(
-        <option key={ cat.id } value={ cat.id }>{ cat.name }</option>
-      );
-    });
-    return allCat;
-  }
-
-  handleSubmit(event) {
-    if (this.state.cover.length < 5) {
-      <Toast toast="Please upload book cover!">
-        Toast
-      </Toast>;
-    //   Materialize.toast('Please upload book cover', 4000, '#15b39d');
-      event.preventDefault();
-      return false;
-    }
-    event.preventDefault();
-    this
-      .props
-      .onSubmit(this.state)
-      .then((message) => {
-        Materialize.toast('Book added Successfully', 2000, '#15b39d', () => {
-          this.setState({ isLoading: false });
-        });
-        window.location.href = '/admin';
-      })
-      .catch(err => err);
-  }
-
   render() {
     return (
-      <div
-        style={{
-          marginTop: 20,
-          backgroundColor: '#fff',
-          width: '70%',
-          float: 'right',
-          marginRight: 100
-        }}
-      >
+      <div className="addbook">
         <div className="row">
           <form name="add_book" className="col s12" onSubmit={ this.handleSubmit }>
             <div className="add-book">
@@ -212,11 +103,9 @@ class AddBook extends Component {
                     name="title"
                     className="validate"
                     onChange={ this.onChange }
-                    onFocus={ this.onFocus }
-                    onBlur={ this.onBlur }
                     required
                   />
-                  <label htmlFor="isbn">Title</label>
+                  <label htmlFor="title">Title</label>
                   <div className="red-text">{ this.state.titleError }</div>
                 </div>
                 <div className="input-field col s6">
@@ -226,11 +115,9 @@ class AddBook extends Component {
                     name="author"
                     className="validate"
                     onChange={ this.onChange }
-                    onFocus={ this.onFocus }
-                    onBlur={ this.onBlur }
                     required
                   />
-                  <label htmlFor="isbn">Author</label>
+                  <label htmlFor="author">Author</label>
                   <div className="red-text">{ this.state.authorError }</div>
                 </div>
               </div>
@@ -238,43 +125,30 @@ class AddBook extends Component {
               <div className="row">
                 <div className="input-field col s6">
                   <input
-                    id="total"
-                    name="total"
+                    id="quantity"
+                    name="quantity"
                     type="number"
                     className="validate"
                     defaultValue="1"
                     onChange={ this.onChange }
-                    onFocus={ this.onFocus }
                     required
                   />
-                  <label htmlFor="isbn">Total</label>
-                </div>
-
-                <div className="input-field col s6">
-                  <input
-                    id="prodYear"
-                    name="prodYear"
-                    type="number"
-                    className="validate"
-                    onChange={ this.onChange }
-                    onBlur={ this.onBlur }
-                    onFocus={ this.onFocus }
-                    required
-                  />
-                  <label htmlFor="prodYear">Production Year</label>
-                  <div className="red-text">{ this.state.prodYearError }</div>
+                  <label htmlFor="quantity">Quantity</label>
                 </div>
               </div>
               <div className="row">
                 <div className="col s6">
                   <select
                     id="catId"
-                    name="catId"
+                    name="category"
                     onChange={ this.onChange }
                     className="browser-default"
                   >
                     <option value="">Select Category</option>
-                    { this.renderCategory() }
+                    <option value="Epic">Epic</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Action">Action</option>
+                    <option value="Scifi">Sci-fi</option>
                   </select>
                 </div>
                 <div className="input-field col s6">
@@ -284,8 +158,6 @@ class AddBook extends Component {
                     type="text"
                     className="validate"
                     onChange={ this.onChange }
-                    onBlur={ this.onBlur }
-                    onFocus={ this.onFocus }
                     required
                   />
                   <label htmlFor="isbn">ISBN</label>
@@ -298,9 +170,7 @@ class AddBook extends Component {
                     id="description"
                     className="materialize-textarea"
                     name="description"
-                    onBlur={ this.onBlur }
                     onChange={ this.onChange }
-                    onFocus={ this.onFocus }
                   />
                   <label htmlFor="description">Description</label>
                   <div className="red-text">{ this.state.descError }</div>
@@ -339,11 +209,7 @@ class AddBook extends Component {
               />
             </div>
             <button
-              style={{
-                backgroundColor: 'rgb(37, 76, 71)',
-                color: '#fff',
-                float: 'right'
-              }}
+              id="addbook"
               className="btn waves-effect waves-light"
               type="submit"
               name="submit"
@@ -357,15 +223,8 @@ class AddBook extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({
-      getCategory
-    }, dispatch)
-  };
-}
-function mapStateToProps(state) {
-  return { category: state.book.category };
-}
+export default AddBook;
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddBook);
+AddBook.propTypes = {
+  add: React.PropTypes.func.isRequired
+};
