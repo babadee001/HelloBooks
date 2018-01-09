@@ -8,7 +8,6 @@ dotenv.load();
 const adminRoute = process.env.route;
 const app = express.Router();
 
-app.route('/') // Get all users
 /**
  * @swagger
  * definition:
@@ -19,21 +18,43 @@ app.route('/') // Get all users
  *       email:
  *         type: string
  *       password:
- *         type: integer
+ *         type: string
+ *       membership:
+ *         type: string
  *
  */
+/**
+ * @swagger
+ * definition:
+ *   signin:
+ *     properties:
+ *       username:
+ *         type: string
+ *       password:
+ *         type: string
+ *
+ */
+app.route('/') // Get all users
 /**
  * @swagger
  * /api/v1/users:
  *   get:
  *     tags:
  *       - users
- *     description: Returns all users
+ *     description: Returns an array of all users
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - name: xaccesstoken
+ *         description: Authorization token for this request
+ *         in: header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
- *         description: Returns all users 
+ *         description: Returns all users
+ *       401:
+ *         description: User not logged in, User not an admin
  *     schema:
  *       $ref: '#/definitions/users'
  */
@@ -41,7 +62,7 @@ app.route('/') // Get all users
 app.route('/:userId')
 /**
  * @swagger
- * /api/v1/users/userId:
+ * /api/v1/users/{userId}:
  *   get:
  *     tags:
  *       - users
@@ -54,15 +75,22 @@ app.route('/:userId')
  *         in: path
  *         required: true
  *         type: integer
+ *       - name: xaccesstoken
+ *         description: Authorization token for this request
+ *         in: header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: An array of all books (returned and unreturned) borrowed by the user.
+ *       401:
+ *         description: User not logged in, invalid access token.
  */
   .get(Check.isLoggedIn, UsersController.userHistory);
 app.route('/signup')
 /**
  * @swagger
- * /api/v1/users:
+ * /api/v1/users/signup:
  *   post:
  *     tags:
  *       - users
@@ -73,13 +101,17 @@ app.route('/signup')
  *       - name: details
  *         description: The registration details of the user
  *         in: body
- *         required: true
+ *         required: false
  *         type: string
  *         schema:
  *           $ref: '#/definitions/users'
  *     responses:
- *       200:
+ *       201:
  *         description: Signed up successfully
+ *       400:
+ *         description: Invalid input(email, password...) details
+ *       409:
+ *         description: Existing details
  */
   .post(Check.validateInput, UsersController.create);
 app.route('/signin')
@@ -99,10 +131,12 @@ app.route('/signin')
  *         required: true
  *         type: string
  *         schema:
- *           $ref: '#/definitions/users'
+ *           $ref: '#/definitions/signin'
  *     responses:
  *       200:
  *         description: Log in successful
+ *       401:
+ *         description: Invalid username or password
  */
   .post(Check.validateLogin, UsersController.signin);
 app.route(adminRoute)
@@ -110,7 +144,7 @@ app.route(adminRoute)
 app.route('/:userId/books/:bookId')
 /**
  * @swagger
- * /api/v1/users/:userId/books/:bookId:
+ * /api/v1/users/{userId}/books/{bookId}:
  *   post:
  *     tags:
  *       - users
@@ -124,23 +158,32 @@ app.route('/:userId/books/:bookId')
  *         required: true
  *         type: integer
  *       - name: bookId
- *         description: The id of the book to be borrowed 
+ *         description: The id of the book to be borrowed
  *         in: path
  *         required: true
  *         type: integer
+ *       - name: xaccesstoken
+ *         description: Authorization token for this request
+ *         in: header
+ *         required: false
+ *         type: string
  *     responses:
- *       200:
+ *       201:
  *         description: You have successfully borrowed the book
+ *       401:
+ *         description: User not logged in, book already borrowed and not returned
+ *       404:
+ *         description: Book not in database
  */
-  .post(BooksController.borrow);
+  .post(Check.isLoggedIn, BooksController.borrow);
 app.route('/:userId/books/:bookId')
 /**
  * @swagger
- * /api/v1/users/:userId/books/:bookId:
+ * /api/v1/users/{userId}/books/{bookId}:
  *   put:
  *     tags:
  *       - users
- *     description: Users can return a borrowed a book
+ *     description: Users can return a borrowed book
  *     produces:
  *       - application/json
  *     parameters:
@@ -150,19 +193,26 @@ app.route('/:userId/books/:bookId')
  *         required: true
  *         type: integer
  *       - name: bookId
- *         description: The id of the book to be returned 
+ *         description: The id of the book to be returned
  *         in: path
  *         required: true
  *         type: integer
+ *       - name: xaccesstoken
+ *         description: Authorization token for this request
+ *         in: header
+ *         required: false
+ *         type: string
  *     responses:
- *       200:
+ *       201:
  *         description: Book returned!
+ *       401:
+ *         description: User not logged in
  */
-  .put(BooksController.returnBook);
+  .put(Check.isLoggedIn, BooksController.returnBook);
 app.route('/:userId/books')
 /**
  * @swagger
- * /api/v1/users/userId:/?returned=false:
+ * /api/v1/users/{userId}/books?returned=false:
  *   get:
  *     tags:
  *       - users
@@ -175,9 +225,16 @@ app.route('/:userId/books')
  *         in: path
  *         required: true
  *         type: integer
+ *       - name: xaccesstoken
+ *         description: Authorization token for this request
+ *         in: header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
- *         description: An array of books borrowed but not returned.
+ *         description: An array of books borrowed but not returned, a message indicating no unreturned book
+ *       401:
+ *         description: User not logged in
  */
   .get(Check.isLoggedIn, BooksController.showBorrowed);
 export default app;
