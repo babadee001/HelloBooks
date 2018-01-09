@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
-import { borrowBook } from '../../actions/booksActions';
+import Navbar from '../Navbar';
+import { borrowBook } from '../../actions/BooksActions';
 
 export default class AllBooks extends Component {
   constructor(props) {
@@ -38,17 +39,19 @@ export default class AllBooks extends Component {
 
   render() {
     return (
-      <div className="col m3 s12">
-        <div className="card">
-          <div className="card-image waves-effect waves-block waves-light">
-            <img className="activator" src={ this.props.cover } alt="" />
-          </div>
-          <div className="card-content">
-            <span className="card-title">{this.props.title}</span>
-            <span>{this.props.description}</span>
-            <p>
-              <button onClick={ this.handleClick } className="btn">Borrow</button>
-            </p>
+      <div>
+        <div className="col s12 m3 l3">
+          <div className="card">
+            <div className="card-image waves-effect waves-block waves-light">
+              <img className="activator" src={ this.props.cover } id="cover" alt="cover" />
+            </div>
+            <div className="card-content">
+              <span className="card-title">{this.props.title}</span>
+              <span>{this.props.description}</span>
+              <p>
+                <button onClick={ this.handleClick } className="btn">Borrow</button>
+              </p>
+            </div>
           </div>
         </div>
       </div>

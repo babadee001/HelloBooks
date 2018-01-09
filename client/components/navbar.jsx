@@ -1,25 +1,51 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
+import { Navbar, NavItem } from 'react-materialize';
+import { logout } from '../actions/AuthActions'; 
 
-export default class Nav extends Component {
+class Nav extends Component {
+  logout(event) {
+    event.preventDefault();
+    this.props.logout();
+  }
   render() {
+    const isAuthenticated = this.props.auth.authenticated;
+    
     return (
-      <div className="navbar">
-        <nav className="teal">
-          <div className="nav-wrapper">
-            <a href="" className="">Hello-books</a>
-            <ul id="nav-mobile" className="right hide-on-med-and-down">
-              <div className="navitems">
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/profile">{this.props.link1}</a></li>
-                <li><a href="/dashboard">{this.props.link2}</a></li>
-                <li><a href="/logout">{this.props.link3}</a></li>
-              </div>
-            </ul>
-          </div>
-        </nav>
+      <div className="Navwrapper">
+        {isAuthenticated?
+        (
+          <Navbar brand='Hello-Books' right fixed>
+            <NavItem><Link to='/dashboard'>Home</Link></NavItem>
+            <NavItem><Link to='/about'>About</Link></NavItem>
+            <NavItem><Link to={this.props.route1}>{this.props.link1}</Link></NavItem>
+            <NavItem><Link to={this.props.route2}>{this.props.link2}</Link></NavItem>
+            <NavItem><Link onClick={ this.logout.bind(this) }>Logout</Link></NavItem>
+          </Navbar>
+        ):
+        (
+          <Navbar brand='Hello-Books' right fixed>
+            <NavItem><Link to='/dashboard'>Home</Link></NavItem>
+            <NavItem><Link to='/about'>About</Link></NavItem>
+            <NavItem><Link to='/'>Contact Us</Link></NavItem>
+          </Navbar>
+        )
+        }
+        
       </div>
     );
   }
 }
+Nav.propTypes = {
+  auth: React.PropTypes.object.isRequired,
+  logout: React.PropTypes.func.isRequired
+};
+
+function mapStateToProps(state) {
+  return {
+    auth: state.auth
+  };
+}
+
+export default connect(mapStateToProps, { logout })(Nav);
