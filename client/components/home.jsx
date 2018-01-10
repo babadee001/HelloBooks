@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import Nav from './Navbar';
+import Nav from './navbar';
 import '../style/style.scss';
 
 export default class Home extends Component {

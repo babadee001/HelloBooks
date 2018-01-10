@@ -2,7 +2,7 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import Materialize from 'materialize-css';
 import setAuthorizationToken from '../utils/setAuthorization';
-import { SET_CURRENT_USER, UNAUTH_USER } from './types';
+import { SET_CURRENT_USER, UNAUTH_USER, GET_ALL_USERS } from './types';
 
 export default function userSignupRequest(userData) {
   return dispatch => axios.post('api/v1/users/signup', userData)
@@ -56,9 +56,36 @@ export function logout() {
     // window.location.href = '/';
   };
 }
-export function editProfile(userId, userData) {
-  return axios.put(`/edit/${userId}`, userData)
-    .then(() => axios.get(`seaech/${userId}`)
-      .then(res => res.data.token))
-    .catch(error => error.data.response);
+/** Edit profile action
+ * @param {Number} userId - User ID
+ * 
+ * @param {Object} userData - User data object
+ * 
+ * @returns { String } - JWT Token
+ */
+export function editProfileAction(userId, userData) {
+  return dispatch => axios.put(`api/v1/users/${userId}`, userData)
+      .then((response) => {
+        dispatch({
+          type: EDIT_PROFILE,
+          user: jwt.decode(response.data.token)
+        });
+        localStorage.setItem('token', response.data.token);
+        Materialize.toast('Profile edited Successfully',
+          1000, 'blue darken-4', () => {
+            $('.modal').modal('close');
+          });
+      })
+    .catch(error => Materialize.toast(error.response.data.message));
+}
+export function getUsers() {
+  return dispatch => axios.get('api/v1/users')
+    .then((res) => {
+      dispatch({
+        type: GET_ALL_USERS,
+        data: res.data
+      });
+      return res.data;
+    })
+    .catch(error => error);
 }

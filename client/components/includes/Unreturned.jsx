@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
-import Navbar from '../Navbar';
-import { returnBook } from '../../actions/BooksActions';
+import Navbar from '../navbar';
+import { returnBook } from '../../actions/booksActions';
 
 export default class AllBooks extends Component {
   constructor(props) {

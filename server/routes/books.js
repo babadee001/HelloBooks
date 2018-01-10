@@ -138,4 +138,29 @@ app.route('/:bookId')
  *         description: Invalid or missing bookId supplied
  */
   .delete(Check.isAdmin, BooksController.erase);
+  /**
+ * @swagger
+ * /api/v1/books/borrowed:
+ *   get:
+ *     tags:
+ *       - books
+ *     description: Returns all borrowed books
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: xaccesstoken
+ *         description: Authorization token for this request
+ *         in: header
+ *         required: true
+ *         type: string
+ *         schema:
+ *           $ref: '#/definitions/books'
+ *     responses:
+ *       200:
+ *         description: An array of books
+ *       401:
+ *         description: Invalid token provided or User not logged in
+ */
+app.route('/borrowed')
+.get(Check.isAdmin, BooksController.listBorrowed);
 export default app;

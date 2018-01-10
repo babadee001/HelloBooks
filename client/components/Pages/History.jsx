@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
 	returnBook, 
-	getHistory } from '../../actions/BooksActions';
+	getHistory } from '../../actions/booksActions';
 import { bindActionCreators } from 'redux';
-import Sidebar from '../includes/Sidebar';
+import Sidebar from '../includes/sidebar';
 import AllBooks from '../includes/BorrowedBooks';
-import Navbar from '../Navbar';
+import Navbar from '../navbar';
 
 /**
  * borrowedBooks component

@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getBorrowed } from '../../actions/booksActions';
-import AllBorrowed from '../includes/BorrowedBooks';
+import AllBorrowed from '../includes/Unreturned';
+import Sidebar from '../includes/sidebar';
 import Navbar from '../navbar';
 
 class Profile extends Component {
@@ -21,16 +22,16 @@ class Profile extends Component {
 
   renderBooks() {
     const allBorrowed = this.props.book;
-    if (!allBorrowed) {
-      return (<div className="empty-notifier">
-        <h2>Wawu!!!...You have no borrowing history.</h2>
+    if (allBorrowed.length < 1) {
+      return (<div className="empty-notifier headcard">
+        <h2 id="returned">Wawu!!!...All books returned.</h2>
       </div>);
     }
     return (
       <div className="container-fluid">
         <div className="row">
-          <div className="card-panel">
-            <center>Borrowing History</center>
+          <div className="card-panel headcard">
+            <center>Unreturned books</center>
           </div>
           {allBorrowed.map(book => (<AllBorrowed
             key={ book.id }
@@ -48,38 +49,24 @@ class Profile extends Component {
   }
 
   render() {
-    const { username, id, email, membership } = this.props.user;
+    const { username, userId, email, membership } = this.props.user;
     return (
-      <div className="row">
-        <Navbar link2="All books" link3="Logout" />
-        <div className="profile-usermenu col-md-3">
-          <ul className="nav">
-            <li className="active">
-              <a href="/dashboard">
-                <i className="glyphicon glyphicon-home" />
-							View All Books </a>
-            </li>
-            <li>
-              <a href="/history">
-                <i className="glyphicon glyphicon-user" />
-							Borrowing history </a>
-            </li>
-            <li>
-              <a href="" target="_blank">
-                <i className="glyphicon glyphicon-ok" />
-							Edit profile </a>
-            </li>
-            <li>
-              <a href="">
-                <i className="glyphicon glyphicon-flag" />
-							Contact Admin </a>
-            </li>
-          </ul>
-        </div>
-        {/* <!-- END MENU --> */}
-        <div className="col-md-9">
-          <div className="profile-content">
-            {this.renderBooks()}
+      <div>
+        <Navbar route1="/dashboard" link1="All books" route2="" link2="Contact Us" />
+        <div className="row">
+          <Sidebar 
+          fullname={ this.props.user.username }
+          link1={'Borrow History'} 
+          route1={'/history'}
+          link2={'All books'} 
+          route2={'/dashboard'}
+          link3={'Profile'} 
+          route3={'/profile'}
+          />
+          <div className="col-md-9">
+            <div className="profile-content">
+              {this.renderBooks()}
+            </div>
           </div>
         </div>
       </div>
@@ -95,7 +82,7 @@ Profile.PropTypes = {
 
 function mapStateToProps(state) {
   return { user: state.auth.user.currentUser,
-    book: state.books.allBorrowedBooks };
+    book: state.books.allUnreturnedBooks };
 }
 
 function mapDispatchToProps(dispatch) {

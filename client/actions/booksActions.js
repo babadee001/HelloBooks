@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { GET_ALL_BOOKS, DELETE_BOOK, EDIT_BOOK, ADD_BOOK, ADD_CATEGORY, GET_UNRETURNED_BOOKS, RETURN_BOOK, GET_BORROWED_HISTORY } from './types';
+import { GET_ALL_BOOKS, DELETE_BOOK, EDIT_BOOK, ADD_BOOK, ADD_CATEGORY, GET_UNRETURNED_BOOKS, RETURN_BOOK, GET_BORROWED_HISTORY, GET_ALL_TIME_BORROWED } from './types';
 
 dotenv.load();
 export function addBook(book) {
@@ -16,10 +16,6 @@ export function getBooks() {
       return res.data;
     })
     .catch(error => error);
-}
-
-export function deleteBook(book) {
-  return { type: DELETE_BOOK, book };
 }
 export function getBorrowed(userId) {
   return dispatch => axios.get(`api/v1/users/${userId}/books?returned=false`)
@@ -44,10 +40,17 @@ export function getHistory(userId) {
     })
     .catch(error => error);
 }
+
 export function editBook(details, bookId) {
-  return axios.put(`api/v1/books/${bookId}`, details)
-    .then(res => res.data.message)
-    .catch(error => error.data.message);
+  return dispatch => axios.put(`api/v1/books/${bookId}`, details)
+    .then((res) => {
+      dispatch({
+        type: EDIT_BOOK,
+        data: res.data.book
+      });
+      return res.data.message;
+    })
+    .catch(error => error);
 }
 
 export function borrowBook(userId, bookId) {
@@ -94,7 +97,24 @@ export function addCategory(data) {
     .catch(error => error);
 }
 export function deleteBookAction(bookId) {
-  return axios.delete(`api/v1/books/${bookId}`)
-    .then(res => res.data.message)
-    .catch(error => error.data.message);
+  return dispatch => axios.delete(`api/v1/books/${bookId}`)
+    .then((res) => {
+      dispatch({
+        type: DELETE_BOOK,
+        data: Number(res.data.id)
+      });
+      return res.data.message;
+    })
+    .catch(error => Materialize.toast(error.response.data.message, 1000));
+}
+export function getAllBorrowed() {
+  return dispatch => axios.get('api/v1/books/borrowed')
+    .then((res) => {
+      dispatch({
+        type: GET_ALL_TIME_BORROWED,
+        data: res.data
+      });
+      return res.data;
+    })
+    .catch(error => error);
 }

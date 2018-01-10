@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getBooks } from '../../actions/BooksActions';
-import AllBooks from '../includes/Books';
-import SideBar from '../includes/Sidebar';
-import Navbar from '../Navbar';
+import { getBooks } from '../../actions/booksActions';
+import AllBooks from '../includes/books';
+import SideBar from '../includes/sidebar';
+import Navbar from '../navbar';
 
 class Dashboard extends Component {
   constructor(props) {

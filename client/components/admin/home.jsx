@@ -2,11 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import AllBooks from './AllBooks';
-import { getBooks, deleteBook } from '../../actions/BooksActions';
-import { logout } from '../../actions/AuthActions';
-import AdminSideBar from '../includes/Sidebar';
-import Navbar from '../Navbar';
+import AllBooks from './allBooks';
+import { getBooks, deleteBook } from '../../actions/booksActions';
+import { logout } from '../../actions/authActions';
+import AdminSideBar from '../includes/sidebar';
+import Navbar from '../navbar';
 
 class AdminHome extends Component {
   constructor(props) {
@@ -65,7 +65,7 @@ class AdminHome extends Component {
           link2={'User dashboard'} 
           route2={'/dashboard'}
           link3={'Logs'} 
-          route3={''}
+          route3={'/logs'}
           />
           <div className="col s12 l9" id="list_boy">
             {allbooks.map(book => (<AllBooks

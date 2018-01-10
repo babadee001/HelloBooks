@@ -122,6 +122,11 @@ export default {
           // isAlpha: false,
           errorMessage: 'Enter valid author name',
         },
+        // category: {
+        //   notEmpty: true,
+        //   // isAlphanumeric: false,
+        //   errorMessage: 'Enter valid category name',
+        // },
       });
     const errors = req.validationErrors();
     if (errors) {

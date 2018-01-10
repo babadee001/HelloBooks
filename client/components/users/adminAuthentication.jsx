@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import dotenv from 'dotenv';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import { logout } from '../../actions/AuthActions';
+import { logout } from '../../actions/authActions';
 
 
 dotenv.load();

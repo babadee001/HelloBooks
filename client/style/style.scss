@@ -176,6 +176,49 @@ input {
   .card .card-content .card-title {
     width: max-content;
   }
-  .error-template {padding: 40px 15px;text-align: center;}
-  .error-actions {margin-top:15px;margin-bottom:15px;}
-  .error-actions .btn { margin-right:10px; }
+  .error-template {
+    padding: 40px 15px;text-align: center;
+  }
+  .error-actions {
+    margin-top:15px;margin-bottom:15px;
+  }
+  .error-actions .btn {
+    margin-right:10px; 
+    background-color: teal !important;
+  }
+  .error-actions .a {
+    margin: 10;
+  }
+  
+  .error-actions .text{
+    margin: 10;
+  }
+  .logcard {
+    max-width: 18rem;
+    margin: 10px
+  }
+  .cardstyle {
+    padding: 1.5rem;
+    margin-top: 10%;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 25%;
+    border-width: .2rem;
+    position: relative;
+  }
+  .card-wrapper {
+    margin-top: 17%;
+  }
+  
+  .cardbox {
+    min-height: 200px !important;
+    border-radius: 8px;
+    padding: 10px;
+    width: 80%;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  }
+  .card-text{
+    font-size: 70px;
+    margin-left: 60px;
+  }
+  

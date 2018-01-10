@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import userSignupRequest from '../../actions/AuthActions';
+import userSignupRequest from '../../actions/authActions';
 
 export default class SignupForm extends Component {
   constructor(props) {

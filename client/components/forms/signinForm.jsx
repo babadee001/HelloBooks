@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import GoogleLogin from 'react-google-login';
 import { Link } from 'react-router';
-import { userSigninRequest } from '../../actions/AuthActions';
+import { userSigninRequest } from '../../actions/authActions';
 
 export default class SigninForm extends Component {
   constructor(props) {
