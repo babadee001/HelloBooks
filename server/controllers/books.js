@@ -101,36 +101,20 @@ module.exports = {
    */
   // Modify a book information
   edit(req, res) {
-    return Books
-      .findOne({
-        where: { id: req.params.bookId },
-        attributes: ['id'],
-      })
-      .then((book) => {
-        if (!book) {
-          return res.status(404).send({
-            message: 'Book Not Found',
+    return Books.update(req.body, {
+      where: {
+        id: req.params.bookId
+      }
+    })
+      .then(() => {
+        Books.findById(req.params.bookId).then((book) => {
+          res.status(200).send({
+            book,
+            message: 'Book updated successfully!'
           });
-        }
-        return book
-          .update({
-            title: req.body.title || book.title,
-            author: req.body.author || book.author,
-            category: req.body.category || book.category,
-            description: req.body.description || book.quantity,
-            quantity: req.body.quantity,
-            catId: req.body.catId || book.catId,
-            isbn: req.body.isbn || book.isbn,
-            createdAt: book.createdAt,
-
-          })
-          .then(() => res.status(200).send({
-            message: 'Book updated successfully',
-            book
-          }))
-          .catch(error => res.status(400).send(error));
+        });
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
   showBorrowed(req, res) {
     return Borrowed
