@@ -8,8 +8,14 @@ module.exports = {
     dialect: 'postgres'
   },
   test: {
-    use_env_variable: 'travis_ci_test',
-    dialect: 'postgres'
+    test: {
+      username: "root",
+      password: "password",
+      database: "hellobooks_test",
+      host: "127.0.0.1",
+      port: 5432,
+      dialect: "postgres"
+      },
   },
   production: {
     use_env_variable: 'DATABASE_URL',
