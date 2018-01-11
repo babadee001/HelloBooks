@@ -10,3 +10,5 @@ before_script:
 script:
   - npm install
   - npm run test
+env:
+  - dialect=postgres

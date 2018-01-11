@@ -8,7 +8,7 @@ module.exports = {
     dialect: 'postgres'
   },
   test: {
-    use_env_variable: 'DATABASE_TEST_URL',
+    use_env_variable: 'travis_ci_test',
     dialect: 'postgres'
   },
   production: {
