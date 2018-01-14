@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import GoogleLogin from 'react-google-login';
 import { Link } from 'react-router';
-import { userSigninRequest } from '../../actions/authActions';
+import { browserHistory } from 'react-router';
+import jwt from 'jsonwebtoken';
 
 export default class SigninForm extends Component {
   constructor(props) {
@@ -18,7 +19,28 @@ export default class SigninForm extends Component {
   }
   onSubmit(event) {
     event.preventDefault();
-    this.props.userSigninRequest(this.state);
+    this.props.userSigninRequest(this.state).then(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const currentUser = jwt.decode(token).currentUser;
+				if (currentUser.isAdmin === 1) {
+          Materialize.toast('Logged In Successfully', 1000,
+            'teal',
+            () => {
+              browserHistory.push('/admin');
+            }
+          );
+				} else {
+          Materialize.toast('Logged In Successfully', 1000,
+            'teal',
+            () => {
+              browserHistory.push('/dashboard');
+            }
+          );
+				}
+			}
+    }
+    )
   }
   render() {
     return (
