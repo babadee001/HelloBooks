@@ -22,7 +22,6 @@ class  BorrowedBooks extends Component {
 		this.renderBorrowedBooks = this.renderBorrowedBooks.bind(this);
 		this.handleClick =  this.handleClick.bind(this);
 	}
-
 	/**
 	 * Fetches the list of rented books by a user
 	 * 
@@ -30,10 +29,13 @@ class  BorrowedBooks extends Component {
 	 * 
 	 * @memberOf  BorrowedBooks
 	 */
-	componentDidMount(props) {
-		const userId = this.props.user.id || this.props.user.userId
-		this.props.actions.getHistory(userId);
-	}
+  componentDidMount() {
+    const userId = this.props.user.userId
+    this
+      .props
+      .actions
+      .getHistory(userId);
+  }
 
 	/**
 	 * Handles book return
@@ -65,13 +67,33 @@ class  BorrowedBooks extends Component {
 	 */
 	renderBorrowedBooks() {
     let borrowedBooks = this.props.borrowedBooks;
-		if (borrowedBooks.length < 1) {
+		if (!borrowedBooks || borrowedBooks.message == "You have never borrowed a book") {
 			return (
-          <div>
-					<h1 className="empty-notifier headcard">You have not borrowed any book</h1>
-          </div>
+        <div>
+					<Sidebar
+					fullname={ this.props.user.username }
+					link1={'Borrow History'} 
+					route1={'/history'}
+					link2={'All books'} 
+					route2={'/dashboard'}
+					link3={'Profile'} 
+					route3={'/profile'}
+        /> 
+					{this.props.isFetching ? <div className="preloader"></div> : 
+          <div className="container">
+            <div className="row card-wrapper">
+              <div className="card-deck col-md-offset-3">
+                <div className="card text-white bg-info mb-3">
+                  <div className="card-body">
+                    <p className="card-text">You have not borrowed any book</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+      </div>}
+        </div>
 			);
-		}
+		}else{
 			return (
         <div className="">
           <div className="row">
@@ -107,7 +129,7 @@ class  BorrowedBooks extends Component {
 						</div>
             </div>
 				</div>
-			);
+			)}
 	}
 
 	/**
@@ -143,7 +165,8 @@ BorrowedBooks.PropTypes = {
 function mapStateToProps(state) {
 	return {
 		borrowedBooks: state.books.allBorrowedBooks,
-		user: state.auth.user.currentUser
+		user: state.auth.user.currentUser,
+		isFetching: state.books.isFetching
 	};
 }
 

@@ -1,6 +1,23 @@
-import { GET_ALL_BOOKS, GET_UNRETURNED_BOOKS, RETURN_BOOK, GET_BORROWED_HISTORY, DELETE_BOOK, GET_ALL_TIME_BORROWED, EDIT_BOOK } from '../actions/types';
+import { 
+  GET_ALL_BOOKS, 
+  GET_UNRETURNED_BOOKS, 
+  RETURN_BOOK, 
+  GET_BORROWED_HISTORY, 
+  DELETE_BOOK, 
+  GET_ALL_TIME_BORROWED, 
+  EDIT_BOOK,
+  SET_API_STATUS } from '../actions/types';
 
-const INITIAL_STATE = { category: [], allTimeBorrowed: '',  message: '', user: '', allBorrowedBooks: [], allUnreturnedBooks: [], data: [], returned: '' };
+const INITIAL_STATE = { 
+  category: [], 
+  allTimeBorrowed: '',  
+  message: '', user: '', 
+  allBorrowedBooks: [], 
+  allUnreturnedBooks: [], 
+  data: [], 
+  returned: '',
+  isFetching: false
+};
 export default function bookReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case GET_ALL_BOOKS:
@@ -36,6 +53,8 @@ export default function bookReducer(state = INITIAL_STATE, action) {
       });
       return { ...state, data: newData };
     }
+    case SET_API_STATUS:
+      return { ...state, isFetching: action.isFetching };
     default:
       return state;
   }

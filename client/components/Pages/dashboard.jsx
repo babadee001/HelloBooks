@@ -5,6 +5,7 @@ import { getBooks } from '../../actions/booksActions';
 import AllBooks from '../includes/books';
 import SideBar from '../includes/sidebar';
 import Navbar from '../navbar';
+import sidebar from '../includes/sidebar';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -22,17 +23,49 @@ class Dashboard extends Component {
 
   renderBooks() {
     const allbooks = this.props.books;
-    if (allbooks.length === 0) {
-      return (<div className="empty-notifier">
-        <h2>Wawu!!!...No book available at this time.</h2>
-      </div>);
-    }
+    if (!allbooks || allbooks.length === 0) {
+      return (
+      <div>
+        <SideBar
+        fullname={ this.props.user.username }
+        link1={'Borrow History'} 
+        route1={'/history'}
+        link2={'All books'} 
+        route2={'/dashboard'}
+        link3={'Profile'} 
+        route3={'/profile'}
+        /> 
+        {this.props.isFetching ? <div className="preloader"></div> :
+        <div className="container">
+        <div className="row card-wrapper">
+          <div className="card-deck col-md-offset-3">
+            <div className="card text-white bg-info mb-3">
+              <div className="card-body">
+                <p className="card-text">No books available in the store now, please check later</p>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>}
+      </div>
+      );
+    }else{
     return (
-      <div className="container-fluid">
+      <div className="">
         <div className="row">
-        <div className="card-panel headcard">
+          <div className="card-panel headcard">
             <center>Recently Added</center>
           </div>
+          <SideBar 
+          fullname={ this.props.user.username }
+          link1={'Borrow History'} 
+          route1={'/history'}
+          link2={'All books'} 
+          route2={'/dashboard'}
+          link3={'Profile'} 
+          route3={'/profile'}
+          /> 
+          <div className="col s12 l9">
           {allbooks.map(book => (<AllBooks
             key={ book.id }
             author={ book.author }
@@ -46,29 +79,15 @@ class Dashboard extends Component {
           }
       </div>
       </div>
-    );
+    </div>
+    )}
   }
 
   render() {
     return (
       <div>
-        <Navbar route1="/profile" link1="Profile" route2="" link2="Contact Us" />
-        <div className="row">
-          <SideBar 
-          fullname={ this.props.user.username }
-          link1={'Borrow History'} 
-          route1={'/history'}
-          link2={'All books'} 
-          route2={'/dashboard'}
-          link3={'Profile'} 
-          route3={'/profile'}
-          /> 
-            <div className="col m9">
-              <div>
-                {this.renderBooks()}
-              </div>
-            </div>
-      </div>
+        <Navbar route='/about' link='About' route1="/profile" link1="Profile" route2="" link2="Contact Us" />
+          {this.renderBooks()}
       </div>
     );
   }
@@ -83,7 +102,9 @@ Dashboard.PropTypes = {
 function mapStateToProps(state) {
   return { 
     user: state.auth.user.currentUser,
-    books: state.books.data };
+    books: state.books.data,
+    isFetching: state.books.isFetching
+  };
 }
 
 function mapDispatchToProps(dispatch) {

@@ -1,18 +1,31 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { GET_ALL_BOOKS, DELETE_BOOK, EDIT_BOOK, ADD_BOOK, ADD_CATEGORY, GET_UNRETURNED_BOOKS, RETURN_BOOK, GET_BORROWED_HISTORY, GET_ALL_TIME_BORROWED } from './types';
+import { 
+  GET_ALL_BOOKS, 
+  DELETE_BOOK, 
+  EDIT_BOOK, 
+  ADD_BOOK, 
+  ADD_CATEGORY, 
+  GET_UNRETURNED_BOOKS, 
+  RETURN_BOOK, 
+  GET_BORROWED_HISTORY, 
+  GET_ALL_TIME_BORROWED 
+} from './types';
+import { isFetching } from './authActions';
 
 dotenv.load();
 export function addBook(book) {
   return { type: ADD_BOOK, book };
 }
-export function getBooks() {
-  return dispatch => axios.get('api/v1/books')
+export const getBooks = () => (dispatch) => {
+  dispatch(isFetching(true));
+  return axios.get('api/v1/books')
     .then((res) => {
       dispatch({
         type: GET_ALL_BOOKS,
         data: res.data
-      });
+      })
+      dispatch(isFetching(false));
       return res.data;
     })
     .catch(error => error);
@@ -29,13 +42,15 @@ export function getBorrowed(userId) {
     .catch(error => error);
 }
 
-export function getHistory(userId) {
-  return dispatch => axios.get(`api/v1/users/${userId}`)
+export const getHistory = userId => (dispatch) => {
+  dispatch(isFetching(true));
+  return axios.get(`api/v1/users/${userId}`)
     .then((res) => {
       dispatch({
         type: GET_BORROWED_HISTORY,
         data: res.data
       });
+      dispatch(isFetching(false));
       return res.data;
     })
     .catch(error => error);

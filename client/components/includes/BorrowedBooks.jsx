@@ -21,13 +21,13 @@ const AllBooks = ({ handleAction, cover, title,
 						<p>
 														
 						{borrowed && !isReturned && (
-								<a href="#" id="returnBook" onClick={handleClick} 
+								<a id="returnBook" onClick={handleClick} 
 								className="btn">
 									Return
 								</a>
 							)}
 							{borrowed && isReturned && (
-								<a href="#" id="returnBook" onClick={handleClick} 
+								<a id="returnBook" onClick={handleClick} 
 								className="btn disabled">
 									Returned
 								</a>
