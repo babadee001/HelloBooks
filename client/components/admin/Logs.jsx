@@ -23,7 +23,6 @@ class Logs extends Component {
   renderProps(){
     const books = this.props.books;
     const auth = this.props.auth;
-    console.log(this.props)
     return (
       <div>
       </div>
@@ -33,7 +32,7 @@ class Logs extends Component {
     return (
       <div>
         {this.renderProps()}
-        <Navbar route1="/admin" link1="Admin dashboard" route2="" link2="Contact Us" />
+        <Navbar route1="/admin" link1="Admin dashboard" route2="/logs" link2="View Logs" />
         <div className="container">
         <div className="row card-wrapper">
                 <div className="col-sm-4 col-md-4 col-lg-4">

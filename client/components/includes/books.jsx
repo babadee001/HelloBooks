@@ -40,7 +40,7 @@ export default class AllBooks extends Component {
   render() {
     return (
       <div>
-        <div className="col s12 m3 l3">
+        <div className="col s12 m6 l3">
           <div className="card">
             <div className="card-image waves-effect waves-block waves-light">
               <img className="activator" src={ this.props.cover } id="cover" alt="cover" />

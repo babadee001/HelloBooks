@@ -7,6 +7,7 @@ import { getBooks, deleteBook } from '../../actions/booksActions';
 import { logout } from '../../actions/authActions';
 import AdminSideBar from '../includes/sidebar';
 import Navbar from '../navbar';
+import { getUsers } from '../../actions/authActions';
 
 class AdminHome extends Component {
   constructor(props) {
@@ -23,6 +24,10 @@ class AdminHome extends Component {
       .props
       .actions
       .getBooks();
+      this
+      .props
+      .actions
+      .getUsers();
   }
 
   logout(event) {
@@ -62,8 +67,8 @@ class AdminHome extends Component {
           fullname={ this.props.user.username }
           link1={'Add New Book'} 
           route1={'/add'}
-          link2={'User dashboard'} 
-          route2={'/dashboard'}
+          link2={'Profile'} 
+          route2={'/profile'}
           link3={'Logs'} 
           route3={'/logs'}
           />
@@ -91,7 +96,7 @@ class AdminHome extends Component {
     const { username, id } = this.props.user;
     return (
       <div>
-        <Navbar route1="/admin" link1="Admin dashboard" route2="" link2="Contact Us" />
+        <Navbar route="/admin" link="Admin dashboard" route1="/logs" link1="View Logs" />
         {this.renderBooks()}
       </div>
     );
@@ -100,7 +105,7 @@ class AdminHome extends Component {
 
 function mapStateToProps(state) {
   return { books: state.books.data,
-    user: state.auth.user.currentUser };
+    user: state.auth.user };
 }
 
 AdminHome.PropTypes = {
