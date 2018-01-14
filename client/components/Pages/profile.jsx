@@ -21,7 +21,6 @@ class Profile extends Component {
 
   render() {
     const { username, email, membership } = this.props.user;
-    console.log(this.props.book.length);
     return (
       <div>
         <Navbar route1="/dashboard" link1="All books" route2="" link2="Contact Us" />

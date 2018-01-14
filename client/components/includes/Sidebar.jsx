@@ -17,7 +17,6 @@ class SideBar extends Component {
                 src="http://res.cloudinary.com/babadee30/image/upload/v1507304526/prof_qqq3su.jpg"
                 alt="Avatar"
               /><br />
-              <i className="material-icons">account_circle</i>
               <b>{this.props.fullname}</b>
             </div><br />
           </div>
