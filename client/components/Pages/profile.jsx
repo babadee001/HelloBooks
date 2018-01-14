@@ -9,47 +9,19 @@ import Navbar from '../navbar';
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.renderBooks = this
-      .renderBooks
-      .bind(this);
   }
+
   componentDidMount() {
+    const userId = this.props.user.userId
     this
       .props
       .actions
-      .getBorrowed(this.props.user.userId);
-  }
-
-  renderBooks() {
-    const allBorrowed = this.props.book;
-    if (allBorrowed.length < 1) {
-      return (<div className="empty-notifier headcard">
-        <h2 id="returned">Wawu!!!...All books returned.</h2>
-      </div>);
-    }
-    return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="card-panel headcard">
-            <center>Unreturned books</center>
-          </div>
-          {allBorrowed.map(book => (<AllBorrowed
-            key={ book.id }
-            author={ book.author }
-            description={ book.description }
-            id={ book.id }
-            userId={ this.props.user.userId }
-            title={ book.title }
-            cover={ book.cover }
-          />))
-          }
-        </div>
-      </div>
-    );
+      .getBorrowed(userId);
   }
 
   render() {
-    const { username, userId, email, membership } = this.props.user;
+    const { username, email, membership } = this.props.user;
+    console.log(this.props.book.length);
     return (
       <div>
         <Navbar route1="/dashboard" link1="All books" route2="" link2="Contact Us" />
@@ -63,11 +35,24 @@ class Profile extends Component {
           link3={'Profile'} 
           route3={'/profile'}
           />
-          <div className="col-md-9">
-            <div className="profile-content">
-              {this.renderBooks()}
+          <div className="container">
+        <div className="row card-wrapper about">
+          <div className="card-deck col-md-offset-3">
+            <div className="card text-white bg-info mb-3">
+              <div className="card-body">
+                <div className="card-text">
+                <div className="records">
+                  <p><span>Username ====></span> {this.props.user.username}</p>
+                  <p><span>Email ====></span> {this.props.user.email}</p>
+                  <p><span>Membership ====></span> {this.props.user.membership}</p>
+                  <p><span>Number of Unreturned Books ====> {this.props.book.length} </span> {}</p>
+                </div>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
         </div>
       </div>
     );
