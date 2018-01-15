@@ -3,6 +3,7 @@ import GoogleLogin from 'react-google-login';
 import { Link } from 'react-router';
 import { browserHistory } from 'react-router';
 import jwt from 'jsonwebtoken';
+import { checkExisting } from '../../utils/validations';
 
 export default class SigninForm extends Component {
   constructor(props) {
@@ -13,6 +14,63 @@ export default class SigninForm extends Component {
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.responseGoogle = this.responseGoogle.bind(this);
+    this.getDetails = this.getDetails.bind(this);
+  }
+  /**
+	 * @description - Re-map API response to retrieve necessary data
+	 * 
+	 * @param {Object} obj - Object from Google API
+	 * 
+	 * @returns {Object} 
+	 * 
+	 * @memberOf GoogleLogIn
+	 */
+	getDetails(obj) {
+		let mainUserObject = {
+			currentUser: {}
+		};
+		const username = obj.name.toLowerCase().replace(/[\s]/, '_')
+		 + Math.round(Math.random(1998) * 56);
+		mainUserObject.currentUser.username = username;
+		mainUserObject.currentUser.membership = 'googleSilver';
+		mainUserObject.currentUser.password = username;
+		mainUserObject.currentUser.email = obj.email;
+		return mainUserObject;
+	}
+  responseGoogle(response) {
+    const secret = process.env.secretKey;
+    if (response.Zi.id_token) {
+      const decoded = jwt.decode(response.Zi.id_token);
+      const newUserObject = this.getDetails(decoded);
+      checkExisting({ email: newUserObject.currentUser.email })
+      .then((res) => {
+        if (res == 'Not found') {
+          this.props.userSignupRequest(newUserObject.currentUser)
+          .then(() => {
+            Materialize.toast('Logged In Successfully', 1000,
+            'teal',
+            () => {
+              browserHistory.push('/dashboard');
+            }
+          );
+          });
+        } else {
+          let currentUser = res;
+          const token = jwt.sign(
+            { currentUser,
+            }, secret
+          );
+          this.props.googleSigninRequest(token)
+            Materialize.toast('Logged In Successfully', 1000,
+            'teal',
+            () => {
+              browserHistory.push('/dashboard');
+            }
+          );
+        }
+      });
+    }
   }
   onChange(event) {
     this.setState({ [event.target.name]: event.target.value });
@@ -76,7 +134,9 @@ export default class SigninForm extends Component {
                     <button className="btn btn-success btn-block">Sign in</button>
                   </div>
                   <GoogleLogin
-                    clientId={ '332619675586-3k9hmrmeben0c8929757f2khnic9s7ul.apps.googleusercontent.com' }
+                    clientId={ '555411087662-6jdfislpa3bh0l5ala6c93ht1jruv5sq.apps.googleusercontent.com' }
+                      onSuccess={this.responseGoogle}
+                      onFailure={this.responseGoogle}
                   />
                   <div className="text-center">
                   Dont have an account?
@@ -93,6 +153,7 @@ export default class SigninForm extends Component {
 }
 SigninForm.propTypes = {
   userSigninRequest: React.PropTypes.func.isRequired,
+  userSignupRequest: React.PropTypes.func.isRequired
 };
 SigninForm.contextTypes = {
   router: React.PropTypes.object.isRequired,

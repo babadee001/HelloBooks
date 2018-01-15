@@ -12,7 +12,7 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    const userId = this.props.user.userId
+    const userId = this.props.user.userId || this.props.user.id
     this
       .props
       .actions
@@ -44,7 +44,7 @@ class Profile extends Component {
                   <p><span>Username ====></span> {this.props.user.username}</p>
                   <p><span>Email ====></span> {this.props.user.email}</p>
                   <p><span>Membership ====></span> {this.props.user.membership}</p>
-                  <p><span>Number of Unreturned Books ====> {this.props.book.length} </span> {}</p>
+                  <p><span>Number of Unreturned Books ====> { this.props.book } </span> {}</p>
                 </div>
                 </div>
               </div>
@@ -66,7 +66,8 @@ Profile.PropTypes = {
 
 function mapStateToProps(state) {
   return { user: state.auth.user.currentUser,
-    book: state.books.allUnreturnedBooks };
+    book: state.books.unreturnedCount
+   };
 }
 
 function mapDispatchToProps(dispatch) {

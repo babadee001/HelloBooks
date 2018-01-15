@@ -16,6 +16,7 @@ const INITIAL_STATE = {
   allUnreturnedBooks: [], 
   data: [], 
   returned: '',
+  unreturnedCount: '',
   isFetching: false
 };
 export default function bookReducer(state = INITIAL_STATE, action) {
@@ -23,7 +24,7 @@ export default function bookReducer(state = INITIAL_STATE, action) {
     case GET_ALL_BOOKS:
       return { ...state, data: action.data };
     case GET_UNRETURNED_BOOKS:
-      return { ...state, allUnreturnedBooks: action.data };
+      return { ...state, allUnreturnedBooks: action.data.message, unreturnedCount: action.data.count };
     case RETURN_BOOK: {
       const newData = [];
       state.allBorrowedBooks.map((book) => {

@@ -72,7 +72,7 @@ class Dashboard extends Component {
             borrowed={false}
             description={ book.description }
             id={ book.id }
-            userId={ this.props.user.userId }
+            userId={ this.props.user.userId || this.props.user.id }
             title={ book.title }
             cover={ book.cover }
           />))

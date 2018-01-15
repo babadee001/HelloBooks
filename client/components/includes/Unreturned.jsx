@@ -12,7 +12,7 @@ export default class AllBooks extends Component {
   }
 
   handleClick() {
-    const userId = this.props.userId;
+    const userId = this.props.user.userId || this.props.user.id
       const bookId = { bookId: this.props.id };
       swal({
         title: 'Are you sure?',
