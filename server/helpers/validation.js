@@ -15,16 +15,14 @@ export default {
       {
         username: {
           notEmpty: true,
-          isAlphanumeric: false,
           isLength: {
             options: [{ min: 3 }],
-            errorMessage: 'username should be at least three characters',
+            errorMessage: 'Username is required',
           },
           errorMessage: 'username is required and should contain no spaces or special characters',
         },
         password: {
           notEmpty: true,
-          isAlphanumeric: false,
           isLength: {
             options: [{ min: 4 }],
             errorMessage: 'password should be at least four characters',

@@ -100,3 +100,10 @@ export function getUsers() {
     })
     .catch(error => error);
 }
+
+export const googleSigninRequest = token  => (dispatch) => {
+  localStorage.setItem('token', token);
+  setAuthorizationToken(token);
+  const decoded = jwt.decode(token);
+  dispatch(setCurrentUser(decoded));
+}

@@ -30,7 +30,7 @@ class  BorrowedBooks extends Component {
 	 * @memberOf  BorrowedBooks
 	 */
   componentDidMount() {
-    const userId = this.props.user.userId
+    const userId = this.props.user.userId || this.props.user.id
     this
       .props
       .actions
@@ -45,6 +45,7 @@ class  BorrowedBooks extends Component {
 	 * @memberOf  BorrowedBooks
 	 */
 	handleClick(id) {
+		const userId = this.props.user.userId || this.props.user.id
 		swal({
 			title: 'Are you sure?',
 			text: 'Do you really want to return the book?',
@@ -53,7 +54,7 @@ class  BorrowedBooks extends Component {
 			dangerMode: true
 		}).then((willReturn) => {
 			if (willReturn) {
-				this.props.actions.returnBook(this.props.user.userId, { bookId: id })
+				this.props.actions.returnBook(userId, { bookId: id })
 			}
 		});
 	}
@@ -142,7 +143,7 @@ class  BorrowedBooks extends Component {
 	render() {
 		return (
 			<div>
-        <Navbar route1="/dashboard" link1="All books" route2="" link2="Contact Us" />
+        <Navbar route="/dashboard" link="All books" route1="/history" link1="History" />
 		      	{this.renderBorrowedBooks()}
           </div>
 		);

@@ -128,9 +128,13 @@ module.exports = {
         if (books.length < 1) {
           res.status(200).send({
             message: 'All books returned',
+            count: 0
           });
         } else {
-          res.status(200).send(books);
+          res.status(200).send({
+            books,
+            count: books.length
+          });
         }
       })
       .catch(error => res.status(404).send(error));

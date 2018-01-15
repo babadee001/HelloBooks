@@ -3,15 +3,19 @@ import { connect } from 'react-redux';
 import Navbar from '../navbar';
 
 import SigninForm from '../forms/signinForm';
-import { userSigninRequest } from '../../actions/authActions';
+import { userSigninRequest, userSignupRequest, googleSigninRequest } from '../../actions/authActions';
 
 class Signin extends Component {
   render() {
-    const { userSigninRequest } = this.props;
+    const { userSigninRequest, userSignupRequest, googleSigninRequest } = this.props;
     return (
       <div>
         <Navbar />
-        <SigninForm userSigninRequest={ userSigninRequest } />
+        <SigninForm 
+        userSigninRequest={ userSigninRequest } 
+        userSignupRequest= { userSignupRequest }
+        googleSigninRequest= { googleSigninRequest }
+        />
       </div>
     );
   }
@@ -19,6 +23,7 @@ class Signin extends Component {
 
 Signin.propTypes = {
   userSigninRequest: React.PropTypes.func.isRequired,
+  userSignupRequest: React.PropTypes.func.isRequired,
+  googleSigninRequest: React.PropTypes.func.isRequired
 };
-
-export default connect(state => ({}), { userSigninRequest })(Signin);
+export default connect(state => ({}), { userSignupRequest, userSigninRequest, googleSigninRequest })(Signin);

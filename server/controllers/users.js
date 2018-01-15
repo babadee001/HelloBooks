@@ -129,4 +129,21 @@ export default {
       })
       .catch(error => res.status(404).send(error));
   },
+  checkExisting(req, res) {
+    return Users
+      .findOne({
+        where: { 
+          email: req.body.email
+        },
+      })
+      .then((user) => {
+        res.status(200).json({
+          message: user
+        })
+      }).catch(error =>{
+        res.status(404).json({
+          message:error
+        })
+      })
+  },
 };

@@ -237,4 +237,32 @@ app.route('/:userId/books')
  *         description: User not logged in
  */
   .get(Check.isLoggedIn, BooksController.showBorrowed);
+  
+  app.route('/existing')
+/**
+ * @swagger
+ * /api/v1/users/google:
+ *   post:
+ *     tags:
+ *       - users
+ *     description: Creates a new user using google oauth
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: details
+ *         description: The registration details of the user
+ *         in: body
+ *         required: false
+ *         type: string
+ *         schema:
+ *           $ref: '#/definitions/users'
+ *     responses:
+ *       201:
+ *         description: Signed up successfully
+ *       400:
+ *         description: Invalid input(email, password...) details
+ *       409:
+ *         description: Existing details
+ */
+  .post(UsersController.checkExisting);
 export default app;
