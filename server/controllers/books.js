@@ -101,31 +101,20 @@ module.exports = {
    */
   // Modify a book information
   edit(req, res) {
-    return Books
-      .findOne({
-        where: { id: req.params.bookId },
-        attributes: ['id'],
-      })
-      .then((book) => {
-        if (!book) {
-          return res.status(404).send({
-            message: 'Book Not Found',
+    return Books.update(req.body, {
+      where: {
+        id: req.params.bookId
+      }
+    })
+      .then(() => {
+        Books.findById(req.params.bookId).then((book) => {
+          res.status(200).send({
+            book,
+            message: 'Book updated successfully!'
           });
-        }
-        return book
-          .update({
-            title: req.body.title || book.title,
-            author: req.body.author || book.author,
-            category: req.body.category || book.category,
-            description: req.body.description || book.quantity,
-            quantity: req.body.quantity,
-          })
-          .then(() => res.status(200).send({
-            message: 'Book updated successfully',
-          }))
-          .catch(error => res.status(400).send(error));
+        });
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
   showBorrowed(req, res) {
     return Borrowed
@@ -158,12 +147,25 @@ module.exports = {
           userId: req.params.userId,
         },
       })
-      .then(() => res.status(201).send(
-        {
-          message: 'Book returned!',
-        }
-      ))
-      .catch(error => res.status(400).send(error));
+      .then(() =>
+        Books.findById(req.params.bookId).then((book) => {
+          Books.update(
+            {
+              quantity: book.quantity + 1
+            },
+            {
+              where: {
+                id: req.params.bookId
+              }
+            }
+          ).then(() => {
+            res.status(201).send({
+              message: 'Book returned successfully',
+              book
+            });
+          });
+        })
+    ).catch(error => res.status(400).send(error));
   },
   erase(req, res) {
     return Books
@@ -178,9 +180,16 @@ module.exports = {
           .destroy()
           .then(() => res.status(201).send({
             message: 'book deleted',
+            id: req.params.bookId
           }))
           .catch(error => res.status(400).send(error));
       })
+      .catch(error => res.status(400).send(error));
+  },
+  listBorrowed(req, res) {
+    return Borrowed
+      .all()
+      .then(borrowed => res.status(200).send(borrowed))
       .catch(error => res.status(400).send(error));
   },
 };

@@ -3,26 +3,6 @@ import { Link } from 'react-router';
 import { SideNav, SideNavItem, Button } from 'react-materialize';
 
 class SideBar extends Component {
-  // componentDidMount() {
-  //   $('.button-collapse').sideNav({
-  //     menuWidth: 300,
-  //     edge: 'left',
-  //     closeOnClick: false,
-  //     draggable: true //
-  //   });
-  //   $('.dropdown-button').dropdown({
-  //     inDuration: 300,
-  //     outDuration: 225,
-  //     constrainWidth: false,
-  //     hover: true,
-  //     gutter: 0,
-  //     belowOrigin: false,
-  //     alignment: 'left',
-  //     stopPropagation: false
-  //   }
-  //   );
-  //   $('.modal').modal();
-  // }
   render() {
     return (
       <div className="col s2 m3 l3">
@@ -37,7 +17,6 @@ class SideBar extends Component {
                 src="http://res.cloudinary.com/babadee30/image/upload/v1507304526/prof_qqq3su.jpg"
                 alt="Avatar"
               /><br />
-              <i className="material-icons">account_circle</i>
               <b>{this.props.fullname}</b>
             </div><br />
           </div>

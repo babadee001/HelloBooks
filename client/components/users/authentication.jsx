@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
+import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { logout } from '../../actions/AuthActions';
+import { logout } from '../../actions/authActions';
 
 export default function (ComposedComponent) {
   class Authentication extends Component {
@@ -12,18 +13,18 @@ export default function (ComposedComponent) {
       if (token) {
         jwt.verify(token, key, (error) => {
           if (error) {
-            window.location.href = '/';
+            this.props.actions.logout()
           }
         });
       }
       if (!this.props.authenticated) {
-        window.location.href = '/';
+        this.props.actions.logout();
       }
     }
 
     componentWillUpdate(nextProps) {
       if (!nextProps.authenticated) {
-        window.location.href = '/';
+        this.props.actions.logout(); 
       }
     }
 

@@ -1,21 +1,27 @@
 const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const htmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   cache: true,
   entry: [
-    './client/index.jsx'
+    path.join(__dirname, '/client/index.jsx')
   ],
   output: {
-    path: path.join(__dirname, './client/dist/'),
-    publicPath: './client',
+    // path: path.resolve(__dirname, '/client/dist'),
+    path: path.join(__dirname, '/client/dist/'),
+    publicPath: '/',
     filename: 'bundle.js'
   },
   externals: {
     Materialize: 'Materialize'
   },
   plugins: [
+    new htmlWebpackPlugin({
+        title: 'Hellobooks',
+        template: './client/index.html'
+      }),
     new CleanWebpackPlugin(['client/dist']),
     new webpack.EnvironmentPlugin([
       'FIREABSE_DOMAIN',

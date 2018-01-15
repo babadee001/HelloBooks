@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import dotenv from 'dotenv';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import { logout } from '../../actions/AuthActions';
+import { logout } from '../../actions/authActions';
 
 
 dotenv.load();
@@ -27,7 +27,7 @@ export default function (ComposedComponent) {
   */
     componentWillMount() {
       if (!this.props.authenticated) {
-        browserHistory.push('/');
+        this.props.actions.logout();
       }
 
       if (this.props.user.isAdmin !== 1) {
@@ -43,9 +43,8 @@ export default function (ComposedComponent) {
    * @memberOf AdminAuthentication
    */
     componentWillUpdate(nextProps) {
-      console.log('next', nextProps);
       if (nextProps.authenticated === false) {
-        browserHistory.push('/');
+        this.props.actions.logout();
       }
     }
 

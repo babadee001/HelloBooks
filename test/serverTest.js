@@ -25,7 +25,7 @@ describe('Test', () => {
       .get('/api')
       .end((err, res) => {
         res.should.have.status(200);
-        res.text.should.equal('Welcome to Hello-Books API');
+        res.should.be.html;
         done();
       });
   });
@@ -34,7 +34,7 @@ describe('Test', () => {
       .get('/')
       .end((err, res) => {
         res.should.have.status(200);
-        res.text.should.equal('Welcome!!!!');
+        res.should.be.html;
         done();
       });
   });
@@ -50,6 +50,7 @@ describe('Test', () => {
       .end((err, res) => {
         res.body.message.should.equal('Signed up successfully');
         res.should.have.status(201);
+        res.should.be.json;
         done();
       });
   });
@@ -61,8 +62,9 @@ describe('Test', () => {
         username: 'testusername2',
       })
       .end((err, res) => {
-        res.should.have.status(409);
+        res.should.have.status(400);
         res.body.message.should.equals('Enter a valid email');
+        res.should.be.json
         done();
       });
   });
@@ -74,7 +76,7 @@ describe('Test', () => {
         email: 'test@yag.com',
       })
       .end((err, res) => {
-        res.should.have.status(409);
+        res.should.have.status(400);
         res.body.message.should.equals('username is required and should contain no spaces or special characters');
         done();
       });
@@ -104,7 +106,8 @@ describe('Test', () => {
       })
       .end((err, res) => {
         res.body.message.should.equal('Enter a valid email');
-        res.should.have.status(409);
+        res.should.be.json;
+        res.should.have.status(400);
         done();
       });
   });
@@ -116,6 +119,7 @@ describe('Test', () => {
         password: 'wrongpassword',
       })
       .end((err, res) => {
+        res.should.be.json
         res.body.message.should.equal('Invalid username or password');
         res.should.have.status(401);
         done();
@@ -124,7 +128,7 @@ describe('Test', () => {
   it('Admin should be able to add books', (done) => {
     chai.request(Server)
       .post('/api/v1/books/')
-      .set('x-access-token', adminToken)
+      .set('xaccesstoken', adminToken)
       // .type('form')
       .send({
         title: 'HarryPorter',
@@ -135,6 +139,7 @@ describe('Test', () => {
       })
       .end((err, res) => {
         res.should.have.status(201);
+        res.should.be.json;
         res.body.message.should.equal('Book added successfully');
         done();
       });
@@ -142,7 +147,7 @@ describe('Test', () => {
   it('Logged in users should not be able to add books', (done) => {
     chai.request(Server)
       .post('/api/v1/books/')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       // .type('form')
       .send({
         title: 'HarryPorter',
@@ -160,7 +165,7 @@ describe('Test', () => {
   it('Users not logged in should not be able to add books', (done) => {
     chai.request(Server)
       .post('/api/v1/books/')
-      // .set('x-access-token', userToken)
+      // .set('xaccesstoken', userToken)
       .send({
         title: 'HarryPorter',
         author: 'babadee',
@@ -177,10 +182,15 @@ describe('Test', () => {
   it('Get all books in the library', (done) => {
     chai.request(Server)
       .get('/api/v1/books/')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       .end((err, res) => {
         res.status.should.equals(200);
         res.body.should.be.a('array');
+        res.body[0].should.have.property('title');
+        res.body[0].should.have.property('author');
+        res.body[0].should.have.property('description');
+        res.body[0].should.have.property('isbn');
+        res.body[0].should.have.property('cover');
         res.body.length.should.equals(1);
         done();
       });
@@ -190,6 +200,7 @@ describe('Test', () => {
       .get('/api/v1/books/')
       .end((err, res) => {
         res.status.should.equals(401);
+        res.should.be.json
         res.body.message.should.equal('Access denied, you have to be logged in to perform this operation');
         done();
       });
@@ -197,17 +208,18 @@ describe('Test', () => {
   it('Cant get all books in the library with invalid token', (done) => {
     chai.request(Server)
       .get('/api/v1/books/')
-      .set('x-access-token', 'faketoken')
+      .set('xaccesstoken', 'faketoken')
       .end((err, res) => {
         res.status.should.equals(401);
-        res.body.message.should.equal('Failed to Authenticate Token');
+        res.should.be.json
+        res.body.message.should.equal('Access Denied. You are not authorized.');
         done();
       });
   });
   it('Allows logged in users to borrow books', (done) => {
     chai.request(Server)
       .post('/api/v1/users/1/books/1')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       .end((err, res) => {
         res.should.have.status(201);
         res.body.message.should.equal('You have successfully borrowed the book');
@@ -217,7 +229,7 @@ describe('Test', () => {
   it('Doesnt allows logged in users to borrow books they already borrowed without returning', (done) => {
     chai.request(Server)
       .post('/api/v1/users/1/books/1')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       .end((err, res) => {
         res.should.have.status(401);
         res.body.message.should.equal('You cant borrow this book again till you return');
@@ -227,7 +239,7 @@ describe('Test', () => {
   it('Logged in users cant borrow books not in the library', (done) => {
     chai.request(Server)
       .post('/api/v1/users/1/books/100')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       .end((err, res) => {
         res.should.have.status(404);
         res.body.message.should.equal('Wrong book id. Not in database.');
@@ -237,7 +249,7 @@ describe('Test', () => {
   it('Users not logged in cant borrow a book', (done) => {
     chai.request(Server)
       .post('/api/v1/users/1/books/1')
-      // .set('x-access-token', userToken)
+      // .set('xaccesstoken', userToken)
       .end((err, res) => {
         res.should.have.status(401);
         res.body.message.should.equal('Access denied, you have to be logged in to perform this operation');
@@ -247,29 +259,29 @@ describe('Test', () => {
   it('Users cant borrow a book with invalid token', (done) => {
     chai.request(Server)
       .post('/api/v1/users/1/books/1')
-      .set('x-access-token', 'wrongtoken')
+      .set('xaccesstoken', 'wrongtoken')
       .end((err, res) => {
         res.should.have.status(401);
-        res.body.message.should.equal('Failed to Authenticate Token');
+        res.body.message.should.equal('Access Denied. You are not authorized.');
         done();
       });
   });
   it('Users can return borrowed books', (done) => {
     chai.request(Server)
       .put('/api/v1/users/1/books/1')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       .end((err, res) => {
-        res.should.have.status(200);
-        res.body.message.should.equal('Book returned!');
+        res.should.have.status(201);
+        res.body.message.should.equal('Book returned successfully');
         done();
       });
   });
   it('Users can get all books borrowed and not returned', (done) => {
     chai.request(Server)
       .get('/api/v1/users/1/books')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       .end((err, res) => {
-        res.status.should.equals(201);
+        res.status.should.equals(200);
         res.body.message.should.equal('All books returned');
         done();
       });
@@ -277,7 +289,7 @@ describe('Test', () => {
   it('Admin should be able to modify books', (done) => {
     chai.request(Server)
       .put('/api/v1/books/1')
-      .set('x-access-token', adminToken)
+      .set('xaccesstoken', adminToken)
       .send({
         title: 'HarryPorterrrr',
         author: 'babadeewwww',
@@ -287,14 +299,14 @@ describe('Test', () => {
       })
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.message.should.equal('Book updated successfully');
+        res.body.message.should.equal('Book updated successfully!');
         done();
       });
   });
   it('Non Admin should not be able to modify books', (done) => {
     chai.request(Server)
       .put('/api/v1/books/1')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       .send({
         title: 'HarryPorterrrr',
         author: 'babadeewwww',
@@ -311,7 +323,7 @@ describe('Test', () => {
   it('Admin should be able to GET all users', (done) => {
     chai.request(Server)
       .get('/api/v1/users/')
-      .set('x-access-token', adminToken)
+      .set('xaccesstoken', adminToken)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.a('array');
@@ -321,7 +333,7 @@ describe('Test', () => {
   it('Non Admin should not be able to GET all users', (done) => {
     chai.request(Server)
       .get('/api/v1/users/')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       .end((err, res) => {
         res.should.have.status(401);
         res.body.message.should.equals('Operation failed. Admin privileges needed.');
@@ -331,9 +343,9 @@ describe('Test', () => {
   it('Admin should be able to delete book', (done) => {
     chai.request(Server)
       .delete('/api/v1/books/1')
-      .set('x-access-token', adminToken)
+      .set('xaccesstoken', adminToken)
       .end((err, res) => {
-        res.should.have.status(200);
+        res.should.have.status(201);
         res.body.message.should.equals('book deleted');
         done();
       });
@@ -341,7 +353,7 @@ describe('Test', () => {
   it('Non Admin should not be able to delete book', (done) => {
     chai.request(Server)
       .delete('/api/v1/books/1')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       .end((err, res) => {
         res.should.have.status(401);
         res.body.message.should.equals('Operation failed. Admin privileges needed.');
@@ -351,7 +363,7 @@ describe('Test', () => {
   it('Users can view their borrowing history, returned or not', (done) => {
     chai.request(Server)
       .get('/api/v1/users/1')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.a('array');
@@ -361,7 +373,7 @@ describe('Test', () => {
   it('Users with no borrowing history should be notified', (done) => {
     chai.request(Server)
       .get('/api/v1/users/100')
-      .set('x-access-token', userToken)
+      .set('xaccesstoken', userToken)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.message.should.equals('You have never borrowed a book');

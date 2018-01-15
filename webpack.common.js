@@ -1,34 +1,29 @@
 const webpack = require('webpack');
 const path = require('path');
+const dotenv = require('dotenv');
 
+dotenv.config();
 module.exports = {
-  // debug: true,
-  devtool: 'cheap-module-eval-source-map',
-  // noInfo: false,
-  entry: ['webpack-hot-middleware/client?reload=true', path.join(__dirname, '/client/index.jsx')],
+  entry: [path.join(__dirname, '/client/index.jsx')],
   output: {
-    path: path.join(__dirname, '/client/public'),
+    path: path.join(__dirname, '/client'),
     filename: 'bundle.js',
     publicPath: '/',
   },
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
-  node: {
-    dns: 'empty',
-    net: 'empty',
-    fs: 'empty'
-  },
   plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
-      'window.$': 'jquery',
       'window.jQuery': 'jquery',
+      Hammer: 'hammerjs/hammer'
     }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        secretKey: JSON.stringify(process.env.secretKey),
+        adminSecret: JSON.stringify(process.env.adminSecret),
+      }
+    })
   ],
   module: {
     loaders: [
@@ -79,4 +74,10 @@ module.exports = {
       },
     ],
   },
+  resolve: { extensions: ['.js', '.jsx', '.css'] },
+  node: {
+    dns: 'empty',
+    net: 'empty',
+    fs: 'empty'
+  }
 };

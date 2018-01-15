@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import Materialize from 'materialize-css';
+import { browserHistory } from 'react-router';
 import ImageUploader from 'react-firebase-image-uploader';
 import swal from 'sweetalert';
 
@@ -8,10 +9,6 @@ class AddBook extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      titleError: '',
-      authorError: '',
-      isbnError: '',
-      descError: '',
       title: '',
       isbn: '',
       description: '',
@@ -19,7 +16,7 @@ class AddBook extends Component {
       author: '',
       catId: '',
       quantity: 5,
-      isLoading: '',
+      isLoading: false,
       isUploading: '',
       progress: 0
     };
@@ -68,7 +65,7 @@ class AddBook extends Component {
           Materialize.toast('Book added Successfully', 2000, '#15b39d', () => {
             this.setState({ isLoading: false });
           });
-          window.location.href = '/admin';
+          browserHistory.push('/admin');
         }
       })
       .catch(err => swal(err));

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
-import Navbar from '../Navbar';
-import { borrowBook } from '../../actions/BooksActions';
+import Navbar from '../navbar';
+import { borrowBook } from '../../actions/booksActions';
 
 export default class AllBooks extends Component {
   constructor(props) {
@@ -40,7 +40,7 @@ export default class AllBooks extends Component {
   render() {
     return (
       <div>
-        <div className="col s12 m3 l3">
+        <div className="col s12 m6 l3">
           <div className="card">
             <div className="card-image waves-effect waves-block waves-light">
               <img className="activator" src={ this.props.cover } id="cover" alt="cover" />

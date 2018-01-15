@@ -4,19 +4,21 @@ module.exports = {
     password: 'andela',
     database: 'New',
     host: '127.0.0.1',
-    port: '5432',
+    port: 5432,
     dialect: 'postgres'
   },
   test: {
-    username: 'postgres',
-    password: 'andela',
-    database: 'database_test',
-    host: '127.0.0.1',
-    port: '5432',
-    dialect: 'postgres'
+    test: {
+      username: "root",
+      password: "password",
+      database: "hellobooks_test",
+      host: "127.0.0.1",
+      port: 5432,
+      dialect: "postgres"
+      },
   },
   production: {
     use_env_variable: 'DATABASE_URL',
-    dialect: 'postgres'
+    dialect: process.env.dialect
   }
 };

@@ -27,6 +27,7 @@ export default {
       })
       .then((user) => {
         const currentUser = {
+          userId: user.id,
           username: user.username,
           password: user.password,
           isAdmin: user.isAdmin,
@@ -65,10 +66,10 @@ export default {
       })
       .then((user) => {
         const currentUser = {
+          userId: user.id,
           username: user.username,
           password: user.password,
           email: user.email,
-          isAdmin: user.isAdmin,
           membership: user.membership,
         };
         const token = jwt.sign(
@@ -93,6 +94,7 @@ export default {
         const currentUser = {
           userId: user.id,
           username: user.username,
+          email: user.email,
           password: user.password,
           isAdmin: user.isAdmin,
           membership: user.membership };

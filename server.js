@@ -9,7 +9,8 @@ import path from 'path';
 import webpackMiddleware from 'webpack-dev-middleware';
 import UserRouter from './server/routes/users';
 import BookRouter from './server/routes/books';
-import webpackConfig from './webpack.config';
+import webpackConfig from './webpack.dev';
+import webpackProd from './webpack.config.prod';
 
 dotenv.load();
 const app = express();
@@ -46,7 +47,9 @@ const options = {
 const swaggerSpec = swagger(options);
 
 app.use(logger('dev'));
-app.use(webpackMiddleware(webpack(webpackConfig)));
+if (process.env.NODE_ENV !== 'production'){
+  app.use(webpackMiddleware(webpack(webpackConfig)));
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -63,6 +66,8 @@ app.get('/api', (req, res) => {
   res.header(200);
   res.send('Welcome to Hello-Books API');
 });
+
+
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/index.html'));
