@@ -1,24 +1,22 @@
+const dotenv = require('dotenv');
+
+dotenv.load();
+
 module.exports = {
   development: {
-    username: 'postgres',
-    password: 'andela',
-    database: 'New',
-    host: '127.0.0.1',
-    port: 5432,
+    username: process.env.username,
+    password: process.env.password,
+    database: process.env.database,
+    host: process.env.host,
+    port: process.env.port,
     dialect: 'postgres'
   },
   test: {
-    test: {
-      username: "root",
-      password: "password",
-      database: "hellobooks_test",
-      host: "127.0.0.1",
-      port: 5432,
-      dialect: "postgres"
-      },
-  },
+    use_env_variable: 'DATABASE_TEST_URL',
+    dialect: 'postgres'
+    },
   production: {
     use_env_variable: 'DATABASE_URL',
-    dialect: process.env.dialect
+    dialect: 'postgres'
   }
 };
