@@ -1,8 +1,22 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import { SideNav, SideNavItem, Button } from 'react-materialize';
 
+/**
+ * @description - User side bar component
+ * 
+ * @class SideBar
+ * 
+ * @extends {Component}
+ */
 class SideBar extends Component {
+
+  /**
+	 * @description - Renders the component
+	 * 
+	 * @returns {Object}
+	 * 
+	 * @memberOf SideBar
+	 */
   render() {
     return (
       <div className="col s2 m3 l3">

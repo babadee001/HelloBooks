@@ -1,5 +1,4 @@
 module.exports = (sequelize, DataTypes) => {
-  // Model for users
   const Users = sequelize.define('Users', {
     username: {
       type: DataTypes.STRING,
@@ -20,9 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        /**Users.hasMany(models.borrowed, {
-          foreignKey: 'userId',
-        });**/
+        // None
       },
     },
   });

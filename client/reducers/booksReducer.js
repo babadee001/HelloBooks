@@ -9,9 +9,9 @@ import {
   SET_API_STATUS } from '../actions/types';
 
 const INITIAL_STATE = { 
-  category: [], 
   allTimeBorrowed: '',  
-  message: '', user: '', 
+  message: '', 
+  user: '', 
   allBorrowedBooks: [], 
   allUnreturnedBooks: [], 
   data: [], 
@@ -19,6 +19,16 @@ const INITIAL_STATE = {
   unreturnedCount: '',
   isFetching: false
 };
+
+/**
+ * @description - Book reducer
+ *
+ * @param {Object} state - Object containing the default state
+ *
+ * @param {Object} action - Object containing dispatched data
+ *
+ * @returns {Object} - Object containing the store data
+ */
 export default function bookReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case GET_ALL_BOOKS:

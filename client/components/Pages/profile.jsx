@@ -2,15 +2,26 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getBorrowed } from '../../actions/booksActions';
-import AllBorrowed from '../includes/Unreturned';
 import Sidebar from '../includes/sidebar';
 import Navbar from '../navbar';
 
+/**
+ * @description Profile component
+ * 
+ * @class  Profile
+ * 
+ * @extends {Component}
+ */
 class Profile extends Component {
   constructor(props) {
     super(props);
   }
 
+  /**
+	 * @description - Executes after component is mounted
+	 * 
+	 * @memberOf Profile
+	 */
   componentDidMount() {
     const userId = this.props.user.userId || this.props.user.id
     this
@@ -19,6 +30,13 @@ class Profile extends Component {
       .getBorrowed(userId);
   }
 
+  /**
+	 * Renders the component
+	 * 
+	 * @returns 
+	 * 
+	 * @memberOf  Profile
+	 */
   render() {
     const { username, email, membership } = this.props.user;
     return (
@@ -64,12 +82,26 @@ Profile.PropTypes = {
   books: PropTypes.object.isRequired
 };
 
+/**
+ * @description mapStateToProps - maps state value to props
+ *
+ * @param  {object} state the store state
+ *
+ * @return {Object} returns state object
+ */
 function mapStateToProps(state) {
   return { user: state.auth.user.currentUser,
     book: state.books.unreturnedCount
    };
 }
 
+/**
+ * Maps the action to component Props
+ * 
+ * @param {Function} dispatch 
+ *
+ * @returns {Object} - Object containing functions
+ */
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({

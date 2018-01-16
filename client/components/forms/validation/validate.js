@@ -1,6 +1,15 @@
 import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 
+/**
+ * @description - validateInput component
+ * 
+ * @export {Object} validateInput component
+ * 
+ * @class validateInput
+ * 
+ * @extends {Component}
+ */
 export default function validateInput(data) {
   let errors = {};
   if (Validator.isEmpty(data.email)) {

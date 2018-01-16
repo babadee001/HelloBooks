@@ -4,11 +4,36 @@ import { Link } from 'react-router';
 import { Navbar, NavItem } from 'react-materialize';
 import { logout } from '../actions/authActions'; 
 
+/**
+ * @description - Navbar component
+ * 
+ * @export {Object}
+ * 
+ * @class Navbar
+ * 
+ * @extends {Component}
+ */
 class Nav extends Component {
+
+  /**
+	 * 
+	 * @description - Logout user out of the app
+	 * 
+	 * @memberOf Navbar
+	 */
   logout(event) {
     event.preventDefault();
     this.props.logout();
   }
+
+  /**
+	 * 
+	 * @description - Renders the component
+	 * 
+	 * @returns {Object} - Object
+	 * 
+	 * @memberOf Navbar
+	 */
   render() {
     const isAuthenticated = this.props.auth.authenticated;
     
@@ -41,6 +66,13 @@ Nav.propTypes = {
   logout: React.PropTypes.func.isRequired
 };
 
+/**
+ * @description - Maps the redux state to the component props
+ * 
+ * @param {Object} state - Application state
+ *  
+ * @returns {Object} - Selected state
+ */
 function mapStateToProps(state) {
   return {
     auth: state.auth

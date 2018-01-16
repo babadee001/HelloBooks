@@ -3,7 +3,24 @@ import swal from 'sweetalert';
 import Navbar from '../navbar';
 import { borrowBook } from '../../actions/booksActions';
 
+/**
+ * @description - Allbooks component
+ * 
+ * @export
+ * 
+ * @class AllBooks
+ * 
+ * @extends {Component}
+ */
 export default class AllBooks extends Component {
+
+  /**
+	 * @description - Creates an instance of AllBooks.
+	 * 
+	 * @param {Object} props - Componnet props data
+	 * 
+	 * @memberOf AllBooks
+	 */
   constructor(props) {
     super(props);
     this.handleClick = this
@@ -11,6 +28,11 @@ export default class AllBooks extends Component {
       .bind(this);
   }
 
+   /**
+	 * @description - Executes borrow book action
+	 * 
+	 * @memberOf AllBooks
+	 */
   handleClick() {
     const userId = this.props.userId;
     const bookId = { bookId: this.props.id };
@@ -37,6 +59,14 @@ export default class AllBooks extends Component {
     });
   }
 
+  /**
+	 * 
+	 * @description - Renders the component
+	 * 
+	 * @returns {Object} - Object
+	 * 
+	 * @memberOf AllBooks
+	 */
   render() {
     return (
       <div>

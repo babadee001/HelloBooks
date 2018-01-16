@@ -14,15 +14,7 @@ export default (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: () => {
-        // associations can be defined here
-        // Borrowed.BelongsTo(models.Book, {
-        //   foreignKey: 'bookId',
-        //   onDelete: 'CASCADE'
-        // });
-        // Borrowed.BelongsTo(models.User, {
-        //   foreignKey: 'userId',
-        //   onDelete: 'CASCADE'
-        // });
+        // None
       }
     }
   });

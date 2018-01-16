@@ -11,6 +11,7 @@ dotenv.load();
 /**
  *
  * Higher order component for admin authentication
+ * 
  * @export {Object}
  *
  * @param {Object} ComposedComponent
@@ -19,12 +20,12 @@ dotenv.load();
  */
 export default function (ComposedComponent) {
   class AdminAuthentication extends Component {
-    /**
-  *
-  *
-  *
-  * @memberOf AdminAuthentication
-  */
+
+  /**
+		 * @description - Validates the user authentication data
+		 * 
+		 * @memberOf AdminAuthentication
+		 */
     componentWillMount() {
       if (!this.props.authenticated) {
         this.props.actions.logout();
@@ -38,7 +39,7 @@ export default function (ComposedComponent) {
     /**
    * Executes before component is updated
    *
-   * @param {any} nextProps
+   * @param { object } nextProps
    *
    * @memberOf AdminAuthentication
    */
@@ -51,7 +52,7 @@ export default function (ComposedComponent) {
     /**
    * Renders the component
    *
-   * @returns
+   * @returns { object }
    *
    * @memberOf AdminAuthentication
    */
@@ -64,7 +65,7 @@ export default function (ComposedComponent) {
   };
 
   /**
- * Maps dispatch to the application action creators
+ * @description Maps dispatch to the application action creators
  *
  * @param {Function} dispatch
  *
@@ -82,7 +83,7 @@ export default function (ComposedComponent) {
   }
 
   /**
- *
+ *@description -  Maps dispatch to the component
  *
  * @param {Function} state
  *

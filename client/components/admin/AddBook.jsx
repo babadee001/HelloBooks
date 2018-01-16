@@ -2,11 +2,18 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import AddBook from '../includes/addBook';
-import AdminSideBar from '../includes/sidebar';
 import { addBookAction } from '../../actions/booksActions';
 import Navbar from '../navbar';
 
-
+/**
+ * @description - Add new book component
+ * 
+ * @export
+ * 
+ * @class AddNewBook
+ * 
+ * @extends {Component}
+ */
 export class AddANewBook extends Component {
   render() {
     const { addNewBookAction } = this.props;
