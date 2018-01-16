@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
-export default class Foot extends Component {
+/**
+ * @description - Footer
+ * 
+ * @export {Object}
+ * 
+ * @class Footer
+ * 
+ * @extends {Component}
+ */
+export default class Footer extends Component {
   render() {
     return (
       <div>

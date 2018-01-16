@@ -9,21 +9,28 @@ import { logout } from '../../actions/authActions';
 dotenv.load();
 
 /**
- *
- * Higher order component for admin authentication
- * @export {Object}
- *
- * @param {Object} ComposedComponent
- *
- * @returns {Object}
+ * @description - Higher order component for user authentication
+ * 
+ * @param {Object} ComposedComponent 
+ * 
+ * @returns {Void} - nothing
  */
 export default function (ComposedComponent) {
 
-    /**
-  *
-  * @memberOf Authentication
-  */
+  /**
+	 * 
+	 * 
+	 * @class Authentication
+	 * 
+	 * @extends {Component}
+	 */
   class Authentication extends Component {
+
+    /**
+		 * @description - Validates the user authentication data
+		 * 
+		 * @memberOf Authentication
+		 */
     componentWillMount() {
       const key = process.env.secretKey;
       const token = localStorage.getItem('token');
@@ -39,10 +46,11 @@ export default function (ComposedComponent) {
       }
     }
 
-    /**
+
+      /**
    * Executes before component is updated
    *
-   * @param {any} nextProps
+   * @param { object } nextProps
    *
    * @memberOf Authentication
    */
@@ -52,20 +60,21 @@ export default function (ComposedComponent) {
       }
     }
 
-     /**
-   * Renders the component
-   *
-   * @returns
-   *
-   * @memberOf Authentication
-   */
+
+    /**
+		 * @description - Renders the component
+		 * 
+		 * @returns  { object }
+		 * 
+		 * @memberOf AdminAuthentication
+		 */
     render() {
       return <ComposedComponent { ...this.props } />;
     }
   }
 
-  /**
- * Maps dispatch to the application action creators
+    /**
+ * @description Maps dispatch to the application action creators
  *
  * @param {Function} dispatch
  *
@@ -83,7 +92,8 @@ export default function (ComposedComponent) {
     router: PropTypes.object
   };
 
-  /**
+   /**
+ *@description -  Maps application state to the component
  *
  * @param {Function} state
  *

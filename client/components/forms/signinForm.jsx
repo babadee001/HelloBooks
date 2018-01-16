@@ -5,7 +5,23 @@ import { browserHistory } from 'react-router';
 import jwt from 'jsonwebtoken';
 import { checkExisting } from '../../utils/validations';
 
+/**
+ * @description - Signin form component
+ * 
+ * @export {Object} SigninForm component
+ * 
+ * @class SigninForm
+ * 
+ * @extends {Component}
+ */
 export default class SigninForm extends Component {
+  /**
+	 * @description - Creates an instance of signinForm.
+	 * 
+	 * @param {Object} props - component properties
+	 * 
+	 * @memberOf signinForm
+	 */
   constructor(props) {
     super(props);
     this.state = {
@@ -18,13 +34,13 @@ export default class SigninForm extends Component {
     this.getDetails = this.getDetails.bind(this);
   }
   /**
-	 * @description - Re-map API response to retrieve necessary data
+	 * @description - Destructure API response from google to retrieve necessary data
 	 * 
 	 * @param {Object} obj - Object from Google API
 	 * 
 	 * @returns {Object} 
 	 * 
-	 * @memberOf GoogleLogIn
+	 * @memberOf signinForm
 	 */
 	getDetails(obj) {
 		let mainUserObject = {
@@ -37,7 +53,17 @@ export default class SigninForm extends Component {
 		mainUserObject.currentUser.password = username;
 		mainUserObject.currentUser.email = obj.email;
 		return mainUserObject;
-	}
+  }
+  
+  /**
+	 * @description - Handles response from google signin request
+	 * 
+	 * @param {Object} response - Object from Google API
+	 * 
+	 * @returns {Object} 
+	 * 
+	 * @memberOf signinForm
+	 */
   responseGoogle(response) {
     const secret = process.env.secretKey;
     if (response.Zi.id_token) {
@@ -72,9 +98,25 @@ export default class SigninForm extends Component {
       });
     }
   }
+
+  /**
+	 * @description - Handles the input value changes
+	 * 
+	 * @param {Object} event 
+	 * 
+	 * @memberOf signinForm
+	 */
   onChange(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
+
+  /**
+	 * @description - Submits the signin information
+	 * 
+	 * @param {Object} event 
+	 * 
+	 * @memberOf signinForm
+	 */
   onSubmit(event) {
     event.preventDefault();
     this.props.userSigninRequest(this.state).then(() => {
@@ -100,6 +142,14 @@ export default class SigninForm extends Component {
     }
     )
   }
+
+  /**
+	 * @description - Renders the component
+	 * 
+	 * @returns { Object }
+	 * 
+	 * @memberOf signinForm
+	 */
   render() {
     return (
       <div className="background">
@@ -136,7 +186,6 @@ export default class SigninForm extends Component {
                   <GoogleLogin
                     clientId={ '555411087662-6jdfislpa3bh0l5ala6c93ht1jruv5sq.apps.googleusercontent.com' }
                       onSuccess={this.responseGoogle}
-                      onFailure={this.responseGoogle}
                   />
                   <div className="text-center">
                   Dont have an account?

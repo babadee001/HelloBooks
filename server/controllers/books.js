@@ -5,12 +5,17 @@ const { Books } = db;
 const { Borrowed } = db;
 
 module.exports = {
-  /** Admin add new book
-   * @param  {object} req request
-   * @param  {object} res response
-   * Route: POST: /books
+/**
+   * @method create
+   * 
+   * @description This method handles creating new books request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
    */
-  // Add new book (by admin)
   create(req, res) {
     return Books
       .create({
@@ -27,24 +32,36 @@ module.exports = {
       }))
       .catch(error => res.status(400).send(error));
   },
-  /** displays all books
-   * @param  {object} req request
-   * @param  {object} res response
-   *  Route: GET: api/books
+ 
+  /**
+   * @method list
+   * 
+   * @description This method handles get all books request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
    */
-  // Get all books
   list(req, res) {
     return Books
       .all()
       .then(books => res.status(200).send(books))
       .catch(error => res.status(400).send(error));
   },
-  /** User can rent a book
-   * @param  {object} req request
-   * @param  {object} res response
-   * Route: POST: /api/users/:Userid/books/:bookId
+
+  /**
+   * @method borrow
+   * 
+   * @description This method handles borrow books request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
    */
-  // Borrow a book (requires user id and book id)
   borrow(req, res) {
     const now = new Date();
     const due = now.setDate(now.getDate() + 15);
@@ -94,12 +111,18 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   },
-  /** Admin modify book details
-   * @param  {object} request
-   * @param  {object} resonse
-   * Route: GET: /
+
+  /**
+   * @method edit
+   * 
+   * @description This method handles edit books request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
    */
-  // Modify a book information
   edit(req, res) {
     return Books.update(req.body, {
       where: {
@@ -116,6 +139,18 @@ module.exports = {
       })
       .catch(error => res.status(500).send(error));
   },
+
+  /**
+   * @method showborrowed
+   * 
+   * @description This method handles showing borrowed books request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   showBorrowed(req, res) {
     return Borrowed
       .findAll({
@@ -139,6 +174,18 @@ module.exports = {
       })
       .catch(error => res.status(404).send(error));
   },
+
+  /**
+   * @method returnBook
+   * 
+   * @description This method handles returning of books request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   returnBook(req, res) {
     return Borrowed
       .update({
@@ -171,6 +218,18 @@ module.exports = {
         })
     ).catch(error => res.status(400).send(error));
   },
+
+  /**
+   * @method erase
+   * 
+   * @description This method handles delete books request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   erase(req, res) {
     return Books
       .findById(req.params.bookId)
@@ -190,6 +249,18 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   },
+
+  /**
+   * @method listBorrowed
+   * 
+   * @description This method handles showing all borrowed books request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   listBorrowed(req, res) {
     return Borrowed
       .all()

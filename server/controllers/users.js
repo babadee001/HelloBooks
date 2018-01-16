@@ -11,11 +11,17 @@ const { Users } = db;
 const { Borrowed } = db;
 
 export default {
-  /** new user
-   * @param  {object} req request
-   * @param  {object} res response
-   * Route: POST: users/signup  
-   */ 
+  /**
+   * @method create
+   * 
+   * @description This method handles creation of new users request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   create(req, res) {
     const hashedPassword = bcrypt.hashSync(req.body.password, 10);
     return Users
@@ -47,13 +53,36 @@ export default {
         message: 'Username or email already exists',
       }));
   },
+
+  /**
+   * @method list
+   * 
+   * @description This method handles getting all registered users request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   list(req, res) {
     return Users
       .all()
       .then(users => res.status(200).send(users))
       .catch(error => res.status(400).send(error));
   },
-  // Create an admin 
+  
+  /**
+   * @method admin
+   * 
+   * @description This method handles creation of new admin users request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   admin(req, res) {
     const hashedPassword = bcrypt.hashSync(req.body.password, 10);
     return Users
@@ -85,6 +114,18 @@ export default {
         message: 'Username or email already exists',
       }));
   },
+
+  /**
+   * @method signin
+   * 
+   * @description This method handles authentication of users request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   signin(req, res) {
     return Users
       .findOne({
@@ -111,6 +152,18 @@ export default {
           });
       });
   },
+
+  /**
+   * @method userHistory
+   * 
+   * @description This method handles getting history of users request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   userHistory(req, res) {
     return Borrowed
       .findAll({
@@ -129,6 +182,18 @@ export default {
       })
       .catch(error => res.status(404).send(error));
   },
+
+  /**
+   * @method checkExisting
+   * 
+   * @description This method handles checking of existing users request
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   checkExisting(req, res) {
     return Users
       .findOne({

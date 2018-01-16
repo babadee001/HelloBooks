@@ -3,7 +3,23 @@ import { Link } from 'react-router';
 import jwt from 'jsonwebtoken';
 import { browserHistory } from 'react-router';
 
+/**
+ * @description - Signup form component
+ * 
+ * @export {Object} SignupForm component
+ * 
+ * @class SignupForm
+ * 
+ * @extends {Component}
+ */
 export default class SignupForm extends Component {
+  /**
+	 * @description - Creates an instance of signupForm.
+	 * 
+	 * @param {Object} props - component properties
+	 * 
+	 * @memberOf signupForm
+	 */
   constructor(props) {
     super(props);
     this.state = {
@@ -15,9 +31,25 @@ export default class SignupForm extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
+
+  /**
+	 * @description - Handles the input value changes
+	 * 
+	 * @param {Object} event 
+	 * 
+	 * @memberOf signupForm
+	 */
   onChange(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
+
+  /**
+	 * @description - Submits the signin information
+	 * 
+	 * @param {Object} event 
+	 * 
+	 * @memberOf signupForm
+	 */
   onSubmit(event) {
     event.preventDefault();
     this.props.userSignupRequest(this.state).then(() => {
@@ -43,6 +75,14 @@ export default class SignupForm extends Component {
     }
     )
   }
+
+  /**
+	 * @description - Renders the component
+	 * 
+	 * @returns { Object }
+	 * 
+	 * @memberOf signupForm
+	 */
   render() {
     return (
       <div className="background">

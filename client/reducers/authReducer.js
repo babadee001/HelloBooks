@@ -3,7 +3,6 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  userExist: '',
   error: '',
   message: '',
   user: {},
@@ -13,6 +12,15 @@ const INITIAL_STATE = {
   data: ''
 };
 
+/**
+ * @description - User authentication reducer
+ *
+ * @param {Object} state - Default application state
+ *
+ * @param {Object} action - Response from the API
+ *
+ * @returns {Object} - Object containing new state
+ */
 function authReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case UNAUTH_USER:

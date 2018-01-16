@@ -10,7 +10,7 @@ import AllBooks from '../includes/BorrowedBooks';
 import Navbar from '../navbar';
 
 /**
- * borrowedBooks component
+ * @description BorrowedBooks component
  * 
  * @export {Object}
  * @class  BorrowedBooks
@@ -23,7 +23,7 @@ class  BorrowedBooks extends Component {
 		this.handleClick =  this.handleClick.bind(this);
 	}
 	/**
-	 * Fetches the list of rented books by a user
+	 * Fetches the list of borrowed books by a user
 	 * 
 	 * @param {any} props 
 	 * 
@@ -60,7 +60,7 @@ class  BorrowedBooks extends Component {
 	}
 
 	/**
-	 * Displays lists of rented books
+	 * Displays lists of borrowed books
 	 * 
 	 * @returns 
 	 * 
@@ -172,8 +172,8 @@ function mapStateToProps(state) {
 }
 
 /**
+ * Maps the actions to component Props
  * 
- * Maps the state to component Props
  * @param {Function} dispatch 
  *
  * @returns {Object} - Object containing functions
