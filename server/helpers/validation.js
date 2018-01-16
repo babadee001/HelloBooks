@@ -9,7 +9,17 @@ const adminSecret = process.env.adminSecret;
 const { Users } = db;
 
 export default {
-  // Check if input fields are entered correctly
+  /**
+   * @method validateInput
+   * 
+   * @description This method handles validation of users input
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   validateInput(req, res, next) {
     req.checkBody(
       {
@@ -61,6 +71,18 @@ export default {
     };
     next();
   },
+
+  /**
+   * @method validateLogin
+   * 
+   * @description This method handles validation of login input
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   validateLogin(req, res, next) {
     req.checkBody(
       {
@@ -92,18 +114,27 @@ export default {
         }
       });
   },
-  // vallidation for book fields
+  
+  /**
+   * @method validateBook
+   * 
+   * @description This method handles validations of book input
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   validateBook(req, res, next) {
     req.checkBody(
       {
         title: {
           notEmpty: true,
-          // isAlphanumeric: true,
           errorMessage: 'Enter a valid title',
         },
         description: {
           notEmpty: true,
-          // isAlphanumeric: true,
           errorMessage: 'Enter a valid description',
         },
         quantity: {
@@ -117,14 +148,8 @@ export default {
         },
         author: {
           notEmpty: true,
-          // isAlpha: false,
           errorMessage: 'Enter valid author name',
         },
-        // category: {
-        //   notEmpty: true,
-        //   // isAlphanumeric: false,
-        //   errorMessage: 'Enter valid category name',
-        // },
       });
     const errors = req.validationErrors();
     if (errors) {
@@ -140,7 +165,18 @@ export default {
     }
     next();
   },
-  // Check if a user is logged in. Requires jwt token
+
+  /**
+   * @method isLoggedIn
+   * 
+   * @description This method checks for logged in users
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   isLoggedIn(req, res, next) {
     const token = req.headers.xaccesstoken;
     if (token) {
@@ -161,7 +197,18 @@ export default {
         });
     }
   },
-  // Check if user is an admin. Requires jwt token for admin.
+  
+  /**
+   * @method isAdmin
+   * 
+   * @description This method handles check for admin authentication of users
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
   isAdmin(req, res, next) {
     const token = req.headers.xaccesstoken;
     if (token) {

@@ -3,9 +3,9 @@ import axios from 'axios';
 /**
  * @description - Check if user details exists
  *
- * @param {object} detail - user details
+ * @param {object} userData - user details
  *
- * @returns {String} - String
+ * @returns {String, object} - String
  */
 export function checkExisting(userData) {
   return axios

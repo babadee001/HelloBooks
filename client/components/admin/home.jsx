@@ -9,7 +9,24 @@ import AdminSideBar from '../includes/sidebar';
 import Navbar from '../navbar';
 import { getUsers } from '../../actions/authActions';
 
+/**
+ * AdminHome component
+ * 
+ * @export { Object }
+ * 
+ * @class AdminHome
+ * 
+ * @extends {Component}
+ */
 class AdminHome extends Component {
+
+  /**
+	 * @description - Creates an instance of AdminHome.
+	 * 
+	 * @param {Object} props - Componnet props data
+	 * 
+	 * @memberOf AdminHome
+	 */
   constructor(props) {
     super(props);
     this.renderBooks = this
@@ -19,6 +36,13 @@ class AdminHome extends Component {
       .logout
       .bind(this);
   }
+
+  /**
+	 * 
+	 * @description - Executes after component is mounted
+	 * 
+	 * @memberOf AdminHome
+	 */
   componentDidMount() {
     this
       .props
@@ -30,6 +54,11 @@ class AdminHome extends Component {
       .getUsers();
   }
 
+  /**
+	 * @description - Unauthenticates user
+	 * 
+	 * @memberOf AdminHome
+	 */
   logout(event) {
     event.preventDefault();
 
@@ -40,7 +69,14 @@ class AdminHome extends Component {
     browserHistory.push('/');
   }
 
-
+  /**
+	 * 
+	 * @description - Displays the list of books in library
+	 * 
+	 * @returns {Array} - Array of books
+	 * 
+	 * @memberOf AdminHome
+	 */
   renderBooks() {
     const { username } = this.props.user;
     const allbooks = this.props.books;
@@ -92,17 +128,33 @@ class AdminHome extends Component {
 
     );
   }
+
+  /**
+	 * 
+	 * @description - Renders the component
+	 * 
+	 * @returns {Object} - Object
+	 * 
+	 * @memberOf AdminHome
+	 */
   render() {
     const { username, id } = this.props.user;
     return (
       <div>
-        <Navbar route="/admin" link="Admin dashboard" route1="/logs" link1="View Logs" />
+        <Navbar route="/add" link="Add Book" route1="/logs" link1="View Logs" />
         {this.renderBooks()}
       </div>
     );
   }
 }
 
+/**
+ * @description - Maps the redux state to the component props
+ * 
+ * @param {Object} state - Application state
+ *  
+ * @returns {Object} - Selected state
+ */
 function mapStateToProps(state) {
   return { books: state.books.data,
     user: state.auth.user };
@@ -113,6 +165,14 @@ AdminHome.PropTypes = {
   user: PropTypes.object.isRequired
 };
 
+/**
+ * 
+ * @description - Maps the dispatch to component props
+ * 
+ * @param {Function} dispatch 
+ *
+ * @returns {Object} - Object containing functions
+ */
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({

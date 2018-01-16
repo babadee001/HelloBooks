@@ -5,7 +5,24 @@ import Materialize from 'materialize-css';
 import { bindActionCreators } from 'redux';
 import { editBook, deleteBookAction } from '../../actions/booksActions';
 
+/**
+ * AllBooks component
+ * 
+ * @export { Object }
+ * 
+ * @class AllBooks
+ * 
+ * @extends {Component}
+ */
 class AllBooks extends Component {
+
+  /**
+	 * @description - Creates an instance of AllBooks.
+	 * 
+	 * @param {Object} props - component properties
+	 * 
+	 * @memberOf AllBooks
+	 */
   constructor(props) {
     super(props);
     this.state = {
@@ -35,6 +52,14 @@ class AllBooks extends Component {
       .bind(this);
   }
 
+  /**
+	 * 
+	 * @description - Sets user input in component local sttae
+	 * 
+	 * @param {Object} event 
+	 * 
+	 * @memberOf AllBooks
+	 */
   onChange(event) {
     this.setState({
       [event.target.name]: event.target.value
@@ -45,6 +70,12 @@ class AllBooks extends Component {
     this.setState({ displayBook: false, edit: true });
   }
 
+  /**
+	 * 
+	 * @description - Handles the delete book action
+	 * 
+	 * @memberOf AllBooks
+	 */
   handleClick() {
     swal({ title: 'Are you sure?',
       text: 'This is permanent!',
@@ -63,9 +94,24 @@ class AllBooks extends Component {
       });
   }
 
+  /**
+	 *
+	 * @description - Toggles the application display
+	 * 
+	 * @memberOf AllBooks
+	 */
   changeView() {
     this.setState({ displayBook: true, edit: false });
   }
+
+  /**
+	 * 
+	 * @description - Submits the form data
+	 * 
+	 * @param {Object} event 
+	 * 
+	 * @memberOf AllBooks
+	 */
   handleFormSubmit(event) {
     event.preventDefault();
     this.props.actions.editBook(this.state, this.props.id)
@@ -76,6 +122,14 @@ class AllBooks extends Component {
     });
   }
 
+  /**
+	 * 
+	 * @description - Renders the component
+	 * 
+	 * @returns {Object}
+	 * 
+	 * @memberOf AllBooks
+	 */
   render() {
     return (
       <div className="col s12 m3 l3">
@@ -198,6 +252,14 @@ AllBooks.propTypes = {
   title: React.PropTypes.string
 };
 
+/**
+ * 
+ * @description - Maps the dispatch to component props
+ * 
+ * @param {Function} dispatch 
+ *
+ * @returns {Object} - Object containing functions
+ */
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({

@@ -5,7 +5,24 @@ import { browserHistory } from 'react-router';
 import ImageUploader from 'react-firebase-image-uploader';
 import swal from 'sweetalert';
 
+/**
+ * @description - Add book component
+ * 
+ * @export
+ * 
+ * @class AddBook
+ * 
+ * @extends {Component}
+ */
 class AddBook extends Component {
+
+  /**
+	 * @description - Creates an instance of AddBook.
+	 * 
+	 * @param {Object} props - Componnet props data
+	 * 
+	 * @memberOf AddBook
+	 */
   constructor(props) {
     super(props);
     this.state = {
@@ -14,7 +31,6 @@ class AddBook extends Component {
       description: '',
       cover: '',
       author: '',
-      catId: '',
       quantity: 5,
       isLoading: false,
       isUploading: '',
@@ -40,19 +56,49 @@ class AddBook extends Component {
       .bind(this);
   }
 
+  /**
+	 * @description - Executes when text is typed in input box
+	 * 
+	 * @param {Object} event - Object
+	 * 
+	 * @memberOf AddBook
+	 */
   onChange(event) {
     this.setState({
       [event.target.name]: event.target.value
     });
   }
  
+  /**
+	 * 
+	 * @description - Tracks progress of book upload
+	 * 
+	 * @param {Object} progress 
+	 * 
+	 * @memberOf AddBook
+	 */
   handleProgress(progress) {
     this.setState({ progress });
   }
+
+  /**
+	 * @description - Starts the book cover upload
+	 * 
+	 * @memberOf AddBook
+	 */
   handleUploadStart() {
     this.setState({ isUploading: true, progress: 0 });
   }
 
+  /**
+	 * @description - Submit user input
+	 * 
+	 * @param {Object} event - Submits the form
+	 * 
+	 * @returns 
+	 * 
+	 * @memberOf AddBook
+	 */
   handleSubmit(event) {
     event.preventDefault();
     this
@@ -71,10 +117,26 @@ class AddBook extends Component {
       .catch(err => swal(err));
   }
 
+  /**
+	 * 
+	 * @description - Displays error if any during file upload
+	 * 
+	 * @param {Object} error when book upload fails
+	 * 
+	 * @memberOf AddBook
+	 */
   handleUploadError(error) {
     this.setState({ isUploading: false });
     console.error(error);}
   
+  /**
+	 * 
+	 * @description - Completes the file upload and set the state to cover url
+	 * 
+	 * @param {String} filename - Link to uploaded file
+	 * 
+	 * @memberOf AddBook
+	 */
   handleUploadSuccess(filename) {
     firebase
       .storage()
@@ -86,6 +148,14 @@ class AddBook extends Component {
       });
   }
 
+  /**
+	 * 
+	 * @description - Renders the component
+	 * 
+	 * @returns {Object} - Object
+	 * 
+	 * @memberOf AddBook
+	 */
   render() {
     return (
       <div className="addbook">
@@ -190,8 +260,7 @@ class AddBook extends Component {
               { this.state.progress === 100 &&
                 <div>
                   <img
-                    height="50px"
-                    width="50px"
+                    className="checkmark"
                     alt="check mark"
                     src="https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/512/Tick_Mark-128.png"
                   /><br /></div> }

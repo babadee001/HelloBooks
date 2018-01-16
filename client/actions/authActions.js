@@ -5,6 +5,15 @@ import { browserHistory } from 'react-router';
 import setAuthorizationToken from '../utils/setAuthorization';
 import { SET_CURRENT_USER, UNAUTH_USER, GET_ALL_USERS, SET_API_STATUS } from './types';
 
+/**
+ * @description -  Sets API status
+ *
+ * @export { Function } - Set API Progress
+ *
+ * @param { Boolean } status - User object
+ *
+ * @returns {  Object } - Action
+ */
 export function isFetching(status) {
   return {
     type: SET_API_STATUS,
@@ -12,6 +21,13 @@ export function isFetching(status) {
   };
 }
 
+/**
+ * @description - Set current user
+ *
+ * @param {Object} currentUser - Decoded JWT Token
+ *
+ * @returns {Object} - redux action to be dispatched
+ */
 export function setCurrentUser(currentUser) {
   return {
     type: SET_CURRENT_USER,
@@ -20,6 +36,14 @@ export function setCurrentUser(currentUser) {
   };
 }
 
+/**
+ *
+ * @description - Register new user action
+ *
+ * @param {Object} userData - Object containing user details
+ *
+ * @returns { Object } - Dispatches user object to the store
+ */
 export const userSignupRequest = userData => (dispatch) => {
   dispatch(isFetching(true));
   return axios.post('api/v1/users/signup', userData)
@@ -37,6 +61,15 @@ export const userSignupRequest = userData => (dispatch) => {
         'red');
     });
   }
+
+  /**
+ *
+ * @description - Signin user action
+ *
+ * @param {Object} userData - Object containing user details
+ *
+ * @returns { Object } - Dispatches user object to the store
+ */
 export const userSigninRequest = userData => (dispatch) => {
   dispatch(isFetching(true));
   return axios.post('api/v1/users/signin', userData)
@@ -55,6 +88,12 @@ export const userSigninRequest = userData => (dispatch) => {
     });
 };
 
+/**
+ *
+ * @description - Unauthenticate user action
+ *
+ * @returns { Object } - Dispatches user object to the store
+ */
 export function logout() {
   return (dispatch) => {
     localStorage.removeItem('token');
@@ -67,28 +106,13 @@ export function logout() {
     browserHistory.push('/');
   };
 }
-/** Edit profile action
- * @param {Number} userId - User ID
- * 
- * @param {Object} userData - User data object
- * 
- * @returns { String } - JWT Token
+
+/**
+ *
+ * @description - Get all users action
+ *
+ * @returns { Object } - Dispatches user object to the store
  */
-export function editProfileAction(userId, userData) {
-  return dispatch => axios.put(`api/v1/users/${userId}`, userData)
-      .then((response) => {
-        dispatch({
-          type: EDIT_PROFILE,
-          user: jwt.decode(response.data.token)
-        });
-        localStorage.setItem('token', response.data.token);
-        Materialize.toast('Profile edited Successfully',
-          1000, 'blue darken-4', () => {
-            $('.modal').modal('close');
-          });
-      })
-    .catch(error => Materialize.toast(error.response.data.message));
-}
 export function getUsers() {
   return dispatch => axios.get('api/v1/users')
     .then((res) => {
@@ -101,6 +125,14 @@ export function getUsers() {
     .catch(error => error);
 }
 
+/**
+ *
+ * @description -Authenticate users through google action
+ *
+ * @param {Object} token - token containing user details
+ *
+ * @returns { Object } - Dispatches user object to the store
+ */
 export const googleSigninRequest = token  => (dispatch) => {
   localStorage.setItem('token', token);
   setAuthorizationToken(token);

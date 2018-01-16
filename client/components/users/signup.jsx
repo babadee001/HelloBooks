@@ -5,7 +5,24 @@ import Navbar from '../navbar';
 import SignupForm from '../forms/signupForm';
 import { userSignupRequest } from '../../actions/authActions';
 
+/**
+ * @description - Signup component
+ * 
+ * @export {Object} Signup component
+ * 
+ * @class Signup
+ * 
+ * @extends {Component}
+ */
 class Signup extends Component {
+
+  /**
+	 * @description - Renders the component
+	 * 
+	 * @returns { Object }
+	 * 
+	 * @memberOf Signin
+	 */
   render() {
     const { userSignupRequest } = this.props;
     return (
