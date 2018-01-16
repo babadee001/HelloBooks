@@ -32,7 +32,7 @@ export default function (ComposedComponent) {
 		 * @memberOf Authentication
 		 */
     componentWillMount() {
-      const key = 'babadee';
+      const key = process.env.secretKey;
       const token = localStorage.getItem('token');
       if (token) {
         jwt.verify(token, key, (error) => {
@@ -46,6 +46,7 @@ export default function (ComposedComponent) {
       }
     }
 
+
       /**
    * Executes before component is updated
    *
@@ -58,6 +59,7 @@ export default function (ComposedComponent) {
         this.props.actions.logout(); 
       }
     }
+
 
     /**
 		 * @description - Renders the component
