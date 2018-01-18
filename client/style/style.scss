@@ -222,7 +222,7 @@ input {
     margin-left: 60px;
   }
   #sidenav-overlay {
-    background-color: rgba(0,0,0,0.0)
+    background-color: rgba(0,0,0,0.0);
   }
   .about {
     margin-top: 6%;
@@ -255,5 +255,43 @@ input {
   .checkmark {
     height: 50px;
     width: 50px;
+  }
+  .navbar-fixed {
+    z-index: 999;
+  }
+  .profilecard img{
+    max-width: 300px !important;
+  }
+  .profilecard a {
+    margin: 24px 0;
+    text-decoration: none;
+    font-size: 22px;
+    color: black;
+  }
+  .profilecard {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    margin-top: 5%;
+    text-align: center;
+    font-family: arial;
+    max-height: 300px;
+  }
+  
+  .title {
+    color: grey;
+    font-size: 18px;
+  }
+  
+  .profilecard button {
+    border: none;
+    outline: 0;
+    display: inline-block;
+    padding: 8px;
+    color: white;
+    background-color: teal;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
   }
   

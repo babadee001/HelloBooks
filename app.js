@@ -9,7 +9,7 @@ import path from 'path';
 import webpackMiddleware from 'webpack-dev-middleware';
 import UserRouter from './server/routes/users';
 import BookRouter from './server/routes/books';
-import webpackConfig from './webpack.dev';
+import webpackConfig from './webpack.config';
 import webpackProd from './webpack.config.prod';
 
 dotenv.load();
@@ -38,9 +38,6 @@ const options = {
       in: 'header'
     }
   },
-  security: [
-    { jwt: [] }
-  ]
 };
 
 // initialize swagger-jsdoc

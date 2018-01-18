@@ -41,7 +41,7 @@ export default {
           membership: user.membership };
         const token = jwt.sign(
           { currentUser,
-          }, secret
+          }, secret, { expiresIn: 60  * 60 * 24 }
         );
         return res.status(201).send({
           message: 'Signed up successfully',
@@ -143,7 +143,7 @@ export default {
           {
             currentUser,
           },
-          secret
+          secret, { expiresIn: 60 * 60 * 24 }
         );
         res.status(200)
           .json({

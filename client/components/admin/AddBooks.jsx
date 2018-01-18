@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import { connect } from 'react-redux';
 import AddBook from '../includes/addBook';
 import { addBookAction } from '../../actions/booksActions';
-import Navbar from '../navbar';
+import Navbar from '../NavigationBar';
 
 /**
  * @description - Add new book component
@@ -14,12 +14,12 @@ import Navbar from '../navbar';
  * 
  * @extends {Component}
  */
-export class AddANewBook extends Component {
+export class AddBooks extends Component {
   render() {
     const { addNewBookAction } = this.props;
     return (
       <div>
-        <Navbar route1="/admin" link1="Admin dashboard" route2="/logs" link2="View Logs" />
+        <Navbar route="/admin" link="Admin dashboard" route1="/logs" link1="View Logs" />
         <AddBook
           firebaseStorage={ firebase.storage().ref('images') }
           add={ this.props.addBookAction }
@@ -41,4 +41,4 @@ function mapStateToProps(state) {
     user: state.auth.user.currentUser
   };
 }
-export default connect(mapStateToProps, { addBookAction })(AddANewBook);
+export default connect(mapStateToProps, { addBookAction })(AddBooks);

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getUsers } from '../../actions/authActions';
-import { getAllBorrowed } from '../../actions/booksActions';
-import Navbar from '../navbar';
+import { getUsers } from '../../actions/AuthActions';
+import { getAllBorrowed } from '../../actions/BooksActions';
+import Navbar from '../NavigationBar';
 
 /**
  * Logs component
@@ -61,7 +61,7 @@ class Logs extends Component {
     return (
       <div>
         {this.renderProps()}
-        <Navbar route1="/admin" link1="Admin dashboard" route2="/logs" link2="View Logs" />
+        <Navbar route="/admin" link="Admin dashboard" route1="/add" link1="Add New" />
         <div className="container">
         <div className="row card-wrapper">
                 <div className="col-sm-4 col-md-4 col-lg-4">

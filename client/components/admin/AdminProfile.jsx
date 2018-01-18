@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getBorrowed } from '../../actions/BooksActions';
-import Sidebar from '../includes/SideBar';
+import Sidebar from '../includes/sidebar';
 import Navbar from '../NavigationBar';
 
 /**
@@ -12,22 +11,9 @@ import Navbar from '../NavigationBar';
  * 
  * @extends {Component}
  */
-class Profile extends Component {
+class AdminProfile extends Component {
   constructor(props) {
     super(props);
-  }
-
-  /**
-	 * @description - Executes after component is mounted
-	 * 
-	 * @memberOf Profile
-	 */
-  componentDidMount() {
-    const userId = this.props.user.userId || this.props.user.id
-    this
-      .props
-      .actions
-      .getBorrowed(userId);
   }
 
   /**
@@ -35,22 +21,22 @@ class Profile extends Component {
 	 * 
 	 * @returns 
 	 * 
-	 * @memberOf  Profile
+	 * @memberOf  AdminProfile
 	 */
   render() {
     const { username, email, membership } = this.props.user;
     return (
       <div>
-        <Navbar route="/dashboard" link="All books" route1="/history" link1="History" />
+        <Navbar route="/admin" link="Admin dashboard" route1="/logs" link1="Logs" />
         <div className="row">
           <Sidebar 
           fullname={ this.props.user.username }
-          link1={'Borrow History'} 
-          route1={'/history'}
-          link2={'All books'} 
-          route2={'/dashboard'}
-          link3={'Profile'} 
-          route3={'/profile'}
+          link1={'Admin dashboard'} 
+          route1={'/admin'}
+          link2={'View Logs'} 
+          route2={'/logs'}
+          link3={'Add New Book'} 
+          route3={'/add'}
           />
           <div className="row">
             <div className="card profilecard col-md-offset-4">
@@ -58,8 +44,7 @@ class Profile extends Component {
               <h1>{this.props.user.username}</h1>
               <p className="title">{this.props.user.membership}</p>
               <p>{this.props.user.email}</p>
-              <p>Books yet to return {this.props.book}</p>
-                <p><button>Info</button></p>
+                <p><button> Admin Info</button></p>
             </div>
           </div>
         </div>
@@ -68,10 +53,8 @@ class Profile extends Component {
   }
 }
 
-Profile.PropTypes = {
+AdminProfile.PropTypes = {
   user: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
-  books: PropTypes.object.isRequired
 };
 
 /**
@@ -83,22 +66,7 @@ Profile.PropTypes = {
  */
 function mapStateToProps(state) {
   return { user: state.auth.user.currentUser,
-    book: state.books.unreturnedCount
    };
 }
 
-/**
- * Maps the action to component Props
- * 
- * @param {Function} dispatch 
- *
- * @returns {Object} - Object containing functions
- */
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({
-      getBorrowed
-    }, dispatch)
-  };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, null)(AdminProfile);

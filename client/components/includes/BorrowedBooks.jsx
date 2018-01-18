@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const AllBooks = ({ handleAction, cover, title, 
+const BorrowedBooks = ({ handleAction, cover, title, 
 	description, id, isReturned, borrowed }) => {
 		
 	const handleClick = () => {
@@ -42,11 +42,11 @@ const AllBooks = ({ handleAction, cover, title,
 	);
 };
 
-AllBooks.PropTypes = {
+BorrowedBooks.PropTypes = {
 	handleBorrow: PropTypes.func.isRequired,
 	cover: PropTypes.string.isRequired,
 	description: PropTypes.string.isRequired,
 	title: PropTypes.string.isRequired
 };
 
-export default AllBooks;
+export default BorrowedBooks;
