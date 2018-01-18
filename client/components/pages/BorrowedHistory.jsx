@@ -3,23 +3,23 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
 	returnBook, 
-	getHistory } from '../../actions/booksActions';
+	getHistory } from '../../actions/BooksActions';
 import { bindActionCreators } from 'redux';
-import Sidebar from '../includes/sidebar';
+import Sidebar from '../includes/SideBar';
 import AllBooks from '../includes/BorrowedBooks';
-import Navbar from '../navbar';
+import Navbar from '../NavigationBar';
 
 /**
- * @description BorrowedBooks component
+ * @description BorrowedHistory component
  * 
  * @export {Object}
- * @class  BorrowedBooks
+ * @class  BorrowedHistory
  * @extends {Component}
  */
-class  BorrowedBooks extends Component {
+class  BorrowedHistory extends Component {
 	constructor(props) {
 		super(props);
-		this.renderBorrowedBooks = this.renderBorrowedBooks.bind(this);
+		this.renderHistory = this.renderHistory.bind(this);
 		this.handleClick =  this.handleClick.bind(this);
 	}
 	/**
@@ -27,7 +27,7 @@ class  BorrowedBooks extends Component {
 	 * 
 	 * @param {any} props 
 	 * 
-	 * @memberOf  BorrowedBooks
+	 * @memberOf  BorrowedHistory
 	 */
   componentDidMount() {
     const userId = this.props.user.userId || this.props.user.id
@@ -42,7 +42,7 @@ class  BorrowedBooks extends Component {
 	 * 
 	 * @param {any} id 
 	 * 
-	 * @memberOf  BorrowedBooks
+	 * @memberOf  BorrowedHistory
 	 */
 	handleClick(id) {
 		const userId = this.props.user.userId || this.props.user.id
@@ -64,9 +64,9 @@ class  BorrowedBooks extends Component {
 	 * 
 	 * @returns 
 	 * 
-	 * @memberOf  BorrowedBooks
+	 * @memberOf  BorrowedHistory
 	 */
-	renderBorrowedBooks() {
+	renderHistory() {
     let borrowedBooks = this.props.borrowedBooks;
 		if (!borrowedBooks || borrowedBooks.message == "You have never borrowed a book") {
 			return (
@@ -138,22 +138,22 @@ class  BorrowedBooks extends Component {
 	 * 
 	 * @returns 
 	 * 
-	 * @memberOf  BorrowedBooks
+	 * @memberOf  BorrowedHistory
 	 */
 	render() {
 		return (
 			<div>
-        <Navbar route="/dashboard" link="All books" route1="/history" link1="History" />
-		      	{this.renderBorrowedBooks()}
+        <Navbar route="/dashboard" link="All books" route1="/profile" link1="Profile" />
+		      	{this.renderHistory()}
           </div>
 		);
 	}
 }
 
-BorrowedBooks.PropTypes = {
+BorrowedHistory.PropTypes = {
 	user: PropTypes.object.isRequired,
 	actions: PropTypes.object.isRequired,
-	borrowedBooks: PropTypes.object.isRequired
+	borrowedHistory: PropTypes.object.isRequired
 };
 
 /**
@@ -190,4 +190,4 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)( BorrowedBooks);
+export default connect(mapStateToProps, mapDispatchToProps)( BorrowedHistory);

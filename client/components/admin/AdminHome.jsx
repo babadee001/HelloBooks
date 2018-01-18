@@ -6,7 +6,7 @@ import AllBooks from './allBooks';
 import { getBooks, deleteBook } from '../../actions/booksActions';
 import { logout } from '../../actions/authActions';
 import AdminSideBar from '../includes/sidebar';
-import Navbar from '../navbar';
+import Navbar from '../NavigationBar';
 import { getUsers } from '../../actions/authActions';
 
 /**
@@ -103,10 +103,10 @@ class AdminHome extends Component {
           fullname={ this.props.user.username }
           link1={'Add New Book'} 
           route1={'/add'}
-          link2={'Profile'} 
-          route2={'/profile'}
-          link3={'Logs'} 
-          route3={'/logs'}
+          link2={'View Logs'} 
+          route2={'/logs'}
+          link3={'Profile'} 
+          route3={'/adminprofile'}
           />
           <div className="col s12 l9" id="list_boy">
             {allbooks.map(book => (<AllBooks
@@ -141,7 +141,7 @@ class AdminHome extends Component {
     const { username, id } = this.props.user;
     return (
       <div>
-        <Navbar route="/add" link="Add Book" route1="/logs" link1="View Logs" />
+        <Navbar route="/add" link="Add Book" route1="/adminprofile" link1="Profile" />
         {this.renderBooks()}
       </div>
     );
