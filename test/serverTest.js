@@ -1,7 +1,7 @@
 import chai from 'chai';
 import dotenv from 'dotenv';
 import chaiHttp from 'chai-http';
-import Server from '../server';
+import Server from '../app';
 import models from '../server/models';
 
 dotenv.load();
@@ -136,6 +136,7 @@ describe('Test', () => {
         description: 'A film about magic',
         category: 'Magic and fantasy',
         quantity: '5',
+        cover: 'testcover'
       })
       .end((err, res) => {
         res.should.have.status(201);
@@ -155,6 +156,7 @@ describe('Test', () => {
         description: 'A film about magic',
         category: 'Magic and fantasy',
         quantity: '5',
+        cover: 'testcover'
       })
       .end((err, res) => {
         res.should.have.status(401);
@@ -172,6 +174,7 @@ describe('Test', () => {
         description: 'A film about magic',
         category: 'Magic and fantasy',
         quantity: '5',
+        cover: 'testcover'
       })
       .end((err, res) => {
         res.should.have.status(401);
@@ -296,6 +299,7 @@ describe('Test', () => {
         description: 'A film about magic',
         category: 'Magic and fantasy',
         quantity: '25',
+        cover: 'newtestcover'
       })
       .end((err, res) => {
         res.should.have.status(200);
