@@ -1,3 +1,4 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/babadee001/HelloBooks.svg?branch=production-tests)](https://travis-ci.org/babadee001/HelloBooks)
 [![Coverage Status](https://coveralls.io/repos/github/babadee001/HelloBooks/badge.svg?branch=staging)](https://coveralls.io/github/babadee001/HelloBooks?branch=staging)
 # Hello-Books
