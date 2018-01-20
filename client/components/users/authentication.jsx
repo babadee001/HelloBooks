@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { logout } from '../../actions/authActions';
+import { logout } from '../../actions/AuthActions';
 
 dotenv.load();
 
@@ -32,7 +32,10 @@ export default function (ComposedComponent) {
 		 * @memberOf Authentication
 		 */
     componentWillMount() {
-      const key = process.env.secretKey;
+      if (!this.props.authenticated) {
+        this.props.actions.logout();
+      }
+      const key = process.env.SECRET;
       const token = localStorage.getItem('token');
       if (token) {
         jwt.verify(token, key, (error) => {
@@ -40,8 +43,7 @@ export default function (ComposedComponent) {
             this.props.actions.logout()
           }
         });
-      }
-      if (!this.props.authenticated) {
+      }else {
         this.props.actions.logout();
       }
     }
