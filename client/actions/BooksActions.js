@@ -10,7 +10,7 @@ import {
   GET_BORROWED_HISTORY, 
   GET_ALL_TIME_BORROWED 
 } from './types';
-import { isFetching } from './authActions';
+import { isFetching } from './AuthActions';
 
 dotenv.load();
 
@@ -91,7 +91,7 @@ export function editBook(details, bookId) {
       });
       return res.data.message;
     })
-    .catch(error => error);
+    .catch(error => error.data.message);
 }
 
 /**
@@ -132,7 +132,7 @@ export function returnBook(userId, bookId) {
         data: response.data.book
       });
     })
-    .catch(error => swal(error));
+    .catch(error => swal(error.data.message));
 }
 
 /**
@@ -150,7 +150,7 @@ export function addBookAction(bookDetails) {
         message: res.data.message
       });
     })
-    .catch(error => error);
+    .catch(error => error.data.message);
 }
 
 /**
@@ -169,7 +169,7 @@ export function deleteBookAction(bookId) {
       });
       return res.data.message;
     })
-    .catch(error => Materialize.toast(error.response.data.message, 1000));
+    .catch(error => Materialize.toast(error.data.message, 1000));
 }
 
 /**
@@ -186,5 +186,5 @@ export function getAllBorrowed() {
       });
       return res.data;
     })
-    .catch(error => error);
+    .catch(error => error.data.message);
 }
