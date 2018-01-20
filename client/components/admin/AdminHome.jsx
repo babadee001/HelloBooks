@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import AllBooks from './allBooks';
-import { getBooks, deleteBook } from '../../actions/booksActions';
-import { logout } from '../../actions/authActions';
-import AdminSideBar from '../includes/sidebar';
+import { getBooks, deleteBook } from '../../actions/BooksActions';
+import { logout, getUsers } from '../../actions/AuthActions';
+import AdminSideBar from '../includes/SideBar';
 import Navbar from '../NavigationBar';
-import { getUsers } from '../../actions/authActions';
 
 /**
  * AdminHome component
@@ -177,6 +176,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
       getBooks,
+      getUsers,
       logout
     }, dispatch)
   };

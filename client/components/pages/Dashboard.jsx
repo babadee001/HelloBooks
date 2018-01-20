@@ -96,7 +96,7 @@ class Dashboard extends Component {
           link3={'Profile'} 
           route3={'/profile'}
           /> 
-          <div className="col s12 l9">
+          <div className="col s12 l9" id="bookList">
           {allbooks.map(book => (<AllBooks
             key={ book.id }
             author={ book.author }

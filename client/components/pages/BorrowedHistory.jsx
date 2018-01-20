@@ -110,7 +110,7 @@ class  BorrowedHistory extends Component {
           link3={'Profile'} 
           route3={'/profile'}
           />
-              <div className="col s12 l9">
+              <div className="col s12 l9" id="bookList">
 							{borrowedBooks.map((book) => {
 								return (
 									<AllBooks
