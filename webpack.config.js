@@ -20,6 +20,17 @@ module.exports = {
     fs: 'empty'
   },
   plugins: [
+    new webpack.EnvironmentPlugin([
+      'SECRET',
+      'SECRETKEY',
+      'ADMINSECRET',
+      'FIREBASE_MESSENGERID',
+      'FIREBASE_APIKEY',
+      'FIREBASE_URL',
+      'FIREBASE_PROJECTID',
+      'FIREBASE_STORAGEBUCKET',
+      'FIREBASE_AUTHDOMAIN',
+    ]),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),

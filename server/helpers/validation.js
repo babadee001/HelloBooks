@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 import db from '../models/';
 
 dotenv.load();
-const secret = process.env.secretKey;
-const adminSecret = process.env.adminSecret;
+const secret = process.env.SECRETKEY;
+const adminSecret = process.env.ADMINSECRET;
 const { Users } = db;
 
 export default {
@@ -129,6 +129,10 @@ export default {
   validateBook(req, res, next) {
     req.checkBody(
       {
+        cover: {
+          notEmpty: true,
+          errorMessage: 'Please upload a cover',
+        },
         title: {
           notEmpty: true,
           errorMessage: 'Enter a valid title',

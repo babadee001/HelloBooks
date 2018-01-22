@@ -33,6 +33,7 @@ class AllBooks extends Component {
       quantity: this.props.quantity,
       currentBook: {},
       edit: false,
+      cover: this.props.cover,
       displayBook: true
     };
     this.handleClick = this
@@ -114,9 +115,10 @@ class AllBooks extends Component {
 	 */
   handleFormSubmit(event) {
     event.preventDefault();
+    this.setState({ cover: this.props.cover });
     this.props.actions.editBook(this.state, this.props.id)
       .then((res) => {
-        Materialize.toast(res, 1000, 'blue', () => {
+        Materialize.toast(res, 1000, 'teal', () => {
         this.setState({ displayBook: true, edit: false });
       });
     });
