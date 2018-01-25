@@ -23,10 +23,11 @@ export default {
    * @returns { object } response message
    */
   create(req, res) {
+    const user = req.body.username.toLowerCase();
     const hashedPassword = bcrypt.hashSync(req.body.password, 10);
     return Users
       .create({
-        username: req.body.username,
+        username: user,
         email: req.body.email,
         password: hashedPassword,
         membership: req.body.membership,
@@ -127,9 +128,10 @@ export default {
    * @returns { object } response message
    */
   signin(req, res) {
+    const user = req.body.username.toLowerCase();
     return Users
       .findOne({
-        where: { username: req.body.username },
+        where: { username: user },
       })
       .then((user) => {
         const currentUser = {

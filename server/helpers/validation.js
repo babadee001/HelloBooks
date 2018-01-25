@@ -84,6 +84,8 @@ export default {
    * @returns { object } response message
    */
   validateLogin(req, res, next) {
+    const user = req.body.username.toLowerCase();
+    req.body.username = user
     req.checkBody(
       {
         username: {
