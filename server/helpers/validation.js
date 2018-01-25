@@ -232,4 +232,81 @@ export default {
         });
     }
   },
+
+  /**
+   * @method validateSearch
+   * 
+   * @description This method handles check for admin authentication of users
+   * 
+   * @param { object} req HTTP request
+   * 
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
+  validateSearch(req, res, next) {
+    req.checkBody(
+      { searchTerm: {
+        notEmpty: true,
+        errorMessage: 'Enter a valid search term',
+      },
+      });
+      const errors = req.validationErrors();
+    if (errors) {
+      const allErrors = [];
+      errors.forEach((error) => {
+        const errorMessage = error.msg;
+        allErrors.push(errorMessage);
+      });
+      return res.status(400)
+        .json({
+          message: allErrors[0],
+        });
+    }
+    next();
+  },
+   /**
+   * Validates user data when editing profile
+   *
+   * @param {Object} req - request object
+   *
+   * @param {Object} res - repsonse object
+   *
+   * @param {Function} next - Call back function
+   *
+   * @returns {Object} - Response object
+   */
+  validateUserEdit(req, res, next) {
+    req.checkBody(
+      { 
+        username: {
+          notEmpty: true,
+          errorMessage: 'Enter a valid username',
+          isLength: {
+            options: [{ min: 3 }],
+            errorMessage: 'New username should be at least 3 characters',
+        },
+        },
+      });
+      const errors = req.validationErrors();
+    if (errors) {
+      const allErrors = [];
+      errors.forEach((error) => {
+        const errorMessage = error.msg;
+        allErrors.push(errorMessage);
+      });
+      return res.status(400)
+        .json({
+          message: allErrors[0],
+        });
+    }
+    const usernameValidator = /[A-Za-z]/g;
+
+    if (!usernameValidator.test(req.body.username)) {
+      res.status(400).send({
+        message: 'Invalid data supplied pls check and try again'
+      });
+    }
+    next();
+  },
 };

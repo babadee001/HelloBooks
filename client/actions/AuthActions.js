@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import Materialize from 'materialize-css';
 import { browserHistory } from 'react-router';
 import setAuthorizationToken from '../utils/setAuthorization';
-import { SET_CURRENT_USER, UNAUTH_USER, GET_ALL_USERS, SET_API_STATUS } from './types';
+import { SET_CURRENT_USER, UNAUTH_USER, GET_ALL_USERS, SET_API_STATUS, EDIT_PROFILE } from './types';
 
 /**
  * @description -  Sets API status
@@ -138,4 +138,32 @@ export const googleSigninRequest = token  => (dispatch) => {
   setAuthorizationToken(token);
   const decoded = jwt.decode(token);
   dispatch(setCurrentUser(decoded));
+}
+
+/**
+ * @description - Edit profile action
+ *
+ * @param {Number} userId - User ID
+ *
+ * @param {Object} userData - User data object
+ *
+ * @returns { String } - JWT Token
+ */
+export function editProfileAction(userId, userData) {
+  return dispatch => axios.put(`api/v1/users/edit/${userId}`, userData)
+    .then((response) => {
+      dispatch({
+        type: EDIT_PROFILE
+      });
+      Materialize.toast(
+        response.data.message,
+        1000, 'teal', () => {
+          localStorage.removeItem('token');
+          setAuthorizationToken(false);
+          browserHistory.push('/signin');
+        }
+      );
+      return response.data.message;
+    })
+    .catch(error => Materialize.toast(error.data.message, 2000, 'red'));
 }

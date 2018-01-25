@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { getBorrowed } from '../../actions/BooksActions';
 import Sidebar from '../includes/SideBar';
@@ -59,7 +60,7 @@ class Profile extends Component {
               <p className="title">{this.props.user.membership}</p>
               <p>{this.props.user.email}</p>
               <p>Books yet to return {this.props.book}</p>
-                <p><button>Info</button></p>
+                <p><Link to ="/edit"><button>Edit profile</button></Link></p>
             </div>
           </div>
         </div>

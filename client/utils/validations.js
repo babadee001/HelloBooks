@@ -19,3 +19,22 @@ export function checkExisting(userData) {
     .catch(error => (error))
 }
 
+/**
+ * @description - Check if username exists
+ *
+ * @param {object} userData - user details
+ *
+ * @returns {String, object} - String
+ */
+export function checkUser(userData) {
+  return axios
+    .post('api/v1/users/checkuser', userData)
+    .then((response) => {
+      if (response.data.message !== null){
+        return response.data.message;
+      }
+        return 'Not found';
+    })
+    .catch(error => (error))
+}
+

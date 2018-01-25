@@ -264,5 +264,36 @@ app.route('/:userId/books')
  *       409:
  *         description: Existing details
  */
-  .post(UsersController.checkExisting);
+  .post(Check.validateSearch, UsersController.checkExisting);
+
+  app.route('/checkuser')
+  /**
+   * @swagger
+   * /api/v1/users/checkuser:
+   *   post:
+   *     tags:
+   *       - users
+   *     description: Creates a new user using google oauth
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: details
+   *         description: The registration details of the user
+   *         in: body
+   *         required: false
+   *         type: string
+   *         schema:
+   *           $ref: '#/definitions/users'
+   *     responses:
+   *       201:
+   *         description: Signed up successfully
+   *       400:
+   *         description: Invalid input(email, password...) details
+   *       409:
+   *         description: Existing details
+   */
+    .post(Check.validateSearch, UsersController.checkExistingUser);
+
+    app.route('/edit/:userId')
+  .put(Check.isLoggedIn, Check.validateUserEdit, UsersController.editProfile);
 export default app;

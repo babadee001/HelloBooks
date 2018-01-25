@@ -1,5 +1,5 @@
 import {
-  SET_CURRENT_USER, UNAUTH_USER, GET_ALL_USERS, SET_API_STATUS
+  SET_CURRENT_USER, UNAUTH_USER, GET_ALL_USERS, SET_API_STATUS, EDIT_PROFILE
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -31,6 +31,8 @@ function authReducer(state = INITIAL_STATE, action) {
       return { ...state, data: action.data };
     case SET_API_STATUS:
       return { ...state, isFetching: action.isFetching };
+    case EDIT_PROFILE:
+      return { ...state, authenticated: false};
     default:
       return state;
   }

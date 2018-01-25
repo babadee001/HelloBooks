@@ -291,7 +291,15 @@ input {
     background-color: teal;
     text-align: center;
     cursor: pointer;
-    width: 100%;
+    width: 50%;
     font-size: 18px;
+    margin: 20px;
   }
-  
+  #editbutton {
+    background-color: rgb(21, 179, 157);
+    color: #fff;
+    float: right;
+  }
+  #message {
+    color: #266767;
+  }

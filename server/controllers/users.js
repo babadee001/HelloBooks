@@ -152,6 +152,33 @@ export default {
           });
       });
   },
+  /**
+   * @method checkExistingUser
+   * 
+   * @description This method handles checking of existing username request
+   * 
+   * @param { object} req HTTP request
+   * @param { object} res HTTP response
+   * 
+   * @returns { object } response message
+   */
+  checkExistingUser(req, res) {
+    return Users
+      .findOne({
+        where: { 
+          username: req.body.searchTerm
+        },
+      })
+      .then((user) => {
+        res.status(200).json({
+          message: user
+        })
+      }).catch(error =>{
+        res.status(404).json({
+          message:error
+        })
+      })
+  },
 
   /**
    * @method userHistory
@@ -198,7 +225,7 @@ export default {
     return Users
       .findOne({
         where: { 
-          email: req.body.email
+          email: req.body.searchTerm
         },
       })
       .then((user) => {
@@ -211,4 +238,55 @@ export default {
         })
       })
   },
+
+   /**
+   *
+   * @description - Edit profile controller
+   *
+   * @param {Object} req - request
+   *
+   * @param {Object} res - response
+   *
+   * @returns {Object} - Object containing status code and success message
+   */
+  editProfile(req, res) {
+    return Users.findOne({
+      where: {
+        id: req.params.userId
+      }
+    }).then((user) => {
+      if(user){
+        if(req.body.oldPassword.length > 4){
+          if(req.body.oldPassword &&
+            !bcrypt.compareSync(req.body.oldPassword, user.password)) {
+            res.status(400).send({
+              message: 'Old password is incorrect'
+            });
+          }else{
+          const password = bcrypt.hashSync(req.body.newPassword, 10);
+          return user.update({
+            username: req.body.username || user.username,
+            password: password
+          }).then(() => {
+            res.status(201).json({
+              message: 'profile updated succesfully',
+              
+            })
+          })
+        }
+      }else{
+        return user.update({
+          username: req.body.username || user.username,
+          password: user.password
+        }).then(() => {
+          res.status(201).json({
+            message: 'profile updated succesfully'
+          })
+        })
+      }
+      }else return res.status(404).json({
+        message: 'User not in database'
+      })
+    })
+  }
 };
