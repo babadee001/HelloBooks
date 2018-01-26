@@ -70,7 +70,7 @@ export default {
     return Users
       .all()
       .then(users => res.status(200).send(users))
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
   
   /**
@@ -111,7 +111,7 @@ export default {
           Token: token,
         });
       })
-      .catch(() => res.status(400).send({
+      .catch(() => res.status(409).send({
         message: 'Username or email already exists',
       }));
   },
@@ -152,7 +152,7 @@ export default {
             message: 'Log in successful',
             Token: token,
           });
-      });
+      }).catch(error => res.status(500).send(error));
   },
   /**
    * @method checkExistingUser
@@ -188,7 +188,6 @@ export default {
    * @description This method handles getting history of users request
    * 
    * @param { object} req HTTP request
-   * 
    * @param { object} res HTTP response
    * 
    * @returns { object } response message
@@ -209,7 +208,7 @@ export default {
           res.status(200).send(books);
         }
       })
-      .catch(error => res.status(404).send(error));
+      .catch(error => res.status(500).send({ message: error }));
   },
 
   /**
@@ -218,7 +217,6 @@ export default {
    * @description This method handles checking of existing users request
    * 
    * @param { object} req HTTP request
-   * 
    * @param { object} res HTTP response
    * 
    * @returns { object } response message
@@ -246,7 +244,6 @@ export default {
    * @description - Edit profile controller
    *
    * @param {Object} req - request
-   *
    * @param {Object} res - response
    *
    * @returns {Object} - Object containing status code and success message
@@ -258,7 +255,7 @@ export default {
       }
     }).then((user) => {
       if(user){
-        if(req.body.oldPassword.length > 4){
+        if(req.body.oldPassword){
           if(req.body.oldPassword &&
             !bcrypt.compareSync(req.body.oldPassword, user.password)) {
             res.status(400).send({
@@ -269,10 +266,10 @@ export default {
           return user.update({
             username: req.body.username || user.username,
             password: password
-          }).then(() => {
+          }).then((updated) => {
             res.status(201).json({
               message: 'profile updated succesfully',
-              
+              updated
             })
           })
         }
@@ -280,9 +277,14 @@ export default {
         return user.update({
           username: req.body.username || user.username,
           password: user.password
-        }).then(() => {
+        }).then((updated) => {
           res.status(201).json({
-            message: 'profile updated succesfully'
+            message: 'profile updated succesfully',
+            updated
+          })
+        }).catch(error =>{
+          res.status(409).json({
+            message: "Username exists. Try another one"
           })
         })
       }

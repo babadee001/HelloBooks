@@ -27,10 +27,11 @@ module.exports = {
         isbn: req.body.isbn,
         cover: req.body.cover
       })
-      .then(() => res.status(201).send({
+      .then((newBook) => res.status(201).send({
         message: 'Book added successfully',
+        newBook
       }))
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
  
   /**
@@ -72,7 +73,7 @@ module.exports = {
       })
       .then((bk) => {
         if (bk) {
-          return res.status(401).send({
+          return res.status(422).send({
             message: 'You cant borrow this book again till you return',
           });
         }
@@ -95,8 +96,9 @@ module.exports = {
                 returned: false,
                 returnDate: due,
               })
-              .then(() => res.status(201).json({
+              .then((borrowed) => res.status(201).json({
                 message: 'You have successfully borrowed the book',
+                borrowed
               }))
               .then(() => Books
                 .update({
@@ -107,9 +109,9 @@ module.exports = {
                   },
                 })
                 .catch(error => error));
-          });
-      })
-      .catch(error => res.status(400).send(error));
+              });
+          })
+      .catch(error => res.status(500).send({ message: error }));
   },
 
   /**
@@ -131,7 +133,7 @@ module.exports = {
     })
       .then(() => {
         Books.findById(req.params.bookId).then((book) => {
-          res.status(200).send({
+          res.status(201).send({
             book,
             message: 'Book updated successfully!'
           });
@@ -172,7 +174,7 @@ module.exports = {
           });
         }
       })
-      .catch(error => res.status(404).send(error));
+      .catch(error => res.status(500).send({ message: error }));
   },
 
   /**
@@ -216,7 +218,7 @@ module.exports = {
             });
           });
         })
-    ).catch(error => res.status(400).send(error));
+    ).catch(error => res.status(500).send(error));
   },
 
   /**
@@ -241,13 +243,13 @@ module.exports = {
         }
         return book
           .destroy()
-          .then(() => res.status(201).send({
+          .then(() => res.status(200).send({
             message: 'book deleted',
             id: req.params.bookId
           }))
-          .catch(error => res.status(400).send(error));
+          .catch(error => res.status(500).send({ message: error }));
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 
   /**
@@ -265,6 +267,6 @@ module.exports = {
     return Borrowed
       .all()
       .then(borrowed => res.status(200).send(borrowed))
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send({ message: error }));
   },
 };

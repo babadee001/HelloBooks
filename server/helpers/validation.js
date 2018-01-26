@@ -78,7 +78,6 @@ export default {
    * @description This method handles validation of login input
    * 
    * @param { object} req HTTP request
-   * 
    * @param { object} res HTTP response
    * 
    * @returns { object } response message
@@ -96,7 +95,7 @@ export default {
         password: {
           notEmpty: true,
           isAlphanumeric: false,
-          errorMessage: 'Enter valid password',
+          errorMessage: 'Enter a valid password',
         },
       });
     Users.findOne(
@@ -178,7 +177,6 @@ export default {
    * @description This method checks for logged in users
    * 
    * @param { object} req HTTP request
-   * 
    * @param { object} res HTTP response
    * 
    * @returns { object } response message
@@ -188,9 +186,9 @@ export default {
     if (token) {
       jwt.verify(token, secret, (error) => {
         if (error) {
-          res.status(401)
+          res.status(403)
             .send({
-              message: 'Access Denied. You are not authorized.'
+              message: 'Access Denied. Admin privileges needed'
             });
         } else {
           next();
@@ -210,7 +208,6 @@ export default {
    * @description This method handles check for admin authentication of users
    * 
    * @param { object} req HTTP request
-   * 
    * @param { object} res HTTP response
    * 
    * @returns { object } response message
@@ -222,7 +219,7 @@ export default {
       if (decoded.currentUser.isAdmin === 1) {
         next();
       } else {
-        res.status(401)
+        res.status(403)
           .json({
             message: 'Operation failed. Admin privileges needed.'
           });
@@ -311,4 +308,45 @@ export default {
     }
     next();
   },
+
+   /**
+ * Checks if book id is a number
+ *
+ * @param {Object} req - request
+ *
+ * @param {Object} res - response
+ *
+ * @param {Function} next - Call back function
+ *
+ * @returns { Object } - containing error message
+ */
+  checkBookId(req, res, next) {
+    const querier = req.body.bookId || req.params.bookId;
+    if (!querier || /[\D]/.test(querier)) {
+      return res.status(400).send({
+        message: 'Invalid book id supplied!!!'
+      });
+    }
+    next();
+  },
+    /**
+ * Checks if user id is a number
+ *
+ * @param {Object} req - request
+ *
+ * @param {Object} res - response
+ *
+ * @param {Function} next - Call back function
+ *
+ * @returns { Object } - containing error message
+ */
+checkUserId(req, res, next) {
+  const querier = req.body.userId || req.params.userId;
+  if (!querier || /[\D]/.test(querier)) {
+    return res.status(400).send({
+      message: 'Invalid user id supplied!!!'
+    });
+  }
+  next();
+},
 };
