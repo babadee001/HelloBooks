@@ -10,16 +10,17 @@ const BorrowedBooks = ({ handleAction, cover, title,
     return (
 		<div>
 			<div>
-      <div className="col s12 m6 l3">
+      <div className="col s12 m3 l3">
 				<div className="card">
-					<div className="card-image waves-effect waves-block waves-light">
-						<img className="activator" src={cover} />
+					<div className="card-image">
+						<img id="cover" src={cover} />
+            <span className="card-title">{title}</span>
 					</div>
 					<div className="card-content">
-						<span className="card-title">{title}</span>
-						<span className="truncate">{description}</span>
-						<p>
-														
+						<span>{description}</span>
+          </div>
+          <div className="card-action">
+						<p>							
 						{borrowed && !isReturned && (
 								<a id="returnBook" onClick={handleClick} 
 								className="btn">

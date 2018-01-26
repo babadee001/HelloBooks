@@ -25,13 +25,13 @@ class Home extends Component {
             {isAuthenticated?
             (
               <div>
-              <h1>This is Hello-Books</h1>
+              <h1>This is HelloBooks</h1>
               <Link to="/admin" className="waves-effect waves-light btn">Dashboard</Link>
               </div>
             ):
             (
               <div>
-              <h1>Welcome to Hello-Books</h1>
+              <h1>Welcome to HelloBooks</h1>
               <Link to="/signup" className="waves-effect waves-light btn">Signup</Link>
               <Link to="/signin" className="waves-effect waves-light btn">Signin</Link>
               </div>

@@ -41,19 +41,19 @@ class NavigationBar extends Component {
       <div className="Navwrapper">
         {isAuthenticated?
         (
-          <Navbar brand='Hello-Books' fixed right>
+          <Link to="/admin"><Navbar brand="Hello-Books" fixed right>
             <NavItem><Link to='/admin'>Home</Link></NavItem>
             <NavItem><Link to={this.props.route}>{this.props.link}</Link></NavItem>
             <NavItem><Link to={this.props.route1}>{this.props.link1}</Link></NavItem>
             <NavItem><Link onClick={ this.logout.bind(this) }>Logout</Link></NavItem>
-          </Navbar>
+          </Navbar></Link>
         ):
         (
-          <Navbar brand='Hello-Books' right fixed>
+          <Link to="/"><Navbar brand='Hello-Books' right fixed>
             <NavItem><Link to='/'>Home</Link></NavItem>
             <NavItem><Link to='/about'>About</Link></NavItem>
             <NavItem href='https://github.com/babadee001/HelloBooks#readme' target="_blank">Check on Github</NavItem>
-          </Navbar>
+          </Navbar></Link>
         )
         }
         
