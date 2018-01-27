@@ -1,19 +1,17 @@
-import db from '../models';
+import database from '../models';
 
 // Get access to books and borrowed model
-const { Books } = db;
-const { Borrowed } = db;
+const { Books, Borrowed } = database;
 
-module.exports = {
+const BookController = {
 /**
    * @method create
-   * 
+   *
    * @description This method handles creating new books request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   create(req, res) {
@@ -27,22 +25,22 @@ module.exports = {
         isbn: req.body.isbn,
         cover: req.body.cover
       })
-      .then((newBook) => res.status(201).send({
+      .then(newBook => res.status(201).send({
         message: 'Book added successfully',
         newBook
       }))
       .catch(error => res.status(500).send(error));
   },
- 
+
   /**
    * @method list
-   * 
+   *
    * @description This method handles get all books request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
+   *
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   list(req, res) {
@@ -54,13 +52,13 @@ module.exports = {
 
   /**
    * @method borrow
-   * 
+   *
    * @description This method handles borrow books request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
+   *
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   borrow(req, res) {
@@ -73,7 +71,7 @@ module.exports = {
       })
       .then((bk) => {
         if (bk) {
-          return res.status(422).send({
+          return res.status(422).json({
             message: 'You cant borrow this book again till you return',
           });
         }
@@ -96,7 +94,7 @@ module.exports = {
                 returned: false,
                 returnDate: due,
               })
-              .then((borrowed) => res.status(201).json({
+              .then(borrowed => res.status(201).json({
                 message: 'You have successfully borrowed the book',
                 borrowed
               }))
@@ -109,20 +107,20 @@ module.exports = {
                   },
                 })
                 .catch(error => error));
-              });
-          })
+          });
+      })
       .catch(error => res.status(500).send({ message: error }));
   },
 
   /**
    * @method edit
-   * 
+   *
    * @description This method handles edit books request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
+   *
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   edit(req, res) {
@@ -144,13 +142,13 @@ module.exports = {
 
   /**
    * @method showborrowed
-   * 
+   *
    * @description This method handles showing borrowed books request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
+   *
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   showBorrowed(req, res) {
@@ -179,13 +177,13 @@ module.exports = {
 
   /**
    * @method returnBook
-   * 
+   *
    * @description This method handles returning of books request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
+   *
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   returnBook(req, res) {
@@ -218,18 +216,18 @@ module.exports = {
             });
           });
         })
-    ).catch(error => res.status(500).send(error));
+      ).catch(error => res.status(500).send({ message: error }));
   },
 
   /**
    * @method erase
-   * 
+   *
    * @description This method handles delete books request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
+   *
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   erase(req, res) {
@@ -254,13 +252,13 @@ module.exports = {
 
   /**
    * @method listBorrowed
-   * 
+   *
    * @description This method handles showing all borrowed books request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
+   *
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   listBorrowed(req, res) {
@@ -270,3 +268,4 @@ module.exports = {
       .catch(error => res.status(500).send({ message: error }));
   },
 };
+export default BookController;

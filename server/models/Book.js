@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const Books = sequelize.define('Books', {
+  const Book = sequelize.define('Books', {
     title: {
       type: DataTypes.STRING,
       allowNull: DataTypes.FALSE,
@@ -19,12 +19,12 @@ export default (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        Books.hasOne(models.Category, {
+        Book.hasOne(models.Category, {
           foreignKey: 'catId',
           onDelete: 'CASCADE'
         });
       }
     }
   });
-  return Books;
+  return Book;
 };

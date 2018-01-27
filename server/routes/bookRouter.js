@@ -1,9 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import BooksController from '../controllers/books';
-import Check from '../helpers/validation';
+import BookController from '../controllers/BookController';
+import Validations from '../helpers/Validations';
 
-const books = express.Router();
+const bookRouter = express.Router();
+const { isAdmin, isLoggedIn, checkBookId, validateBook } = Validations;
+const { list, listBorrowed, edit, erase, create } = BookController;
 dotenv.load(); // Get all books
 /**
  * @swagger
@@ -35,7 +37,7 @@ dotenv.load(); // Get all books
  *     }
  */
 
- /**
+/**
  * @swagger
  * definition:
  *   Borrowing History:
@@ -47,7 +49,7 @@ dotenv.load(); // Get all books
  *      }
  */
 
- /**
+/**
  * @swagger
  * definition:
  *   BorrowBook:
@@ -120,19 +122,20 @@ dotenv.load(); // Get all books
 *           ]
 *           }
 *       401:
-*         description: Invalid token provided or User not logged in 
+*         description: Invalid token provided or User not logged in
 *         example: {
-*           "message": "Access denied, you have to be logged in to perform this operation"
+*           "message":
+*           "Access denied, you have to be logged in to perform this operation"
 *          }
 *       500:
 *         description: Internal server error
 *         example: {
 *           "message": "Internal Server Error"
-} 
+}
  */
-books.route('/')
-  .get(Check.isLoggedIn, BooksController.list);
-books.route('/')
+bookRouter.route('/')
+  .get(isLoggedIn, list);
+bookRouter.route('/')
 /**
  * @swagger
  * /books:
@@ -181,8 +184,9 @@ books.route('/')
  *               "title": "This field is required",
  *               "author": "This field is required",
  *               "description": "This field is required",
- *               "category": "This field is required OR categoryId must be a number",
- *               "quantity": "This field is required OR quantity must not be less than zero"
+ *               "category": "This field is required",
+ *               "quantity":
+ *               "This field is required OR quantity must not be less than zero"
  *    }
  *   }
  *       401:
@@ -193,9 +197,8 @@ books.route('/')
  *               "message": "Internal Server Error"
  * }
  */
-  .post(Check.validateBook, Check.isAdmin,
-    BooksController.create);
-books.route('/:bookId')
+  .post(validateBook, isAdmin, create);
+bookRouter.route('/:bookId')
 /**
  * @swagger
  * /books/{bookId}:
@@ -258,9 +261,8 @@ books.route('/:bookId')
  *       500:
  *         description: Internal server error
  */
-  .put(Check.isAdmin, Check.checkBookId, Check.validateBook,
-    BooksController.edit);
-books.route('/:bookId')
+  .put(isAdmin, checkBookId, validateBook, edit);
+bookRouter.route('/:bookId')
 /**
  * @swagger
  * /books/{bookId}:
@@ -305,8 +307,8 @@ books.route('/:bookId')
  *       500:
  *         description: Internal server error
  */
-  .delete(Check.isAdmin, Check.checkBookId, BooksController.erase);
-  /**
+  .delete(isAdmin, checkBookId, erase);
+/**
  * @swagger
  * /books/borrowed:
  *   get:
@@ -359,6 +361,6 @@ books.route('/:bookId')
  *       500:
  *         description: Internal server error
  */
-books.route('/borrowed')
-.get(Check.isAdmin, BooksController.listBorrowed);
-export default books;
+bookRouter.route('/borrowed')
+  .get(isAdmin, listBorrowed);
+export default bookRouter;

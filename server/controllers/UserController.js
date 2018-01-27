@@ -7,19 +7,18 @@ dotenv.load();
 const secret = process.env.SECRETKEY;
 const adminSecret = process.env.ADMINSECRET;
 
-const { Users } = db;
-const { Borrowed } = db;
+const { Users, Borrowed } = db;
 
-export default {
+const UserController = {
   /**
    * @method create
-   * 
+   *
    * @description This method handles creation of new users request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
+   *
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   create(req, res) {
@@ -42,7 +41,7 @@ export default {
           membership: user.membership };
         const token = jwt.sign(
           { currentUser,
-          }, secret, { expiresIn: 60  * 60 * 24 }
+          }, secret, { expiresIn: 60 * 60 * 24 }
         );
         return res.status(201).send({
           message: 'Signed up successfully',
@@ -57,13 +56,13 @@ export default {
 
   /**
    * @method list
-   * 
+   *
    * @description This method handles getting all registered users request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
+   *
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   list(req, res) {
@@ -72,16 +71,16 @@ export default {
       .then(users => res.status(200).send(users))
       .catch(error => res.status(500).send(error));
   },
-  
+
   /**
    * @method admin
-   * 
+   *
    * @description This method handles creation of new admin users request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
+   *
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   admin(req, res) {
@@ -118,13 +117,13 @@ export default {
 
   /**
    * @method signin
-   * 
+   *
    * @description This method handles authentication of users request
-   * 
+   *
    * @param { object} req HTTP request
-   * 
+   *
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   signin(req, res) {
@@ -156,40 +155,40 @@ export default {
   },
   /**
    * @method checkExistingUser
-   * 
+   *
    * @description This method handles checking of existing username request
-   * 
+   *
    * @param { object} req HTTP request
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   checkExistingUser(req, res) {
     return Users
       .findOne({
-        where: { 
+        where: {
           username: req.body.searchTerm
         },
       })
       .then((user) => {
         res.status(200).json({
           message: user
-        })
-      }).catch(error =>{
-        res.status(404).json({
-          message:error
-        })
-      })
+        });
+      }).catch((error) => {
+        res.status(500).json({
+          message: error
+        });
+      });
   },
 
   /**
    * @method userHistory
-   * 
+   *
    * @description This method handles getting history of users request
-   * 
+   *
    * @param { object} req HTTP request
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   userHistory(req, res) {
@@ -213,33 +212,33 @@ export default {
 
   /**
    * @method checkExisting
-   * 
+   *
    * @description This method handles checking of existing users request
-   * 
+   *
    * @param { object} req HTTP request
    * @param { object} res HTTP response
-   * 
+   *
    * @returns { object } response message
    */
   checkExisting(req, res) {
     return Users
       .findOne({
-        where: { 
+        where: {
           email: req.body.searchTerm
         },
       })
       .then((user) => {
         res.status(200).json({
           message: user
-        })
-      }).catch(error =>{
+        });
+      }).catch((error) => {
         res.status(404).json({
-          message:error
-        })
-      })
+          message: error
+        });
+      });
   },
 
-   /**
+  /**
    *
    * @description - Edit profile controller
    *
@@ -254,43 +253,46 @@ export default {
         id: req.params.userId
       }
     }).then((user) => {
-      if(user){
-        if(req.body.oldPassword){
-          if(req.body.oldPassword &&
+      if (user) {
+        if (req.body.oldPassword) {
+          if (req.body.oldPassword &&
             !bcrypt.compareSync(req.body.oldPassword, user.password)) {
             res.status(400).send({
               message: 'Old password is incorrect'
             });
-          }else{
-          const password = bcrypt.hashSync(req.body.newPassword, 10);
+          } else {
+            const password = bcrypt.hashSync(req.body.newPassword, 10);
+            return user.update({
+              username: req.body.username || user.username,
+              password
+            }).then((updated) => {
+              res.status(201).json({
+                message: 'profile updated succesfully',
+                updated
+              });
+            });
+          }
+        } else {
           return user.update({
             username: req.body.username || user.username,
-            password: password
+            password: user.password
           }).then((updated) => {
             res.status(201).json({
               message: 'profile updated succesfully',
               updated
-            })
-          })
+            });
+          }).catch(() => {
+            res.status(409).json({
+              message: 'Username exists. Try another one'
+            });
+          });
         }
-      }else{
-        return user.update({
-          username: req.body.username || user.username,
-          password: user.password
-        }).then((updated) => {
-          res.status(201).json({
-            message: 'profile updated succesfully',
-            updated
-          })
-        }).catch(error =>{
-          res.status(409).json({
-            message: "Username exists. Try another one"
-          })
-        })
+      } else {
+        return res.status(404).json({
+          message: 'User not in database'
+        });
       }
-      }else return res.status(404).json({
-        message: 'User not in database'
-      })
-    })
+    });
   }
 };
+export default UserController;

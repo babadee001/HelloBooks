@@ -20,116 +20,10 @@ before((done) => {
 });
 
 describe('Test', () => {
-  it('should access api end point', (done) => {
-    chai.request(Server)
-      .get('/api')
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.should.be.html;
-        done();
-      });
-  });
-  it('it should GET a welcome message', (done) => {
-    chai.request(Server)
-      .get('/')
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.should.be.html;
-        done();
-      });
-  });
-  it('creates new user', (done) => {
-    chai.request(Server)
-      .post('/api/v1/users/signup/')
-      .send({
-        password: 'testpassworde',
-        username: 'testusernamew',
-        email: 'test@user.co',
-        membership: 'professional',
-      })
-      .end((err, res) => {
-        res.body.message.should.equal('Signed up successfully');
-        res.should.have.status(201);
-        res.should.be.json;
-        done();
-      });
-  });
-  it('Does not signup without email', (done) => {
-    chai.request(Server)
-      .post('/api/v1/users/signup/')
-      .send({
-        password: 'testpassword',
-        username: 'testusername2',
-      })
-      .end((err, res) => {
-        res.should.have.status(400);
-        res.body.message.should.equals('Enter a valid email');
-        res.should.be.json
-        done();
-      });
-  });
-  it('Does not signup without username', (done) => {
-    chai.request(Server)
-      .post('/api/v1/users/signup/')
-      .send({
-        password: 'testpassword',
-        email: 'test@yag.com',
-      })
-      .end((err, res) => {
-        res.should.have.status(400);
-        res.body.message.should.equals('username is required and should contain no spaces or special characters');
-        done();
-      });
-  });
-  it('should login user with correct details', (done) => {
-    chai.request(Server)
-      .post('/api/v1/users/signin/')
-      .type('form')
-      .send({
-        password: 'testpassworde',
-        username: 'testusernamew',
-      })
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.Token.should.not.equals(null);
-        done();
-      });
-  });
-  it('should request for proper email', (done) => {
-    chai.request(Server)
-      .post('/api/v1/users/signup/')
-      .send({
-        password: 'testpasswordd',
-        username: 'testusernamee',
-        email: 'wrongformat',
-        membership: 'professional',
-      })
-      .end((err, res) => {
-        res.body.message.should.equal('Enter a valid email');
-        res.should.be.json;
-        res.should.have.status(400);
-        done();
-      });
-  });
-  it('should reject signin without correct details', (done) => {
-    chai.request(Server)
-      .post('/api/v1/users/signin/')
-      .send({
-        username: 'testusernamee',
-        password: 'wrongpassword',
-      })
-      .end((err, res) => {
-        res.should.be.json
-        res.body.message.should.equal('Invalid username or password');
-        res.should.have.status(401);
-        done();
-      });
-  });
   it('Admin should be able to add books', (done) => {
     chai.request(Server)
       .post('/api/v1/books/')
       .set('xaccesstoken', adminToken)
-      // .type('form')
       .send({
         title: 'HarryPorter',
         author: 'babadee',
@@ -203,8 +97,12 @@ describe('Test', () => {
       .get('/api/v1/books/')
       .end((err, res) => {
         res.status.should.equals(401);
-        res.should.be.json
-        res.body.message.should.equal('Access denied, you have to be logged in to perform this operation');
+        res.should.be.json;
+        res
+          .body
+          .message
+          .should
+          .equal('Access denied, you have to be logged in to perform this operation');
         done();
       });
   });
@@ -214,7 +112,7 @@ describe('Test', () => {
       .set('xaccesstoken', 'faketoken')
       .end((err, res) => {
         res.status.should.equals(401);
-        res.should.be.json
+        res.should.be.json;
         res.body.message.should.equal('Access Denied. You are not authorized.');
         done();
       });
@@ -320,27 +218,10 @@ describe('Test', () => {
       })
       .end((err, res) => {
         res.should.have.status(401);
-        res.body.message.should.equal('Operation failed. Admin privileges needed.');
-        done();
-      });
-  });
-  it('Admin should be able to GET all users', (done) => {
-    chai.request(Server)
-      .get('/api/v1/users/')
-      .set('xaccesstoken', adminToken)
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
-        done();
-      });
-  });
-  it('Non Admin should not be able to GET all users', (done) => {
-    chai.request(Server)
-      .get('/api/v1/users/')
-      .set('xaccesstoken', userToken)
-      .end((err, res) => {
-        res.should.have.status(401);
-        res.body.message.should.equals('Operation failed. Admin privileges needed.');
+        res
+          .body
+          .message
+          .should.equal('Operation failed. Admin privileges needed.');
         done();
       });
   });
@@ -360,27 +241,10 @@ describe('Test', () => {
       .set('xaccesstoken', userToken)
       .end((err, res) => {
         res.should.have.status(401);
-        res.body.message.should.equals('Operation failed. Admin privileges needed.');
-        done();
-      });
-  });
-  it('Users can view their borrowing history, returned or not', (done) => {
-    chai.request(Server)
-      .get('/api/v1/users/1')
-      .set('xaccesstoken', userToken)
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
-        done();
-      });
-  });
-  it('Users with no borrowing history should be notified', (done) => {
-    chai.request(Server)
-      .get('/api/v1/users/100')
-      .set('xaccesstoken', userToken)
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.message.should.equals('You have never borrowed a book');
+        res
+          .body
+          .message
+          .should.equals('Operation failed. Admin privileges needed.');
         done();
       });
   });

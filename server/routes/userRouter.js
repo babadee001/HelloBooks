@@ -1,12 +1,33 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import UsersController from '../controllers/users';
-import BooksController from '../controllers/books';
-import Check from '../helpers/validation';
+import UserController from '../controllers/UserController';
+import BookController from '../controllers/BookController';
+import Validations from '../helpers/Validations';
 
 dotenv.load();
+const {
+  isLoggedIn,
+  isAdmin,
+  checkBookId,
+  checkUserId,
+  validateInput,
+  validateLogin,
+  validateSearch,
+  validateUserEdit
+} = Validations;
+const {
+  create,
+  checkExistingUser,
+  userHistory,
+  list,
+  signin,
+  checkExisting,
+  admin,
+  editProfile
+} = UserController;
+const { borrow, returnBook, showBorrowed } = BookController;
 const adminRoute = process.env.route;
-const app = express.Router();
+const userRouter = express.Router();
 
 /**
  * @swagger
@@ -42,7 +63,7 @@ const app = express.Router();
  *
  */
 
- /**
+/**
  * @swagger
  * definition:
  *   edit:
@@ -77,7 +98,7 @@ const app = express.Router();
  *
  */
 
- /**
+/**
  * @swagger
  * definitions:
  *   BorrowBook:
@@ -89,7 +110,7 @@ const app = express.Router();
  *      }
  */
 
-  /**
+/**
  * @swagger
  * definitions:
  *   return:
@@ -98,7 +119,7 @@ const app = express.Router();
  *         type: number
  *       userId:
  *         type: number
- *       book: 
+ *       book:
  *         type: object
  *     example: {
  *      bookId: 13,
@@ -118,7 +139,7 @@ const app = express.Router();
  *      }
  */
 
-app.route('/') // Get all users
+userRouter.route('/') // Get all users
 /**
  * @swagger
  * /users:
@@ -142,7 +163,7 @@ app.route('/') // Get all users
  *  {
  *       "id": 1,
  *       "username": "testusernamew",
- *       "password": "$2a$10$jmu2BULd7goy9bqmVRkot.g/19iQy6ic6sPii.0B4kbEGzpslbzmm",
+ *       "password": "$2a$10$jmu2BULd7goy9bqmVRkot",
  *       "email": "test@user.co",
  *       "isAdmin": 0,
  *       "membership": "professional",
@@ -152,7 +173,7 @@ app.route('/') // Get all users
  *   {
  *       "id": 2,
  *       "username": "admin",
- *       "password": "$2a$10$R3aMNiEdIQr4c0.47czWMeHJ4e6O6RTZpiNrcGo7rhqSz/RnFHUP.",
+ *       "password": "$2a$10$R3aMNiEdIQr4c0.47czWMeHJ4e.",
  *       "email": "admin@hellobooks.com",
  *       "isAdmin": 1,
  *       "membership": "admin",
@@ -164,7 +185,8 @@ app.route('/') // Get all users
  *       401:
  *         description: User not logged in
  *         example: {
- *           "message": "Access denied, you have to be logged in to perform this operation"
+ *           "message":
+ *           "Access denied, you have to be logged in to perform this operation"
  *         }
  *       403:
  *         description: Not an admin
@@ -179,8 +201,8 @@ app.route('/') // Get all users
  *     schema:
  *       $ref: '#/definitions/users'
  */
-  .get(Check.isAdmin, UsersController.list);
-app.route('/:userId')
+  .get(isAdmin, list);
+userRouter.route('/:userId')
 /**
  * @swagger
  * /{userId}:
@@ -192,7 +214,8 @@ app.route('/:userId')
  *       - application/json
  *     parameters:
  *       - name: userId
- *         description: The id of the user to check his/her borrowing history
+ *         description:
+ *          The id of the user to Validations his/her borrowing history
  *         in: path
  *         required: true
  *         type: number
@@ -203,7 +226,8 @@ app.route('/:userId')
  *         type: string
  *     responses:
  *       200:
- *         description: An array of all books (returned and unreturned) borrowed by the user.
+ *         description:
+ *          An array of all books (returned & unreturned) borrowed by the user.
  *         example: [
  *            {
  *            "message": "You have never borrowed a book"
@@ -238,7 +262,8 @@ app.route('/:userId')
  *       401:
  *         description: User not logged in
  *         example: {
- *           "message": "Access denied, you have to be logged in to perform this operation"
+ *           "message":
+ *           "Access denied, you have to be logged in to perform this operation"
  *         }
  *       500:
  *         description: server error
@@ -246,8 +271,8 @@ app.route('/:userId')
  *           "message": "internal server error"
  *         }
  */
-  .get(Check.isLoggedIn, Check.checkUserId, UsersController.userHistory);
-app.route('/signup')
+  .get(isLoggedIn, checkUserId, userHistory);
+userRouter.route('/signup')
 /**
  * @swagger
  * /users/signup:
@@ -276,7 +301,8 @@ app.route('/signup')
  *       400:
  *         description: Invalid input(email, password...) fields
  *         example: {
- *           "message": "username is required and should contain no spaces or special characters"
+ *           "message":
+ *     "username is required & should contain no spaces or special characters"
  *         }
  *       409:
  *         description: Existing details
@@ -289,8 +315,8 @@ app.route('/signup')
  *           "message": "internal server error"
  *         }
  */
-  .post(Check.validateInput, UsersController.create);
-app.route('/signin')
+  .post(validateInput, create);
+userRouter.route('/signin')
 /**
  * @swagger
  * /users/signin:
@@ -326,10 +352,10 @@ app.route('/signin')
  *           "message": "internal server error"
  *         }
  */
-  .post(Check.validateLogin, UsersController.signin);
-app.route(adminRoute)
-  .post(Check.validateInput, UsersController.admin);
-app.route('/:userId/books/:bookId')
+  .post(validateLogin, signin);
+userRouter.route(adminRoute)
+  .post(validateInput, admin);
+userRouter.route('/:userId/books/:bookId')
 /**
  * @swagger
  * /users/{userId}/books/{bookId}:
@@ -379,7 +405,8 @@ app.route('/:userId/books/:bookId')
  *       401:
  *         description: User not logged in
  *         example: {
- *           "message": "Access denied, you have to be logged in to perform this operation"
+ *           "message":
+ *           "Access denied, you have to be logged in to perform this operation"
  *         }
  *       404:
  *         description: Not found
@@ -397,8 +424,8 @@ app.route('/:userId/books/:bookId')
  *           "message": "internal server error"
  *         }
  */
-  .post(Check.isLoggedIn, Check.checkBookId, Check.checkUserId, BooksController.borrow);
-app.route('/:userId/books/:bookId')
+  .post(isLoggedIn, checkBookId, checkUserId, borrow);
+userRouter.route('/:userId/books/:bookId')
 /**
  * @swagger
  * /users/{userId}/books/{bookId}:
@@ -447,7 +474,8 @@ app.route('/:userId/books/:bookId')
  *       401:
  *         description: User not logged in
  *         example: {
- *           "message": "Access denied, you have to be logged in to perform this operation"
+ *           "message":
+ *           "Access denied, you have to be logged in to perform this operation"
  *         }
  *       500:
  *         description: server error
@@ -455,8 +483,8 @@ app.route('/:userId/books/:bookId')
  *           "message": "internal server error"
  *         }
  */
-  .put(Check.isLoggedIn, Check.checkUserId, Check.checkBookId, BooksController.returnBook);
-app.route('/:userId/books')
+  .put(isLoggedIn, checkUserId, checkBookId, returnBook);
+userRouter.route('/:userId/books')
 /**
  * @swagger
  * /users/{userId}/books?returned=false:
@@ -479,7 +507,8 @@ app.route('/:userId/books')
  *         type: string
  *     responses:
  *       200:
- *         description: An array of books borrowed but not returned or a message indicating no unreturned book
+ *         description:
+ *          An array of books borrowed but not returned
  *         example: {
  *           "books": [
  *           {
@@ -499,7 +528,8 @@ app.route('/:userId/books')
  *       401:
  *         description: User not logged in
  *         example: {
- *           "message": "Access denied, you have to be logged in to perform this operation"
+ *           "message":
+ *           "Access denied, you have to be logged in to perform this operation"
  *         }
  *       500:
  *         description: server error
@@ -507,19 +537,19 @@ app.route('/:userId/books')
  *           "message": "internal server error"
  *         }
  */
-  .get(Check.isLoggedIn, Check.checkUserId, BooksController.showBorrowed);
-  
-  app.route('/checkuser')
-  .post(Check.validateSearch, UsersController.checkExistingUser);
+  .get(isLoggedIn, checkUserId, showBorrowed);
 
-  app.route('/existing')
+userRouter.route('/checkuser')
+  .post(validateSearch, checkExistingUser);
+
+userRouter.route('/existing')
   /**
    * @swagger
-   * /users/checkuser:
+   * /users/Validationsuser:
    *   post:
    *     tags:
    *       - Users & Authentication
-   *     description: checks for existing email in the database
+   *     description: Validationss for existing email in the database
    *     produces:
    *       - application/json
    *     parameters:
@@ -551,10 +581,10 @@ app.route('/:userId/books')
    *           "message": "internal server error"
    *         }
    */
-    .post(Check.validateSearch, UsersController.checkExisting);
+  .post(validateSearch, checkExisting);
 
-    app.route('/edit/:userId')
-    /**
+userRouter.route('/edit/:userId')
+/**
     * @swagger
     * /users/edit/{userId}:
     *   put:
@@ -579,7 +609,7 @@ app.route('/:userId/books')
     *            "updated": {
     *               "id": 12,
     *                "username": "hoyt",
-    *                "password": "$2a$10$VL3WpYKYoJJOa0WWt4q5E.SEiJo8LKfWbKM0wo/MmH4/fJO0dMRI.",
+    *                "password": "$2a$10$VL3WpYKYoJJOa0WWt4RI.",
     *                "email": "Cesar62@gmail.com",
     *                "isAdmin": 0,
     *                "membership": "Gold",
@@ -603,5 +633,5 @@ app.route('/:userId/books')
     *           "message": "internal server error"
     *         }
     */
-  .put(Check.isLoggedIn, Check.checkUserId, Check.validateUserEdit, UsersController.editProfile);
-export default app;
+  .put(isLoggedIn, checkUserId, validateUserEdit, editProfile);
+export default userRouter;

@@ -7,7 +7,7 @@ import axios from 'axios';
  *
  * @return {void} no return or void
  */
-export default function setAuthorizationToken(token) {
+export default function setAuthorization(token) {
   if (token) {
     axios.defaults.headers.common.xaccesstoken = `${token}`;
   } else {
