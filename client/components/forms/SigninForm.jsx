@@ -3,7 +3,7 @@ import GoogleLogin from 'react-google-login';
 import { Link } from 'react-router';
 import { browserHistory } from 'react-router';
 import jwt from 'jsonwebtoken';
-import { checkExisting } from '../../utils/validations';
+import { checkExisting, getDetails, responseGoogle } from '../../utils/validations';
 
 /**
  * @description - Signin form component
@@ -31,28 +31,6 @@ export default class SigninForm extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.responseGoogle = this.responseGoogle.bind(this);
-    this.getDetails = this.getDetails.bind(this);
-  }
-  /**
-	 * @description - Destructure API response from google to retrieve necessary data
-	 * 
-	 * @param {Object} obj - Object from Google API
-	 * 
-	 * @returns {Object} 
-	 * 
-	 * @memberOf signinForm
-	 */
-	getDetails(obj) {
-		let mainUserObject = {
-			currentUser: {}
-		};
-		const username = obj.name.toLowerCase().replace(/[\s]/, '_')
-		 + Math.round(Math.random(1998) * 56);
-		mainUserObject.currentUser.username = username;
-		mainUserObject.currentUser.membership = 'googleSilver';
-		mainUserObject.currentUser.password = username;
-		mainUserObject.currentUser.email = obj.email;
-		return mainUserObject;
   }
   
   /**
@@ -65,22 +43,14 @@ export default class SigninForm extends Component {
 	 * @memberOf signinForm
 	 */
   responseGoogle(response) {
-    const secret = process.env.secretKey;
+    const secret = process.env.SECRET;
     if (response.Zi.id_token) {
       const decoded = jwt.decode(response.Zi.id_token);
-      const newUserObject = this.getDetails(decoded);
+      const newUserObject = getDetails(decoded);
       checkExisting({ searchTerm: newUserObject.currentUser.email })
       .then((res) => {
         if (res == 'Not found') {
           this.props.userSignupRequest(newUserObject.currentUser)
-          .then(() => {
-            Materialize.toast('Logged In Successfully', 1000,
-            'teal',
-            () => {
-              browserHistory.push('/dashboard');
-            }
-          );
-          });
         } else {
           let currentUser = res;
           const token = jwt.sign(
@@ -88,12 +58,6 @@ export default class SigninForm extends Component {
             }, secret
           );
           this.props.googleSigninRequest(token)
-            Materialize.toast('Logged In Successfully', 1000,
-            'teal',
-            () => {
-              browserHistory.push('/dashboard');
-            }
-          );
         }
       });
     }
@@ -119,28 +83,7 @@ export default class SigninForm extends Component {
 	 */
   onSubmit(event) {
     event.preventDefault();
-    this.props.userSigninRequest(this.state).then(() => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        const currentUser = jwt.decode(token).currentUser;
-				if (currentUser.isAdmin === 1) {
-          Materialize.toast('Logged In Successfully', 1000,
-            'teal',
-            () => {
-              browserHistory.push('/admin');
-            }
-          );
-				} else {
-          Materialize.toast('Logged In Successfully', 1000,
-            'teal',
-            () => {
-              browserHistory.push('/dashboard');
-            }
-          );
-				}
-			}
-    }
-    )
+    this.props.userSigninRequest(this.state)
   }
 
   /**

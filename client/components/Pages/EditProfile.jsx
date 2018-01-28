@@ -99,7 +99,7 @@ class EditProfile extends Component {
     checkUser({searchTerm: this.state.username})
     .then((response) => {
         if (response !== 'Not found') {
-          this.setState({ usernameError: 'username same as previous' });
+          this.setState({ usernameError: 'username exists' });
           return false;
         } else {
           this.props.actions.editProfileAction(userId, this.state);

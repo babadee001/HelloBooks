@@ -266,7 +266,7 @@ const UserController = {
               username: req.body.username || user.username,
               password
             }).then((updated) => {
-              res.status(201).json({
+              res.status(200).json({
                 message: 'profile updated succesfully',
                 updated
               });
@@ -277,7 +277,7 @@ const UserController = {
             username: req.body.username || user.username,
             password: user.password
           }).then((updated) => {
-            res.status(201).json({
+            res.status(200).json({
               message: 'profile updated succesfully',
               updated
             });
@@ -292,6 +292,8 @@ const UserController = {
           message: 'User not in database'
         });
       }
+    }).catch((error) => {
+      res.status(500).send(error);
     });
   }
 };

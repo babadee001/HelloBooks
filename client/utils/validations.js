@@ -5,18 +5,18 @@ import axios from 'axios';
  *
  * @param {object} userData - user details
  *
- * @returns {String, object} - String
+ * @returns {object} - String
  */
 export function checkExisting(userData) {
   return axios
     .post('api/v1/users/existing', userData)
     .then((response) => {
-      if (response.data.message !== null){
+      if (response.data.message !== null) {
         return response.data.message;
       }
-        return 'Not found';
+      return 'Not found';
     })
-    .catch(error => (error))
+    .catch(error => (error));
 }
 
 /**
@@ -24,17 +24,37 @@ export function checkExisting(userData) {
  *
  * @param {object} userData - user details
  *
- * @returns {String, object} - String
+ * @returns {object} - String
  */
 export function checkUser(userData) {
   return axios
     .post('api/v1/users/checkuser', userData)
     .then((response) => {
-      if (response.data.message !== null){
+      if (response.data.message !== null) {
         return response.data.message;
       }
-        return 'Not found';
+      return 'Not found';
     })
-    .catch(error => (error))
+    .catch(error => (error));
+}
+
+/**
+* @description - Destructure API response from google to retrieve necessary data
+*
+* @param {Object} obj - Object from Google API
+*
+* @returns {Object} - string
+*/
+export function getDetails(obj) {
+  const mainUserObject = {
+    currentUser: {}
+  };
+  const username = obj.name.toLowerCase()
+    .replace(/[\s]/, '_') + Math.round(Math.random(1998) * 56);
+  mainUserObject.currentUser.username = username;
+  mainUserObject.currentUser.membership = 'googleSilver';
+  mainUserObject.currentUser.password = username;
+  mainUserObject.currentUser.email = obj.email;
+  return mainUserObject;
 }
 

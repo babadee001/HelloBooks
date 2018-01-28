@@ -24,7 +24,9 @@ const INITIAL_STATE = {
 function authReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case UNAUTH_USER:
-      return { ...state, error: '', message: 'Successfully Logged Out', authenticated: false };
+      return {
+        ...state, message: 'Successfully Logged Out', authenticated: false
+      };
     case SET_CURRENT_USER:
       return { ...state, user: action.user, authenticated: true };
     case GET_ALL_USERS:
@@ -32,7 +34,7 @@ function authReducer(state = INITIAL_STATE, action) {
     case SET_API_STATUS:
       return { ...state, isFetching: action.isFetching };
     case EDIT_PROFILE:
-      return { ...state, authenticated: false};
+      return { ...state, authenticated: false };
     default:
       return state;
   }

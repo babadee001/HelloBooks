@@ -28,7 +28,7 @@ const Validations = {
             options: [{ min: 3 }],
             errorMessage: 'Username is required',
           },
-          errorMessage: 'username is required and should contain no spaces or special characters',
+          errorMessage: 'username is required with no special characters',
         },
         password: {
           notEmpty: true,
@@ -36,7 +36,7 @@ const Validations = {
             options: [{ min: 4 }],
             errorMessage: 'password should be at least four characters',
           },
-          errorMessage: 'password field is required and should contain no spaces or special characters',
+          errorMessage: 'password field is required with no special characters',
         },
         email: {
           isEmail: true,
@@ -46,7 +46,7 @@ const Validations = {
         membership: {
           isAlpha: false,
           notEmpty: true,
-          errorMessage: 'Membership is required, can not be empty and must be alphabet',
+          errorMessage: 'Membership is required, must be alphabet & not empty',
         },
       }
     );
@@ -116,7 +116,6 @@ const Validations = {
       })
       .then((user) => {
         if (user && bcrypt.compareSync(req.body.password, user.password)) {
-          console.log(user.password);
           next();
         } else {
           return res.status(401)
@@ -143,6 +142,10 @@ const Validations = {
         cover: {
           notEmpty: true,
           errorMessage: 'Please upload a cover',
+        },
+        category: {
+          notEmpty: true,
+          errorMessage: 'Please select a category',
         },
         title: {
           notEmpty: true,
@@ -208,7 +211,7 @@ const Validations = {
     } else {
       return res.status(401)
         .send({
-          message: 'Access denied, you have to be logged in to perform this operation',
+          message: 'Access denied, you have to be logged for this operation',
         });
     }
   },
@@ -239,7 +242,7 @@ const Validations = {
     } else {
       return res.status(401)
         .send({
-          message: 'Access denied, you have to be logged in to perform this operation',
+          message: 'Access denied, you have to be logged for this operation',
         });
     }
   },

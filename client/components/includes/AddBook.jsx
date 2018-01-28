@@ -104,17 +104,6 @@ class AddBook extends Component {
     this
       .props
       .add(this.state)
-      .then((res) => {
-        if (res) {
-          swal(res.data.message);
-        } else {
-          Materialize.toast('Book added Successfully', 2000, '#15b39d', () => {
-            this.setState({ isLoading: false });
-          });
-          browserHistory.push('/admin');
-        }
-      })
-      .catch(err => swal(err));
   }
 
   /**
@@ -127,7 +116,7 @@ class AddBook extends Component {
 	 */
   handleUploadError(error) {
     this.setState({ isUploading: false });
-    console.error(error);}
+    swal(error);}
   
   /**
 	 * 

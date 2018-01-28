@@ -1,16 +1,19 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { 
-  GET_ALL_BOOKS, 
-  DELETE_BOOK, 
-  EDIT_BOOK, 
+import swal from 'sweetalert';
+import { browserHistory } from 'react-router';
+
+import {
+  GET_ALL_BOOKS,
+  DELETE_BOOK,
+  EDIT_BOOK,
   ADD_BOOK,
-  GET_UNRETURNED_BOOKS, 
-  RETURN_BOOK, 
-  GET_BORROWED_HISTORY, 
-  GET_ALL_TIME_BORROWED 
+  GET_UNRETURNED_BOOKS,
+  RETURN_BOOK,
+  GET_BORROWED_HISTORY,
+  GET_ALL_TIME_BORROWED
 } from './types';
-import { isFetching } from './authActions';
+import { isFetching } from './AuthActions';
 
 dotenv.load();
 
@@ -26,12 +29,12 @@ export const getBooks = () => (dispatch) => {
       dispatch({
         type: GET_ALL_BOOKS,
         data: res.data
-      })
+      });
       dispatch(isFetching(false));
       return res.data;
     })
     .catch(error => error);
-}
+};
 
 /**
  * @description - Get books borrowed and not returned action
@@ -57,7 +60,7 @@ export function getBorrowed(userId) {
  *
  * @param {  Number } userId - User ID
  *
- * @returns { Object } - Object containing all books borrowed, returned and unreturned
+ * @returns { Object } - Object of all books borrowed, returned & unreturned
  */
 export const getHistory = userId => (dispatch) => {
   dispatch(isFetching(true));
@@ -71,7 +74,7 @@ export const getHistory = userId => (dispatch) => {
       return res.data;
     })
     .catch(error => error);
-}
+};
 
 /**
  * @description - Modify book action
@@ -104,16 +107,34 @@ export function editBook(details, bookId) {
  * @returns { String } - String
  */
 export function borrowBook(userId, bookId) {
-  return axios.post(`api/v1/users/${userId}/books/${bookId.bookId}`)
-    .then(res => res.data.message)
-    .catch(error => error.data.message);
+  const currentDate = new Date(),
+    after30days = currentDate.setDate(currentDate.getDate() + 20),
+    deadline = new Date(after30days);
+  swal({
+    title: 'Are you sure?',
+    text: `You are required to return this book on or before ${deadline}`,
+    icon: 'warning',
+    buttons: true,
+    dangerMode: true
+  }).then((willBorrow) => {
+    if (willBorrow) {
+      return axios.post(`api/v1/users/${userId}/books/${bookId.bookId}`)
+        .then((res) => {
+          const message = res.data.message;
+          if (res) {
+            swal(message, { icon: 'success' });
+          }
+        }).catch(error => swal(error.data.message));
+    }
+  })
+    .catch(error => error);
 }
 
 /**
  * @description - Return books action
  *
  * @param {  Number } userId - ID of user to return book
- * 
+ *
  * @param { Number } bookId - ID of book to be returned
  *
  * @returns { Object } - Object containing rented books
@@ -145,12 +166,16 @@ export function returnBook(userId, bookId) {
 export function addBookAction(bookDetails) {
   return dispatch => axios.post('api/v1/books', bookDetails)
     .then((res) => {
+      Materialize.toast('Book added Successfully', 2000, 'teal', () => {
+        this.setState({ isLoading: false });
+      });
       dispatch({
         type: ADD_BOOK,
         message: res.data.message
       });
+      browserHistory.push('/admin');
     })
-    .catch(error => error);
+    .catch(error => swal(error.data.message));
 }
 
 /**
@@ -175,7 +200,7 @@ export function deleteBookAction(bookId) {
 /**
  * @description - Get all borrowed books in the application action
  *
- * @returns { Object } - Object containing all time borrowed books, returned and unreturned
+ * @returns { Object } - Object of all time borrowed books,returned & unreturned
  */
 export function getAllBorrowed() {
   return dispatch => axios.get('api/v1/books/borrowed')

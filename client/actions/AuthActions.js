@@ -53,6 +53,12 @@ export const userSignupRequest = userData => (dispatch) => {
       setAuthorizationToken(response.data.Token);
       const decoded = jwt.decode(response.data.Token);
       dispatch(setCurrentUser(decoded));
+      Materialize.toast('Signed up Successfully', 1000,
+        'teal',
+        () => {
+          browserHistory.push('/admin');
+        }
+      );
     })
     .catch((error) => {
       dispatch(isFetching(false));
@@ -60,9 +66,9 @@ export const userSignupRequest = userData => (dispatch) => {
         4000,
         'red');
     });
-  }
+};
 
-  /**
+/**
  *
  * @description - Signin user action
  *
@@ -79,6 +85,12 @@ export const userSigninRequest = userData => (dispatch) => {
       setAuthorizationToken(response.data.Token);
       const decoded = jwt.decode(response.data.Token);
       dispatch(setCurrentUser(decoded));
+      Materialize.toast('Logged In Successfully', 1000,
+        'teal',
+        () => {
+          browserHistory.push('/admin');
+        }
+      );
     })
     .catch((error) => {
       dispatch(isFetching(false));
@@ -133,12 +145,18 @@ export function getUsers() {
  *
  * @returns { Object } - Dispatches user object to the store
  */
-export const googleSigninRequest = token  => (dispatch) => {
+export const googleSigninRequest = token => (dispatch) => {
   localStorage.setItem('token', token);
   setAuthorizationToken(token);
   const decoded = jwt.decode(token);
   dispatch(setCurrentUser(decoded));
-}
+  Materialize.toast('Logged In Successfully', 1000,
+    'teal',
+    () => {
+      browserHistory.push('/dashboard');
+    }
+  );
+};
 
 /**
  * @description - Edit profile action

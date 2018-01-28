@@ -47,7 +47,7 @@ const BookController = {
     return Books
       .all()
       .then(books => res.status(200).send(books))
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 
   /**
@@ -66,7 +66,9 @@ const BookController = {
     const due = now.setDate(now.getDate() + 15);
     return Borrowed
       .findOne({
-        where: { bookId: req.params.bookId, userId: req.params.userId, returned: false },
+        where: {
+          bookId: req.params.bookId, userId: req.params.userId, returned: false
+        },
         attributes: ['bookId', 'userId', 'returned'],
       })
       .then((bk) => {
@@ -131,7 +133,7 @@ const BookController = {
     })
       .then(() => {
         Books.findById(req.params.bookId).then((book) => {
-          res.status(201).send({
+          res.status(200).send({
             book,
             message: 'Book updated successfully!'
           });

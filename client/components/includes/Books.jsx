@@ -36,27 +36,7 @@ export default class Books extends Component {
   handleClick() {
     const userId = this.props.userId;
     const bookId = { bookId: this.props.id };
-    const currentDate = new Date(),
-      after30days = currentDate.setDate(currentDate.getDate() + 20),
-      deadline = new Date(after30days);
-    swal({
-      title: 'Are you sure?',
-      text: `You ware required to return this book on or before ${deadline}`,
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true
-    }).then((willBorrow) => {
-      if (willBorrow) {
-        borrowBook(userId, bookId)
-          .then((res) => {
-            if (res === 'You have successfully borrowed the book') {
-              swal(res, { icon: 'success' });
-            } else {
-              swal(res, { icon: 'warning' });
-            }
-          });
-      }
-    });
+    borrowBook(userId, bookId)
   }
 
   /**
