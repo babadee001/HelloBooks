@@ -1,7 +1,7 @@
 import database from '../models';
 
 // Get access to books and borrowed model
-const { Books, Borrowed } = database;
+const { Books, Borrowed, Category } = database;
 
 const BookController = {
 /**
@@ -16,15 +16,7 @@ const BookController = {
    */
   create(req, res) {
     return Books
-      .create({
-        title: req.body.title,
-        author: req.body.author,
-        category: req.body.category,
-        description: req.body.description,
-        quantity: req.body.quantity,
-        isbn: req.body.isbn,
-        cover: req.body.cover
-      })
+      .create(req.userInput)
       .then(newBook => res.status(201).send({
         message: 'Book added successfully',
         newBook
@@ -83,6 +75,12 @@ const BookController = {
             if (!books) {
               return res.status(404).send({
                 message: 'Wrong book id. Not in database.',
+              });
+            }
+            if (books.quantity === 0) {
+              return res.status(200).send({
+                message: 'This book is not available for borrow',
+                status: false
               });
             }
             return Borrowed
@@ -268,6 +266,60 @@ const BookController = {
       .all()
       .then(borrowed => res.status(200).send(borrowed))
       .catch(error => res.status(500).send({ message: error }));
+  },
+
+  /**
+   * @description - Adds a new category
+   *
+   * @param  {object} req - request
+   * @param  {Object} res - response
+   *
+   * @return {Object} - return lists of category
+   */
+  addCategory(req, res) {
+    return Category.findOne({
+      where: {
+        name: req.body.name
+      }
+    })
+      .then((category) => {
+        if (category) {
+          res.status(409).send({
+            message: 'Category with that name exists'
+          });
+        } else {
+          return Category.create(req.body).then((newCategory) => {
+            if (newCategory) {
+              return res.status(201).send({
+                message: 'Category added successfully',
+                newCategory
+              });
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).send(error);
+      });
+  },
+
+  /**
+   * @description - Gets the list of category from database
+   *
+   * @param  {object} req - request
+   * @param  {object} res - response
+   *
+   * @return {Object} - Return category from database
+   *
+   * Route: GET: /books/category
+   *
+   */
+  getCategory(req, res) {
+    return Category.findAll({})
+      .then((category) => {
+        res.status(200).send(category);
+      })
+      .catch(error => res.status(500).send(error));
   },
 };
 export default BookController;

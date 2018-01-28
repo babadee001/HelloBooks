@@ -11,7 +11,9 @@ import {
   GET_UNRETURNED_BOOKS,
   RETURN_BOOK,
   GET_BORROWED_HISTORY,
-  GET_ALL_TIME_BORROWED
+  GET_ALL_TIME_BORROWED,
+  ADD_CATEGORY,
+  GET_CATEGORY
 } from './types';
 import { isFetching } from './AuthActions';
 
@@ -94,7 +96,7 @@ export function editBook(details, bookId) {
       });
       return res.data.message;
     })
-    .catch(error => error);
+    .catch(error => error.data.message);
 }
 
 /**
@@ -210,6 +212,41 @@ export function getAllBorrowed() {
         data: res.data
       });
       return res.data;
+    })
+    .catch(error => error);
+}
+
+/**
+ * @description - Add category action
+ *
+ * @param { Object } data - New category data
+ *
+ * @returns { String } - Message from the API
+ */
+export function addCategoryAction(data) {
+  return dispatch => axios.post('api/v1/books/category', data)
+    .then((response) => {
+      dispatch({
+        type: ADD_CATEGORY,
+        data: response.data.newCategory
+      });
+      Materialize.toast('Category added successfully', 2000, 'teal');
+    })
+    .catch((error => swal(error.data.message)));
+}
+
+/**
+ * @description - Get all category action
+ *
+ * @returns { Object } - Object containg all categories
+ */
+export function getCategoryAction() {
+  return dispatch => axios.get('/api/v1/books/category')
+    .then((response) => {
+      dispatch({
+        type: GET_CATEGORY,
+        data: response.data
+      });
     })
     .catch(error => error);
 }

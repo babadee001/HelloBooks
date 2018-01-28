@@ -95,7 +95,7 @@ class EditProfile extends Component {
    */
   handleSubmit(event) {
     event.preventDefault();
-    const userId = this.props.user.userId;
+    const userId = this.props.user.userId || this.props.user.id;
     checkUser({searchTerm: this.state.username})
     .then((response) => {
         if (response !== 'Not found') {

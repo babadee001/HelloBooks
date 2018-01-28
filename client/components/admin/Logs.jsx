@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUsers } from '../../actions/AuthActions';
-import { getAllBorrowed } from '../../actions/BooksActions';
+import { getAllBorrowed, addCategoryAction } from '../../actions/BooksActions';
 import Navbar from '../NavigationBar';
 
 /**
@@ -17,6 +17,12 @@ import Navbar from '../NavigationBar';
 class Logs extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      name: '',
+      description: '',
+    };
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   /**
@@ -33,6 +39,27 @@ class Logs extends Component {
         .props
         .actions
         .getAllBorrowed();
+  }
+  /**
+	 * @description - Handles the input value changes
+	 * 
+	 * @param {Object} event 
+	 * 
+	 * @memberOf Logs
+	 */
+  onChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+  /**
+	 * @description - Submits the signin information
+	 * 
+	 * @param {Object} event 
+	 * 
+	 * @memberOf Logs
+	 */
+  onSubmit(event) {
+    event.preventDefault();
+    this.props.actions.addCategoryAction(this.state);
   }
   
   /**
@@ -62,7 +89,7 @@ class Logs extends Component {
       <div>
         {this.renderProps()}
         <Navbar route="/admin" link="Admin dashboard" route1="/add" link1="Add New" />
-        <div className="container">
+        <div className="container container-fluid">
         <div className="row card-wrapper">
                 <div className="col-sm-4 col-md-4 col-lg-4">
                     <div className="card text-white bg-info mb-3 col cardbox">
@@ -85,6 +112,38 @@ class Logs extends Component {
                         <div className="card-body">
                           <h5 className="card-title">All Books Borrowed</h5>
                           <p className="card-text">{this.props.books.allTimeBorrowed.length}</p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                <div className="col-sm-4 col-md-4 col-lg-4">
+                    <div className="card text-white bg-info mb-3 col cardbox">
+                        <div className="card-body">
+                          <h5 className="card-title">Add New Category</h5>
+                          <p className="card-text">
+                            <form onSubmit={ this.onSubmit } className="row">
+                              <div className="form-group input-group">
+                                <input
+                                 className="form-control" value={ this.state.name } onChange={ this.onChange } type="text"
+                                 name="name"
+                                 placeholder="Category name"
+                                 required
+                                />
+                              </div>
+                              <div className="form-group input-group">
+                                <input
+                                 className="form-control" value={ this.state.description } onChange={ this.onChange } type="text"
+                                 name="description"
+                                 placeholder="Category description"
+                                 required
+                                />
+                              </div>
+                              <div className="form-group">
+                                <button className="btn btn-success">Add</button>
+                              </div>
+                            </form>
+                          </p>
                         </div>
                     </div>
                   </div>
@@ -119,7 +178,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
-      getAllBorrowed,      
+      getAllBorrowed, 
+      addCategoryAction,     
       getUsers
     }, dispatch)
   };

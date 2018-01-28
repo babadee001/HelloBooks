@@ -6,10 +6,13 @@ import {
   DELETE_BOOK,
   GET_ALL_TIME_BORROWED,
   EDIT_BOOK,
+  GET_CATEGORY,
+  ADD_CATEGORY,
   SET_API_STATUS } from '../actions/types';
 
 const INITIAL_STATE = {
   allTimeBorrowed: '',
+  category: [],
   message: '',
   user: '',
   allBorrowedBooks: [],
@@ -70,6 +73,12 @@ export default function bookReducer(state = INITIAL_STATE, action) {
     }
     case SET_API_STATUS:
       return { ...state, isFetching: action.isFetching };
+    case GET_CATEGORY:
+      return { ...state, category: action.data };
+    case ADD_CATEGORY: {
+      const newCategory = [action.data].concat(state.category);
+      return { ...state, category: newCategory };
+    }
     default:
       return state;
   }

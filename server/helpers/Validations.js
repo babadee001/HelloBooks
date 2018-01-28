@@ -5,7 +5,7 @@ import db from '../models/';
 
 dotenv.load();
 const secret = process.env.SECRETKEY;
-const { Users } = db;
+const { Users, Books } = db;
 
 const Validations = {
   /**
@@ -139,11 +139,11 @@ const Validations = {
   validateBook(req, res, next) {
     req.checkBody(
       {
-        cover: {
-          notEmpty: true,
-          errorMessage: 'Please upload a cover',
-        },
-        category: {
+        // cover: {
+        //   notEmpty: true,
+        //   errorMessage: 'Please upload a cover',
+        // },
+        catId: {
           notEmpty: true,
           errorMessage: 'Please select a category',
         },
@@ -167,6 +167,10 @@ const Validations = {
         author: {
           notEmpty: true,
           errorMessage: 'Enter valid author name',
+        },
+        isbn: {
+          notEmpty: true,
+          errorMessage: 'ISBN is required'
         },
       });
     const errors = req.validationErrors();
@@ -360,6 +364,77 @@ const Validations = {
         message: 'Invalid user id supplied!!!'
       });
     }
+    next();
+  },
+
+  /**
+   * @method validateCategory
+   *
+   * @description This method handles validations of category input
+   * @param { object} req HTTP request
+   * @param { object} res HTTP response
+   * @param {Function} next - Call back function
+   *
+   * @returns { object } response message
+   */
+  validateCategory(req, res, next) {
+    req.checkBody(
+      {
+        name: {
+          notEmpty: true,
+          errorMessage: 'Please select a category name',
+        },
+        // description: {
+        //   notEmpty: true,
+        //   errorMessage: 'Enter a valid category description',
+        // },
+      });
+    const errors = req.validationErrors();
+    if (errors) {
+      const allErrors = [];
+      errors.forEach((error) => {
+        const errorMessage = error.msg;
+        allErrors.push(errorMessage);
+      });
+      return res.status(400)
+        .json({
+          message: allErrors[0],
+        });
+    }
+    next();
+  },
+
+  /**
+   * Sends user input to the add book controller
+   *
+   * @param {Object} req - request
+   * @param {Object} res - response
+   * @param {Object} next - Callback function
+   *
+   * @returns {Object} - Object containing book inout
+   */
+  sendBookInput(req, res, next) {
+    Books.findOne({
+      where: {
+        isbn: req.body.isbn
+      }
+    })
+      .then((book) => {
+        if (book) {
+          return res.status(409).send({
+            message: 'Book with that ISBN already exist'
+          });
+        }
+      });
+    req.userInput = {
+      title: req.body.title,
+      isbn: req.body.isbn,
+      cover: req.body.cover,
+      author: req.body.author,
+      description: req.body.description,
+      catId: req.body.catId,
+      quantity: req.body.quantity
+    };
     next();
   },
 };

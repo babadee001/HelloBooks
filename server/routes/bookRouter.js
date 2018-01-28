@@ -4,8 +4,23 @@ import BookController from '../controllers/BookController';
 import Validations from '../helpers/Validations';
 
 const bookRouter = express.Router();
-const { isAdmin, isLoggedIn, checkBookId, validateBook } = Validations;
-const { list, listBorrowed, edit, erase, create } = BookController;
+const {
+  isAdmin,
+  isLoggedIn,
+  checkBookId,
+  validateBook,
+  validateCategory,
+  sendBookInput
+} = Validations;
+const {
+  list,
+  listBorrowed,
+  edit,
+  erase,
+  create,
+  addCategory,
+  getCategory
+} = BookController;
 dotenv.load(); // Get all books
 /**
  * @swagger
@@ -197,7 +212,7 @@ bookRouter.route('/')
  *               "message": "Internal Server Error"
  * }
  */
-  .post(validateBook, isAdmin, create);
+  .post(validateBook, isAdmin, sendBookInput, create);
 bookRouter.route('/:bookId')
 /**
  * @swagger
@@ -261,7 +276,7 @@ bookRouter.route('/:bookId')
  *       500:
  *         description: Internal server error
  */
-  .put(isAdmin, checkBookId, validateBook, edit);
+  .put(isAdmin, checkBookId, edit);
 bookRouter.route('/:bookId')
 /**
  * @swagger
@@ -363,4 +378,75 @@ bookRouter.route('/:bookId')
  */
 bookRouter.route('/borrowed')
   .get(isAdmin, listBorrowed);
+/**
+ * @swagger
+ * /books/category:
+ *   post:
+ *     tags:
+ *       - Book Operations
+ *     description: Adds a new category to the database
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: category
+ *         description: Category object
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/Category'
+ *       - name: xaccesstoken
+ *         in: header
+ *         description: an authentication header
+ *         required: true
+ *         type: string
+ *     responses:
+ *       201:
+ *         description: Category added successfully
+ *         example: {
+ *          "message": "Category added successfully",
+ *        "newCategory": {
+ *        "id": 24,
+ *        "description": "This is a test for me",
+ *        "updatedAt": "2018-01-05T16:50:49.384Z",
+ *        "createdAt": "2018-01-05T16:50:49.384Z",
+ *        "name": Science & Arts
+ *   }
+* }
+ *       400:
+ *         description: Bad input supplied
+ *       401:
+ *         description: Invalid token supplied
+ *       500:
+ *         description: Internal server error
+ */
+bookRouter.route('/category')
+  .post(isLoggedIn, isAdmin, validateCategory, addCategory);
+
+/**
+ * @swagger
+ * /books/category:
+ *   get:
+ *     tags:
+ *       - Book Operations
+ *     description: Returns all Category in the database
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: xaccesstoken
+ *         in: header
+ *         description: an authentication header
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Returns An array of Categories
+ *         schema:
+ *           $ref: '#/definitions/CategoryList'
+ *       401:
+ *         description: Invalid token supplied
+ *       500:
+ *         description: Internal server error
+ */
+bookRouter.route('/category')
+  .get(isLoggedIn, getCategory);
 export default bookRouter;

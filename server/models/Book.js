@@ -19,6 +19,11 @@ export default (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
+        // associations can be defined here
+        Book.hasMany(models.Borrowed, {
+          onDelete: 'CASCADE',
+          foreignKey: 'bookId'
+        });
         Book.hasOne(models.Category, {
           foreignKey: 'catId',
           onDelete: 'CASCADE'

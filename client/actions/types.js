@@ -12,3 +12,5 @@ export const GET_ALL_USERS = 'GET_ALL_USERS';
 export const GET_ALL_TIME_BORROWED = 'GET_ALL_TIME_BORROWED';
 export const SET_API_STATUS = 'SET_API_STATUS';
 export const EDIT_PROFILE = 'EDIT_PROFILE';
+export const ADD_CATEGORY = 'ADD_CATEGORY';
+export const GET_CATEGORY = 'GET_CATEGORY';
