@@ -7,8 +7,7 @@ module.exports = {
   coverageDirectory: './clientCoverage',
   testPathIgnorePatterns: [
     './server/test',
-    './node_modules/',
-    '</rootDir>/client/__test__/__mocks__/mockLocalStorage.js',
+    './node_modules/'
   ],
   moduleFileExtensions: ['js', 'jsx'],
   moduleNameMapper: {
