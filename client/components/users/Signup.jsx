@@ -14,7 +14,7 @@ import { userSignupRequest } from '../../actions/AuthActions';
  * 
  * @extends {Component}
  */
-class Signup extends Component {
+export class Signup extends Component {
 
   /**
 	 * @description - Renders the component
