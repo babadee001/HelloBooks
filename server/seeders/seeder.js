@@ -1,4 +1,4 @@
-const userSeeder = {
+const seeder = {
   signUp: {
     username: 'babadee50',
     password: '1111',
@@ -35,4 +35,4 @@ const userSeeder = {
   },
 };
 
-export default userSeeder;
+export default seeder;
