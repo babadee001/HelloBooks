@@ -1,6 +1,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/babadee001/HelloBooks.svg?branch=production-tests)](https://travis-ci.org/babadee001/HelloBooks)
 [![Coverage Status](https://coveralls.io/repos/github/babadee001/HelloBooks/badge.svg?branch=staging)](https://coveralls.io/github/babadee001/HelloBooks?branch=staging)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a2ead0f07113065e3206/test_coverage)](https://codeclimate.com/github/babadee001/HelloBooks/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a2ead0f07113065e3206/maintainability)](https://codeclimate.com/github/babadee001/HelloBooks/maintainability)
 # Hello-Books
 Hello-Books is a simple RESTFUL application that helps manage a book library and its processes like updating, borrowing and adding books. The application has an admin who updates book information, add new books etc. 
 Registered users can view available books, borrow books, view borrowed history and return books.
