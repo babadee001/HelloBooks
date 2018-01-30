@@ -5,7 +5,8 @@ module.exports = {
   // debug: true,
   devtool: 'cheap-module-eval-source-map',
   // noInfo: false,
-  entry: ['webpack-hot-middleware/client?reload=true', path.join(__dirname, '/client/index.jsx')],
+  entry: ['webpack-hot-middleware/client?reload=true',
+    'babel-polyfill', path.join(__dirname, '/client/index.jsx')],
   output: {
     path: path.join(__dirname, '/client/public'),
     filename: 'bundle.js',
