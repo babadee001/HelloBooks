@@ -11,7 +11,7 @@ import Navbar from '../NavigationBar';
  * 
  * @extends {Component}
  */
-class AdminProfile extends Component {
+export class AdminProfile extends Component {
   constructor(props) {
     super(props);
   }
@@ -64,7 +64,7 @@ AdminProfile.PropTypes = {
  *
  * @return {Object} returns state object
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return { user: state.auth.user.currentUser,
    };
 }
