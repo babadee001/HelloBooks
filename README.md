@@ -42,32 +42,15 @@ To install this application,
 This application is deployed on heroku server at https://hbks.herokuapp.com
 
 ### API
-> POST : ```/api/v1/users/signup```
-API routes for users to create accounts and login to the application
-
-> POST : ```/api/v1/users/signin (username, password)```
-An API route that allow users to signin to the application
-
-> GET : ```/api/v1/books```
-An API route that allow users to get all books in the library
-
-> PUT : /api/v1/books/<bookId>
-An API route that allows admin to modify books in the library
-
-> GET : ```/api/v1/books?returned=false```
-An API route that allow users to get all the books that the user has borrowed but has not returned
-
-> POST : ```/api/users/<userId>/books```
-An API route that allow user to borrow a book
-
-> PUT : ```/api/users/<userId>/books/<bookId>```
-An API route that allow user to return a book
-
-> DELETE : ```/api/v1/books/delete/:bookId```
-An API route that allows admin to delete books
-
-> GET : ```/api/v1/users/all```
-An API route that allows admin to get all users
+Request type | Endpoint                                                 | Action
+------------ | ---------------------------------------------------------|------
+POST         | [ /api/users/signup](#Create-account)                    | User create account
+POST         | [/api/users/login](#login)                               | To log a user in
+GET          | [ /api/books](#get-books)                                | Get all books
+POST         | [/api/users/:userId/books](#borrow-books)                | borrow books
+PUT          | [/api/users/:userId/books](#return-books)                | return books
+GET          | [/api/users/:userId/books?returned=false](#borrow-books) | get all the books that the user has borrowed but has not returned
+PUT          | [ /api/books/:bookId](#modify-book-infor)                | API route that allow users to modify a book information
 
 
 ### Contributing

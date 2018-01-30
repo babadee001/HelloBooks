@@ -1,13 +1,10 @@
-env:
-  - dialect=postgres
-  - NODE_ENV=test
-  global:
-    - CC_TEST_REPORTER_ID=8e713c16d06f01113d1991406da73fb6ac1f7cb57c952bcd053c782aea42d5fb
 sudo: false
 dist: trusty
 language: node_js
 node_js:
-  - "8"
+- "stable"
+after_success:
+- npm run coveralls
 services:
   - postgresql
 before_script:
@@ -19,11 +16,12 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - npm run client:test
-after_success: 
-  - 'npm run coveralls'
-  - codeclimate-test-reporter < coverage/lcov.info
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - npm install
+  - npm run test:watch
+env:
+global:
+  - CC_TEST_REPORTER_ID=8e713c16d06f01113d1991406da73fb6ac1f7cb57c952bcd053c782aea42d5fb
+  - dialect=postgres
+  - NODE_ENV=test
 addons:
   postgresql: "9.3"
-
