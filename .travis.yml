@@ -1,20 +1,11 @@
-sudo: false
-dist: trusty
 language: node_js
-node_js:
-- "stable"
-after_success:
-- npm run coveralls
-services:
-  - postgresql
+node_js:  
+- node
 before_script:
-  - psql -c 'drop database if exists libdb;' -U postgres
-  - psql -c 'create database libdb;' -U postgres
-script:
-  - npm install
-  - npm run test
-env:
-  - dialect=postgres
-  - NODE_ENV=test
-addons:
-  postgresql: "9.3"
+- npm install -g codeclimate-test-reporter
+- psql -c 'drop database if exists libdb;' -U postgres
+- psql -c 'create database libdb;' -U postgres
+script:  
+- npm test
+after_success:  
+- npm run coverage
