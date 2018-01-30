@@ -13,7 +13,7 @@ configure({ adapter: new Adapter() });
 
 jest.mock('../../../components/includes/Books');
 jest.mock('../../../components/includes/SideBar');
-jest.mock('../../../components/NavigationBar');
+jest.mock('../../../components/navigationBar');
 
 
 let props;
