@@ -61,27 +61,6 @@ describe('Test', () => {
       });
   });
 
-  it('creates new admin', (done) => {
-    chai.request(Server)
-      .post(adminRoute)
-      .send({
-        password: 'admin',
-        username: 'admin',
-        email: 'test@admin.co',
-        membership: 'admin',
-      })
-      .end((err, res) => {
-        res.body.message.should.equal('Admin added successfully');
-        res.should.have.status(201);
-        res.should.be.json;
-        res.body.user.username.should.equal('admin');
-        res.body.user.email.should.equal('test@admin.co');
-        res.body.user.membership.should.equal('admin');
-        res.body.Token.should.not.equals(null);
-        done();
-      });
-  });
-
   it('Doesnt create new user with existing username', (done) => {
     chai.request(Server)
       .post('/api/v1/users/signup/')
