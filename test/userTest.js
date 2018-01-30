@@ -2,8 +2,8 @@ import chai from 'chai';
 import dotenv from 'dotenv';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
-import Server from '../../app';
-import models from '../../server/models';
+import Server from '../app';
+import models from '../server/models';
 
 dotenv.load();
 process.env.NODE_ENV = 'test';

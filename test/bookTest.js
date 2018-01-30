@@ -1,8 +1,8 @@
 import chai from 'chai';
 import dotenv from 'dotenv';
 import chaiHttp from 'chai-http';
-import Server from '../../app';
-import models from '../../server/models';
+import Server from '../app';
+import models from '../server/models';
 
 dotenv.load();
 process.env.NODE_ENV = 'test';
@@ -303,7 +303,9 @@ describe('Test', () => {
         author: 'babadeewwww',
         description: 'A film about magic',
         quantity: '25',
-        cover: 'newtestcover'
+        cover: 'newtestcover',
+        catId: 3,
+        isbn: '123-abc'
       })
       .end((err, res) => {
         res.should.have.status(200);
