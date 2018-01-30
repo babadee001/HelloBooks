@@ -14,7 +14,7 @@ import Navbar from '../NavigationBar';
  * 
  * @extends {Component}
  */
-class Logs extends Component {
+export class Logs extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -90,7 +90,7 @@ class Logs extends Component {
         {this.renderProps()}
         <Navbar route="/admin" link="Admin dashboard" route1="/add" link1="Add New" />
         <div className="container container-fluid">
-        <div className="row card-wrapper">
+        <div id="logs" className="row card-wrapper">
                 <div className="col-sm-4 col-md-4 col-lg-4">
                     <div className="card text-white bg-info mb-3 col cardbox">
                         <div className="card-body">
@@ -160,7 +160,7 @@ class Logs extends Component {
  *  
  * @returns {Object} - Selected state
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     books: state.books,
     auth: state.auth
@@ -175,7 +175,7 @@ function mapStateToProps(state) {
  *
  * @returns {Object} - Object containing functions
  */
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
       getAllBorrowed, 

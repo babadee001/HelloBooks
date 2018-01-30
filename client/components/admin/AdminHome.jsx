@@ -17,7 +17,7 @@ import Navbar from '../NavigationBar';
  * 
  * @extends {Component}
  */
-class AdminHome extends Component {
+export class AdminHome extends Component {
 
   /**
 	 * @description - Creates an instance of AdminHome.
@@ -108,7 +108,7 @@ class AdminHome extends Component {
     }
     return (
       <div className="container">
-        <div className="card-panel headcard">
+        <div id="adminhome" className="card-panel headcard">
             <center>Available Books</center>
           </div>
         <div className="row">
@@ -167,7 +167,7 @@ class AdminHome extends Component {
  *  
  * @returns {Object} - Selected state
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return { 
     books: state.books.data,
     user: state.auth.user,
@@ -188,7 +188,7 @@ AdminHome.PropTypes = {
  *
  * @returns {Object} - Object containing functions
  */
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
       getBooks,

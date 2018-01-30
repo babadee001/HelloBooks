@@ -10,7 +10,8 @@ const {
   checkBookId,
   validateBook,
   validateCategory,
-  sendBookInput
+  sendBookInput,
+  validateEdit
 } = Validations;
 const {
   list,
@@ -276,7 +277,7 @@ bookRouter.route('/:bookId')
  *       500:
  *         description: Internal server error
  */
-  .put(isAdmin, checkBookId, edit);
+  .put(isAdmin, checkBookId, validateEdit, edit);
 bookRouter.route('/:bookId')
 /**
  * @swagger

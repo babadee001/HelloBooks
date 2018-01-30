@@ -13,7 +13,7 @@ import Navbar from '../NavigationBar';
  * 
  * @extends {Component}
  */
-class Profile extends Component {
+export class Profile extends Component {
   constructor(props) {
     super(props);
   }
@@ -82,7 +82,7 @@ Profile.PropTypes = {
  *
  * @return {Object} returns state object
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return { user: state.auth.user.currentUser,
     book: state.books.unreturnedCount
    };
@@ -95,7 +95,7 @@ function mapStateToProps(state) {
  *
  * @returns {Object} - Object containing functions
  */
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
       getBorrowed

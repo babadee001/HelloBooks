@@ -9,8 +9,8 @@ import axios from 'axios';
  */
 export default function setAuthorization(token) {
   if (token) {
-    axios.defaults.headers.common.xaccesstoken = `${token}`;
+    axios.defaults.headers.common.authorization = `${token}`;
   } else {
-    delete axios.defaults.headers.common.xaccesstoken;
+    delete axios.defaults.headers.common.authorization;
   }
 }

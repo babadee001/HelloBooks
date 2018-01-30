@@ -13,7 +13,7 @@ import { editProfileAction } from '../../actions/AuthActions';
  * 
  * @extends {Component}
  */
-class EditProfile extends Component {
+export class EditProfile extends Component {
 	/**
 	 * @description - Creates an instance of EditProfile.
 	 * 

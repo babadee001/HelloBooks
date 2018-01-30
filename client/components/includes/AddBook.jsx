@@ -17,7 +17,7 @@ import { getCategoryAction } from '../../actions/BooksActions';
  * 
  * @extends {Component}
  */
-class AddBook extends Component {
+export class AddBook extends Component {
 
   /**
 	 * @description - Creates an instance of AddBook.
@@ -346,7 +346,3 @@ export function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddBook);
-
-AddBook.propTypes = {
-  add: React.PropTypes.func.isRequired
-};

@@ -13,7 +13,7 @@ import '../style/style.scss';
  * 
  * @extends {Component}
  */
-class Home extends Component {
+export class Home extends Component {
   render() {
     const isAuthenticated = this.props.auth.authenticated;
     return (
@@ -44,7 +44,7 @@ class Home extends Component {
     );
   }
 }
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     auth: state.auth
   };

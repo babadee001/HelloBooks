@@ -13,7 +13,7 @@ import { logout } from '../actions/AuthActions';
  * 
  * @extends {Component}
  */
-class NavigationBar extends Component {
+export class NavigationBar extends Component {
 
   /**
 	 * 
@@ -73,7 +73,7 @@ NavigationBar.propTypes = {
  *  
  * @returns {Object} - Selected state
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     auth: state.auth
   };

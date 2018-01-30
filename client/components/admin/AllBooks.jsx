@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import swal from 'sweetalert';
 import Materialize from 'materialize-css';
 import { bindActionCreators } from 'redux';
-import { editBook, deleteBookAction } from '../../actions/BooksActions';
+import { editBook, getCategoryAction, deleteBookAction } from '../../actions/BooksActions';
 
 /**
  * AllBooks component
@@ -14,7 +14,7 @@ import { editBook, deleteBookAction } from '../../actions/BooksActions';
  * 
  * @extends {Component}
  */
-class AllBooks extends Component {
+export class AllBooks extends Component {
 
   /**
 	 * @description - Creates an instance of AllBooks.
@@ -27,6 +27,7 @@ class AllBooks extends Component {
     super(props);
     this.state = {
       title: this.props.title,
+      catId: this.props.catId,
       description: this.props.description,
       isbn: this.props.isbn,
       author: this.props.author,
@@ -36,6 +37,7 @@ class AllBooks extends Component {
       cover: this.props.cover,
       displayBook: true
     };
+    this.renderCategory = this.renderCategory.bind(this);
     this.handleClick = this
       .handleClick
       .bind(this);
@@ -70,6 +72,38 @@ class AllBooks extends Component {
   onClick() {
     this.setState({ displayBook: false, edit: true });
   }
+ /**
+	 * 
+	 * @description - Executes after component is mounted
+	 * 
+	 * @memberOf AllBooks
+	 */
+	componentDidMount() {
+		this.props.actions.getCategoryAction();
+	}
+    /**
+	 * 
+	 * @description - Displays the list of category
+	 * 
+	 * @returns {Array} - Array of category
+	 * 
+	 * @memberOf AllBooks
+	 */
+	renderCategory() {
+		let allCategory = [];
+		const category = this.props.category;
+		if (!category || category.length < 1) {
+			return 'None Available';
+		}
+		category.map((cat) => {
+			allCategory.push(
+				<option key={cat.id} value={cat.id}>
+					{cat.name}
+				</option>
+			);
+		});
+		return allCategory;
+	}
 
   /**
 	 * 
@@ -86,9 +120,6 @@ class AllBooks extends Component {
       .then((del) => {
         if (del) {
           this.props.actions.deleteBookAction(this.props.id)
-            .then((res) => {
-              swal(res, { icon: 'success' });
-            });
         } else {
           swal('Book was not deleted');
         }
@@ -196,6 +227,17 @@ class AllBooks extends Component {
                       required
                     />
                   </div>
+                  <div className="col s12">
+                  <select
+                    id="catId"
+                    name="catId"
+                    onChange={ this.onChange }
+                    className="browser-default"
+                  >
+                    <option value="">Select Category</option>
+										{this.renderCategory()}
+                  </select>
+                </div>
                 </div>
                 <div className="row">
                   <div className="col s12">
@@ -235,7 +277,7 @@ class AllBooks extends Component {
             <p>{this.props.description}</p>
           </div>
           <div className="card-action">
-            <button className="btn-danger" onClick={ this.handleClick } >Delete</button>
+            <button id="delete_button" className="btn-danger" onClick={ this.handleClick } >Delete</button>
             <button className="btn-primary" onClick={ this.onClick } id="edit_button">Edit</button>
           </div>
         </div>}
@@ -262,13 +304,28 @@ AllBooks.propTypes = {
  *
  * @returns {Object} - Object containing functions
  */
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
       editBook,
-      deleteBookAction
+      deleteBookAction,
+      getCategoryAction
     }, dispatch)
   };
 }
 
-export default connect(null, mapDispatchToProps)(AllBooks);
+/**
+ * @description - Maps the redux state to the component props
+ * 
+ * @param {Object} state - Application state
+ *  
+ * @returns {Object} - Selected state
+ */
+export function mapStateToProps(state) {
+	return { 
+		category: state.books.category
+	};
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AllBooks);

@@ -61,7 +61,7 @@ export default class Books extends Component {
             </div>
             <div className="card-action">
               <p>
-                <button onClick={ this.handleClick } className="btn">Borrow</button>
+                <button id="borrow_button" onClick={ this.handleClick } className="btn">Borrow</button>
               </p>
             </div>
           </div>

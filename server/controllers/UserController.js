@@ -47,6 +47,7 @@ const UserController = {
           message: 'Signed up successfully',
           Token: token,
           success: true,
+          user
         });
       })
       .catch(() => res.status(409).send({
@@ -68,8 +69,9 @@ const UserController = {
   list(req, res) {
     return Users
       .all()
-      .then(users => res.status(200).send(users))
-      .catch(error => res.status(500).send(error));
+      .then(users => res.status(200).send({
+        users
+      })).catch(error => res.status(500).send(error));
   },
 
   /**
@@ -106,8 +108,9 @@ const UserController = {
           }, adminSecret
         );
         return res.status(201).send({
-          message: 'Admin Signed up successfully',
+          message: 'Admin added successfully',
           Token: token,
+          user
         });
       })
       .catch(() => res.status(409).send({

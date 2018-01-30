@@ -14,7 +14,7 @@ import { userSigninRequest, userSignupRequest, googleSigninRequest } from '../..
  * 
  * @extends {Component}
  */
-class Signin extends Component {
+export class Signin extends Component {
 
   /**
 	 * @description - Renders the component

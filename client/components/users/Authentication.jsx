@@ -32,7 +32,7 @@ export default function (ComposedComponent) {
 		 * @memberOf Authentication
 		 */
     componentWillMount() {
-      const key = process.env.secret;
+      const key = process.env.SECRET;
       const token = localStorage.getItem('token');
       if (token) {
         jwt.verify(token, key, (error) => {

@@ -124,7 +124,7 @@ export default class SigninForm extends Component {
                     />
                   </div>
                   <div className="form-group">
-                    <button className="btn btn-success btn-block">Sign in</button>
+                    <button name="signin" className="btn btn-success btn-block">Sign in</button>
                   </div>
                   <GoogleLogin
                     clientId={ '555411087662-6jdfislpa3bh0l5ala6c93ht1jruv5sq.apps.googleusercontent.com' }

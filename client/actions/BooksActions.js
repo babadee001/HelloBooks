@@ -1,6 +1,7 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 import swal from 'sweetalert';
+import 'whatwg-fetch';
 import { browserHistory } from 'react-router';
 
 import {
@@ -8,7 +9,6 @@ import {
   DELETE_BOOK,
   EDIT_BOOK,
   ADD_BOOK,
-  GET_UNRETURNED_BOOKS,
   RETURN_BOOK,
   GET_BORROWED_HISTORY,
   GET_ALL_TIME_BORROWED,
@@ -19,43 +19,47 @@ import { isFetching } from './AuthActions';
 
 dotenv.load();
 
+
+export const deleteBook = bookId =>
+  ({
+    type: DELETE_BOOK,
+    data: bookId
+  });
+
+export const borrowAlert = bookId =>
+  ({
+    type: DELETE_BOOK,
+    data: bookId
+  });
+
+
 /**
  * @description - Get all books action
  *
  * @returns { Object } - Object containing book data
  */
-export const getBooks = () => (dispatch) => {
+export const getBooks = () => async (dispatch) => {
   dispatch(isFetching(true));
-  return axios.get('api/v1/books')
-    .then((res) => {
-      dispatch({
-        type: GET_ALL_BOOKS,
-        data: res.data
-      });
-      dispatch(isFetching(false));
-      return res.data;
-    })
-    .catch(error => error);
+  const serverResponse = await fetch('/api/v1/books', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      xaccesstoken: localStorage.token
+    },
+  });
+  const jsonServerResponse = await serverResponse.json()
+    .then(jsonData => jsonData);
+  if (serverResponse.status === 200) {
+    dispatch({
+      type: GET_ALL_BOOKS,
+      data: jsonServerResponse
+    });
+    dispatch(isFetching(false));
+    return jsonServerResponse;
+  }
 };
 
-/**
- * @description - Get books borrowed and not returned action
- *
- * @param {  Number } userId - ID of user
- *
- * @returns { Object } - Object containing borrowed books not returned
- */
-export function getBorrowed(userId) {
-  return dispatch => axios.get(`api/v1/users/${userId}/books?returned=false`)
-    .then((res) => {
-      dispatch({
-        type: GET_UNRETURNED_BOOKS,
-        data: res.data
-      });
-      return res.data;
-    })
-    .catch(error => error);
-}
 
 /**
  * @description - Get borrowed history action
@@ -64,46 +68,64 @@ export function getBorrowed(userId) {
  *
  * @returns { Object } - Object of all books borrowed, returned & unreturned
  */
-export const getHistory = userId => (dispatch) => {
+export const getHistory = userId => async (dispatch) => {
   dispatch(isFetching(true));
-  return axios.get(`api/v1/users/${userId}`)
-    .then((res) => {
-      dispatch({
-        type: GET_BORROWED_HISTORY,
-        data: res.data
-      });
-      dispatch(isFetching(false));
-      return res.data;
-    })
-    .catch(error => error);
+  const serverResponse = await fetch(`/api/v1/users/${userId}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      xaccesstoken: localStorage.token
+    },
+  });
+  const jsonServerResponse = await serverResponse.json()
+    .then(jsonData => jsonData);
+  if (serverResponse.status === 200) {
+    dispatch({
+      type: GET_BORROWED_HISTORY,
+      data: jsonServerResponse
+    });
+    dispatch(isFetching(false));
+    return jsonServerResponse;
+  }
 };
 
 /**
  * @description - Modify book action
  *
  * @param {Object} details - Object containing details of the book
- *
  * @param {bookId} bookId - ID of book to be modified
  *
  * @returns { String } - Message from API
  */
 export function editBook(details, bookId) {
-  return dispatch => axios.put(`api/v1/books/${bookId}`, details)
-    .then((res) => {
+  return async (dispatch) => {
+    const serverResponse = await fetch(`/api/v1/books/${bookId}`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        xaccesstoken: localStorage.token
+      },
+      body: JSON.stringify(details)
+    });
+    const jsonServerResponse = await serverResponse.json()
+      .then(jsonData => jsonData);
+    if (serverResponse.status === 200) {
       dispatch({
         type: EDIT_BOOK,
-        data: res.data.book
+        data: jsonServerResponse.book
       });
-      return res.data.message;
-    })
-    .catch(error => error.data.message);
+      return jsonServerResponse.message;
+    }
+    swal(jsonServerResponse.message);
+  };
 }
 
 /**
  * @description - Borrow book action
  *
  * @param { Number } userId - ID of user to borrow book
- *
  * @param { Number } bookId - ID of book to be borrowed
  *
  * @returns { String } - String
@@ -136,26 +158,33 @@ export function borrowBook(userId, bookId) {
  * @description - Return books action
  *
  * @param {  Number } userId - ID of user to return book
- *
  * @param { Number } bookId - ID of book to be returned
  *
  * @returns { Object } - Object containing rented books
  */
 export function returnBook(userId, bookId) {
-  return dispatch => axios.put(`api/v1/users/${userId}/books/${bookId.bookId}`)
-    .then((response) => {
-      const message = response.data.message;
-      if (response) {
-        swal(message, { icon: 'success' });
-      } else {
-        swal(message, { icon: 'warning' });
-      }
+  return async (dispatch) => {
+    const serverResponse = await
+      fetch(`/api/v1/users/${userId}/books/${bookId.bookId}`, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          xaccesstoken: localStorage.token
+        },
+      });
+    const jsonServerResponse = await serverResponse.json()
+      .then(jsonData => jsonData);
+    if (serverResponse.status === 201) {
       dispatch({
         type: RETURN_BOOK,
-        data: response.data.book
+        data: jsonServerResponse.book
       });
-    })
-    .catch(error => swal(error));
+      swal(jsonServerResponse.message, { icon: 'success' });
+    } else {
+      swal(jsonServerResponse.message);
+    }
+  };
 }
 
 /**
@@ -166,19 +195,31 @@ export function returnBook(userId, bookId) {
  * @returns { Object } - Redux action to be dispatched to the store
  */
 export function addBookAction(bookDetails) {
-  return dispatch => axios.post('api/v1/books', bookDetails)
-    .then((res) => {
-      Materialize.toast('Book added Successfully', 2000, 'teal', () => {
-        this.setState({ isLoading: false });
-      });
+  return async (dispatch) => {
+    const serverResponse = await fetch('/api/v1/books', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        xaccesstoken: localStorage.token
+      },
+      body: JSON.stringify(bookDetails)
+    });
+    const jsonServerResponse = await serverResponse.json()
+      .then(jsonData => jsonData);
+    if (serverResponse.status === 201) {
       dispatch({
         type: ADD_BOOK,
-        message: res.data.message
+        message: jsonServerResponse.message
       });
       browserHistory.push('/admin');
-    })
-    .catch(error => swal(error.data.message));
+      Materialize.toast('Book added Successfully', 2000, 'teal');
+    } else {
+      swal(jsonServerResponse.message);
+    }
+  };
 }
+
 
 /**
  * @description - Delete book action
@@ -188,16 +229,24 @@ export function addBookAction(bookDetails) {
  * @returns { String } - string containing API message
  */
 export function deleteBookAction(bookId) {
-  return dispatch => axios.delete(`api/v1/books/${bookId}`)
-    .then((res) => {
-      dispatch({
-        type: DELETE_BOOK,
-        data: Number(res.data.id)
-      });
-      return res.data.message;
-    })
-    .catch(error => Materialize.toast(error.response.data.message, 1000));
+  return async (dispatch) => {
+    const serverResponse = await fetch(`/api/v1/books/${bookId}`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        xaccesstoken: localStorage.token
+      }
+    });
+    const jsonServerResponse = await serverResponse.json()
+      .then(jsonData => jsonData);
+    if (serverResponse.status === 200) {
+      dispatch(deleteBook(Number(jsonServerResponse.id)));
+    }
+    Materialize.toast(jsonServerResponse.message, 1000);
+  };
 }
+
 
 /**
  * @description - Get all borrowed books in the application action
@@ -224,15 +273,28 @@ export function getAllBorrowed() {
  * @returns { String } - Message from the API
  */
 export function addCategoryAction(data) {
-  return dispatch => axios.post('api/v1/books/category', data)
-    .then((response) => {
+  return async (dispatch) => {
+    const serverResponse = await fetch('/api/v1/books/category', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        xaccesstoken: localStorage.token
+      },
+      body: JSON.stringify(data)
+    });
+    const jsonServerResponse = await serverResponse.json()
+      .then(jsonData => jsonData);
+    if (serverResponse.status === 201) {
       dispatch({
         type: ADD_CATEGORY,
-        data: response.data.newCategory
+        data: jsonServerResponse.newCategory
       });
       Materialize.toast('Category added successfully', 2000, 'teal');
-    })
-    .catch((error => swal(error.data.message)));
+    } else {
+      swal(jsonServerResponse.message);
+    }
+  };
 }
 
 /**
@@ -241,12 +303,23 @@ export function addCategoryAction(data) {
  * @returns { Object } - Object containg all categories
  */
 export function getCategoryAction() {
-  return dispatch => axios.get('/api/v1/books/category')
-    .then((response) => {
+  return async (dispatch) => {
+    const serverResponse = await fetch('/api/v1/books/category', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        xaccesstoken: localStorage.token
+      },
+    });
+    const jsonServerResponse = await serverResponse.json()
+      .then(jsonData => jsonData);
+    if (serverResponse.status === 200) {
       dispatch({
         type: GET_CATEGORY,
-        data: response.data
+        data: jsonServerResponse
       });
-    })
-    .catch(error => error);
+      return jsonServerResponse.message;
+    }
+  };
 }

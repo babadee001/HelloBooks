@@ -18,7 +18,7 @@ export class AddBooks extends Component {
   render() {
     const { addNewBookAction } = this.props;
     return (
-      <div>
+      <div id="add">
         <Navbar route="/admin" link="Admin dashboard" route1="/logs" link1="View Logs" />
         <AddBook
           firebaseStorage={ firebase.storage().ref('images') }

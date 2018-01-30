@@ -8,6 +8,7 @@ import {
   EDIT_BOOK,
   GET_CATEGORY,
   ADD_CATEGORY,
+  ADD_BOOK,
   SET_API_STATUS } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -79,6 +80,12 @@ export default function bookReducer(state = INITIAL_STATE, action) {
       const newCategory = [action.data].concat(state.category);
       return { ...state, category: newCategory };
     }
+    case ADD_BOOK:
+      return {
+        ...state,
+        message: 'Book added Successfully',
+        data: state.data.concat([action.book])
+      };
     default:
       return state;
   }
