@@ -2,8 +2,8 @@ import chai from 'chai';
 import dotenv from 'dotenv';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
-import Server from '../../app';
-import models from '../../server/models';
+import Server from '../app';
+import models from '../server/models';
 
 dotenv.load();
 process.env.NODE_ENV = 'test';
@@ -56,27 +56,6 @@ describe('Test', () => {
         res.body.user.username.should.equal('testusernamew');
         res.body.user.email.should.equal('test@user.co');
         res.body.user.membership.should.equal('Gold');
-        res.body.Token.should.not.equals(null);
-        done();
-      });
-  });
-
-  it('creates new admin', (done) => {
-    chai.request(Server)
-      .post(adminRoute)
-      .send({
-        password: 'admin',
-        username: 'admin',
-        email: 'test@admin.co',
-        membership: 'admin',
-      })
-      .end((err, res) => {
-        res.body.message.should.equal('Admin added successfully');
-        res.should.have.status(201);
-        res.should.be.json;
-        res.body.user.username.should.equal('admin');
-        res.body.user.email.should.equal('test@admin.co');
-        res.body.user.membership.should.equal('admin');
         res.body.Token.should.not.equals(null);
         done();
       });

@@ -1,6 +1,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/babadee001/HelloBooks.svg?branch=production-tests)](https://travis-ci.org/babadee001/HelloBooks)
 [![Coverage Status](https://coveralls.io/repos/github/babadee001/HelloBooks/badge.svg?branch=staging)](https://coveralls.io/github/babadee001/HelloBooks?branch=staging)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a2ead0f07113065e3206/test_coverage)](https://codeclimate.com/github/babadee001/HelloBooks/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a2ead0f07113065e3206/maintainability)](https://codeclimate.com/github/babadee001/HelloBooks/maintainability)
 # Hello-Books
 Hello-Books is a simple RESTFUL application that helps manage a book library and its processes like updating, borrowing and adding books. The application has an admin who updates book information, add new books etc. 
 Registered users can view available books, borrow books, view borrowed history and return books.
@@ -15,13 +17,13 @@ Registered users can view available books, borrow books, view borrowed history a
 
 ### Installation
 To install this application,
-1. make a new directory 
-2. git clone this repository
-3. Navigate to directory of cloned repo
-5. Setup environment variables using the .env.example file
-4. Run ```npm install``` to install dependencies
-5. Then run ```npm start``` to start the application
-6. 'npm test' runs the tests.
+* make a new directory 
+* git clone this repository
+* Navigate to directory of cloned repo
+* Setup environment variables using the .env.example file
+* Run ```npm install``` to install dependencies
+* Then run ```npm start``` to start the application
+* 'npm test' runs the tests.
 
 ### Built with
 * [NodeJS](https://nodejs.org/en/) - A Javscript runtime built runtime that uses an event-driven non-blocking I/O model that makes it lightweight and efficient.
@@ -40,32 +42,15 @@ To install this application,
 This application is deployed on heroku server at https://hbks.herokuapp.com
 
 ### API
-> POST : ```/api/v1/users/signup```
-API routes for users to create accounts and login to the application
-
-> POST : ```/api/v1/users/signin (username, password)```
-An API route that allow users to signin to the application
-
-> GET : ```/api/v1/books```
-An API route that allow users to get all books in the library
-
-> PUT : /api/v1/books/<bookId>
-An API route that allows admin to modify books in the library
-
-> GET : ```/api/v1/books?returned=false```
-An API route that allow users to get all the books that the user has borrowed but has not returned
-
-> POST : ```/api/users/<userId>/books```
-An API route that allow user to borrow a book
-
-> PUT : ```/api/users/<userId>/books/<bookId>```
-An API route that allow user to return a book
-
-> DELETE : ```/api/v1/books/delete/:bookId```
-An API route that allows admin to delete books
-
-> GET : ```/api/v1/users/all```
-An API route that allows admin to get all users
+Request type | Endpoint                                                 | Action
+------------ | ---------------------------------------------------------|------
+POST         | [ /api/users/signup](#Create-account)                    | User create account
+POST         | [/api/users/login](#login)                               | To log a user in
+GET          | [ /api/books](#get-books)                                | Get all books
+POST         | [/api/users/:userId/books](#borrow-books)                | borrow books
+PUT          | [/api/users/:userId/books](#return-books)                | return books
+GET          | [/api/users/:userId/books?returned=false](#borrow-books) | get all the books that the user has borrowed but has not returned
+PUT          | [ /api/books/:bookId](#modify-book-infor)                | API route that allow users to modify a book information
 
 
 ### Contributing

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import AllBooks from './allBooks';
+import AllBooks from './AllBooks';
 import { getBooks, deleteBook } from '../../actions/BooksActions';
 import { logout, getUsers } from '../../actions/AuthActions';
 import AdminSideBar from '../includes/SideBar';
