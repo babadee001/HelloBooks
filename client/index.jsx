@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import firebase from 'firebase';
 import 'materialize-css';
 import { SET_CURRENT_USER } from './actions/types';
-import configureStore from './store/index';
+import configureStore from './store/configureStore';
 import setAuthorizationToken from './utils/setAuthorization';
 import './style/style.scss';
 
