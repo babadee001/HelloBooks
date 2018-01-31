@@ -29,8 +29,27 @@
   "author": "temidayo oyedele",
   "license": "ISC",
   "jest": {
+    "verbose": true,
+    "roots": [
+      "./client"
+    ],
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
     "setupFiles": [
       "<rootDir>/test-env.js"
+    ],
+    "setupTestFrameworkScriptFile": "./client/__tests__/setup.js",
+    "testPathIgnorePatterns": [
+      "client/__tests__/__mocks__",
+      "client/__tests__/setup.js"
+    ],
+    "moduleNameMapper": {
+      "\\.scss$": "identity-obj-proxy"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json"
     ]
   },
   "dependencies": {
