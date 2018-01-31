@@ -5,7 +5,7 @@ import hammerjs from 'hammerjs';
 import { shallow, configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
 import mockData from '../../__mocks__/mockData';
-import  { EditProfile } from '../../../components/pages/EditProfile';
+import  { EditProfile } from '../../../components/Pages/EditProfile';
 import { editProfileAction } from '../../../actions/AuthActions';
 import { NavigationBar } from '../../../components/NavigationBar';
 

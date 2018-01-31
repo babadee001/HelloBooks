@@ -5,6 +5,8 @@ node_js:
 - "stable"
 after_success:
 - npm run coveralls
+- codeclimate-test-reporter < coverage/lcov.info
+- ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 services:
   - postgresql
 before_script:
@@ -16,7 +18,6 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - npm install
   - npm run client:test
 env:
 global:

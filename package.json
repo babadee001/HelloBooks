@@ -10,7 +10,7 @@
     "e2e:test": "./node_modules/.bin/nightwatch",
     "heroku-postbuild": "NODE_ENV=production && npm run build",
     "dev": "webpack-dev-server --inline --hot",
-    "client:test": "jest --coverage",
+    "client:test": "jest --coverage && npm run coverage",
     "test:watch": "npm run client:test -- --watch",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "coverage": "./node_modules/.bin/nyc --reporter=lcov mocha --reporter spec --timeout 40000 --compilers js:babel-core/register test",
@@ -29,8 +29,27 @@
   "author": "temidayo oyedele",
   "license": "ISC",
   "jest": {
+    "verbose": true,
+    "roots": [
+      "./client"
+    ],
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
     "setupFiles": [
       "<rootDir>/test-env.js"
+    ],
+    "setupTestFrameworkScriptFile": "./client/__tests__/setup.js",
+    "testPathIgnorePatterns": [
+      "client/__tests__/__mocks__",
+      "client/__tests__/setup.js"
+    ],
+    "moduleNameMapper": {
+      "\\.scss$": "identity-obj-proxy"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json"
     ]
   },
   "dependencies": {
