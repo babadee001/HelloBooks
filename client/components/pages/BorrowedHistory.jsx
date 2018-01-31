@@ -16,7 +16,7 @@ import Navbar from '../NavigationBar';
  * @class  BorrowedHistory
  * @extends {Component}
  */
-class  BorrowedHistory extends Component {
+export class  BorrowedHistory extends Component {
 	constructor(props) {
 		super(props);
 		this.renderHistory = this.renderHistory.bind(this);
@@ -163,7 +163,7 @@ BorrowedHistory.PropTypes = {
  *
  * @return {Object} returns state object
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
 	return {
 		borrowedBooks: state.books.allBorrowedBooks,
 		user: state.auth.user.currentUser,
@@ -178,7 +178,7 @@ function mapStateToProps(state) {
  *
  * @returns {Object} - Object containing functions
  */
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
 	return {
 		actions: bindActionCreators(
 			{
