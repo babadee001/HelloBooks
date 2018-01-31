@@ -14,7 +14,7 @@ module.exports = {
   test: {
     url: process.env.DB_TEST_URL,
     dialect: 'postgres',
-    },
+  },
   production: {
     use_env_variable: 'DATABASE_URL',
     dialect: 'postgres'
