@@ -204,9 +204,9 @@ const Validations = {
     if (token) {
       jwt.verify(token, secret, (error) => {
         if (error) {
-          res.status(403)
+          res.status(401)
             .send({
-              message: 'Access Denied. Admin privileges needed'
+              message: 'Access Denied. Invalid token supplied'
             });
         } else {
           next();
@@ -293,6 +293,11 @@ const Validations = {
    * @returns {Object} - Response object
    */
   validateUserEdit(req, res, next) {
+    if ((req.body.newPassword && !req.body.oldPassword) || (req.body.oldPassword && !req.body.newPassword)) {
+      return res.status(400).send({
+        message: 'Old and new passwords required',
+      });
+    }
     req.checkBody(
       {
         username: {

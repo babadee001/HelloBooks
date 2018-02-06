@@ -30,8 +30,8 @@ export function checkUser(userData) {
   return axios
     .post('api/v1/users/checkuser', userData)
     .then((response) => {
-      if (response.data.message !== null) {
-        return response.data.message;
+      if (response.data.message && response.data.message.username !== userData.searchTerm) {
+        return 'Existing username';
       }
       return 'Not found';
     })

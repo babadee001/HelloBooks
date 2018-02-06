@@ -26,9 +26,9 @@ export class EditProfile extends Component {
 		this.state = {
 			username: this.props.user.username,
 			edit: false,
-			emailExist: '',
 			profile: true,
 			usernameError: '',
+			passwordError: '',
 			oldPassword: '',
 			newPassword: ''
 		};
@@ -55,7 +55,7 @@ export class EditProfile extends Component {
 		switch (name) {
 			case 'username':
 				const validator = /[A-Za-z]/g;
-				if (!validator.test(value)) {
+				if (!validator.test(value) || username.lenght > 0) {
 					this.setState({
 						usernameError: 'Invalid input, username cannot be letters only or empty'
 					});
@@ -79,10 +79,10 @@ export class EditProfile extends Component {
 		switch (name) {
 			case 'username':
 				this.setState({ usernameError: '' });
-				break;
-			case 'email':
-				this.setState({ emailExist: '' });
-				break;
+			case 'newPassword':
+				this.setState({ passwordError: '' });
+			case 'oldPassword':
+				this.setState({ passwordError: '' });
 		}
   }
   
@@ -95,15 +95,29 @@ export class EditProfile extends Component {
    */
   handleSubmit(event) {
     event.preventDefault();
-    const userId = this.props.user.userId || this.props.user.id;
+		const userId = this.props.user.userId || this.props.user.id;
+		if (this.state.newPassword.length > 0 
+			&& this.state.newPassword.length < 4 ) {
+				this.setState({
+					passwordError: 'New password should be at least 4 characters'
+				});
+				return false
+			}
+		if ((this.props.user.username === this.state.username) 
+		&& ((this.state.oldPassword === '') ||
+		(this.state.newPassword === ''))) {
+			this.setState({
+				passwordError: 'No changes made. Please fill both old and new password fields'
+			});
+			return false
+		}
     checkUser({searchTerm: this.state.username})
     .then((response) => {
         if (response !== 'Not found') {
-          this.setState({ usernameError: 'username exists' });
+					this.setState({ usernameError: response });
           return false;
-        } else {
-          this.props.actions.editProfileAction(userId, this.state);
         }
+        this.props.actions.editProfileAction(userId, this.state);
     })
 	}
 
@@ -121,7 +135,7 @@ export class EditProfile extends Component {
 	}
 	render() {
 		return (
-      <div>
+      <div className="editprofile">
         <Navbar route="/dashboard" link="All books" route1="/history" link1="History" />
         <Sidebar
             link1={'Borrow History'} 
@@ -131,7 +145,6 @@ export class EditProfile extends Component {
             link3={'Profile'} 
             route3={'/profile'}
             />
-            
             <form className="col-md-offset-3" name="edit_profile" id="edit_profile" 
 								onSubmit={this.handleSubmit}>
 								<div className="edit-profile">
@@ -165,6 +178,7 @@ export class EditProfile extends Component {
 												onFocus={this.onFocus}
 												onChange={this.onChange}
 											/>
+											 <div className="red-text">{this.state.passwordError}</div>
 										</div>
 
 										<div className="input-field col s6">
@@ -188,7 +202,8 @@ export class EditProfile extends Component {
 									className="btn waves-effect"
 									type="submit"
 									name="submit"
-								disabled={this.state.usernameError.length > 1 }
+								disabled={this.state.usernameError.length > 1 
+								|| this.state.passwordError.length > 1 }
                 >
 									Submit
 								</button>

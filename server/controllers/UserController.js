@@ -35,7 +35,6 @@ const UserController = {
         const currentUser = {
           userId: user.id,
           username: user.username,
-          password: user.password,
           isAdmin: user.isAdmin,
           email: user.email,
           membership: user.membership };
@@ -47,7 +46,7 @@ const UserController = {
           message: 'Signed up successfully',
           Token: token,
           success: true,
-          user
+          currentUser
         });
       })
       .catch(() => res.status(409).send({
@@ -257,7 +256,7 @@ const UserController = {
       }
     }).then((user) => {
       if (user) {
-        if (req.body.oldPassword) {
+        if (req.body.oldPassword || req.body.newPassword) {
           if (req.body.oldPassword &&
             !bcrypt.compareSync(req.body.oldPassword, user.password)) {
             res.status(400).send({
