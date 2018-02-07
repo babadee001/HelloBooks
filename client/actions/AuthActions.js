@@ -2,6 +2,7 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { browserHistory } from 'react-router';
 import setAuthorizationToken from '../utils/setAuthorization';
+import notifyNetworkError from '../utils/notifyNetworkError';
 import {
   SET_CURRENT_USER,
   UNAUTH_USER,
@@ -60,6 +61,14 @@ export const userSignupRequest = userData => async (dispatch) => {
       xaccesstoken: localStorage.token
     },
     body: JSON.stringify(userData)
+  }).catch((error) => {
+    if (error.response) {
+      Materialize.toast(error.response.data.message);
+    } else {
+      notifyNetworkError(error);
+      dispatch(isFetching(false));
+      throw error;
+    }
   });
   const jsonServerResponse = await serverResponse.json()
     .then(jsonData => jsonData);
@@ -91,6 +100,14 @@ export const getBooks = () => async (dispatch) => {
       'Content-Type': 'application/json',
       xaccesstoken: localStorage.token
     },
+  }).catch((error) => {
+    if (error.response) {
+      Materialize.toast(error.response.data.message);
+    } else {
+      notifyNetworkError(error);
+      dispatch(isFetching(false));
+      throw error;
+    }
   });
   const jsonServerResponse = await serverResponse.json()
     .then(jsonData => jsonData);
@@ -121,6 +138,14 @@ export const userSigninRequest = userData => async (dispatch) => {
       xaccesstoken: localStorage.token
     },
     body: JSON.stringify(userData)
+  }).catch((error) => {
+    if (error.response) {
+      Materialize.toast(error.response.data.message);
+    } else {
+      notifyNetworkError(error);
+      dispatch(isFetching(false));
+      throw error;
+    }
   });
   const jsonServerResponse = await serverResponse.json()
     .then(jsonData => jsonData);
@@ -170,7 +195,9 @@ export function getUsers() {
       });
       return res.data;
     })
-    .catch(error => error);
+    .catch(error => (error.response ?
+      error.response.data.message :
+      notifyNetworkError(error)));
 }
 
 /**
@@ -219,5 +246,8 @@ export function editProfileAction(userId, userData) {
       );
       return response.data.message;
     })
-    .catch(error => Materialize.toast(error.data.message, 2000, 'red'));
+    .catch((error) => {
+      dispatch(isFetching(false));
+      notifyNetworkError(error);
+    });
 }

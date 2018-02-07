@@ -49,9 +49,23 @@ const UserController = {
           currentUser
         });
       })
-      .catch(() => res.status(409).send({
-        message: 'Username or email already exists',
-      }));
+      .catch((error) => {
+        if (error.name === 'SequelizeUniqueConstraintError') {
+          if (error.fields.username) {
+            res.status(409).json({
+              message: 'Username or email already exists',
+            });
+          } else if (error.fields.email) {
+            res.status(409).json({
+              message: 'Username or email already exists',
+            });
+          } else {
+            res.status(500).json({
+              message: 'An error occured',
+            });
+          }
+        }
+      });
   },
 
   /**
@@ -98,7 +112,6 @@ const UserController = {
         const currentUser = {
           userId: user.id,
           username: user.username,
-          password: user.password,
           email: user.email,
           membership: user.membership,
         };
@@ -109,12 +122,26 @@ const UserController = {
         return res.status(201).send({
           message: 'Admin added successfully',
           Token: token,
-          user
+          currentUser
         });
       })
-      .catch(() => res.status(409).send({
-        message: 'Username or email already exists',
-      }));
+      .catch((error) => {
+        if (error.name === 'SequelizeUniqueConstraintError') {
+          if (error.fields.username) {
+            res.status(409).json({
+              message: 'Username or email already exists',
+            });
+          } else if (error.fields.email) {
+            res.status(409).json({
+              message: 'Username or email already exists',
+            });
+          } else {
+            res.status(500).json({
+              message: 'An error occured',
+            });
+          }
+        }
+      });
   },
 
   /**
@@ -139,7 +166,6 @@ const UserController = {
           userId: user.id,
           username: user.username,
           email: user.email,
-          password: user.password,
           isAdmin: user.isAdmin,
           membership: user.membership };
         const token = jwt.sign(
@@ -176,11 +202,7 @@ const UserController = {
         res.status(200).json({
           message: user
         });
-      }).catch((error) => {
-        res.status(500).json({
-          message: error
-        });
-      });
+      }).catch(error => res.status(500).send(error));
   },
 
   /**
@@ -209,7 +231,7 @@ const UserController = {
           res.status(200).send(books);
         }
       })
-      .catch(error => res.status(500).send({ message: error }));
+      .catch(error => res.status(500).send(error));
   },
 
   /**
@@ -230,14 +252,15 @@ const UserController = {
         },
       })
       .then((user) => {
-        res.status(200).json({
-          message: user
-        });
-      }).catch((error) => {
+        if (user) {
+          res.status(200).json({
+            message: user
+          });
+        }
         res.status(404).json({
-          message: error
+          message: 'Email not found'
         });
-      });
+      }).catch(error => res.status(500).send(error));
   },
 
   /**
@@ -283,20 +306,23 @@ const UserController = {
               message: 'profile updated succesfully',
               updated
             });
-          }).catch(() => {
-            res.status(409).json({
-              message: 'Username exists. Try another one'
+          })
+            .catch((error) => {
+              if (error.name === 'SequelizeUniqueConstraintError') {
+                if (error.fields.username) {
+                  res.status(409).json({
+                    message: 'Username exists. Try another one',
+                  });
+                }
+              } else { res.status(500).json({ message: 'An error occured' }); }
             });
-          });
         }
       } else {
         return res.status(404).json({
           message: 'User not in database'
         });
       }
-    }).catch((error) => {
-      res.status(500).send(error);
-    });
+    }).catch(error => res.status(500).send(error));
   }
 };
 export default UserController;

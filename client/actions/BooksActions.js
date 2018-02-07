@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import swal from 'sweetalert';
 import 'whatwg-fetch';
 import { browserHistory } from 'react-router';
+import notifyNetworkError from '../utils/notifyNetworkError';
 
 import {
   GET_ALL_BOOKS,
@@ -47,6 +48,14 @@ export const getBooks = () => async (dispatch) => {
       'Content-Type': 'application/json',
       xaccesstoken: localStorage.token
     },
+  }).catch((error) => {
+    if (error.response) {
+      Materialize.toast(error.response.data.message);
+    } else {
+      notifyNetworkError(error);
+      dispatch(isFetching(false));
+      throw error;
+    }
   });
   const jsonServerResponse = await serverResponse.json()
     .then(jsonData => jsonData);
@@ -77,6 +86,14 @@ export const getHistory = userId => async (dispatch) => {
       'Content-Type': 'application/json',
       xaccesstoken: localStorage.token
     },
+  }).catch((error) => {
+    if (error.response) {
+      Materialize.toast(error.response.data.message);
+    } else {
+      notifyNetworkError(error);
+      dispatch(isFetching(false));
+      throw error;
+    }
   });
   const jsonServerResponse = await serverResponse.json()
     .then(jsonData => jsonData);
@@ -108,6 +125,14 @@ export function editBook(details, bookId) {
         xaccesstoken: localStorage.token
       },
       body: JSON.stringify(details)
+    }).catch((error) => {
+      if (error.response) {
+        Materialize.toast(error.response.data.message);
+      } else {
+        notifyNetworkError(error);
+        dispatch(isFetching(false));
+        throw error;
+      }
     });
     const jsonServerResponse = await serverResponse.json()
       .then(jsonData => jsonData);
@@ -148,10 +173,16 @@ export function borrowBook(userId, bookId) {
           if (res) {
             swal(message, { icon: 'success' });
           }
-        }).catch(error => swal(error.data.message));
+        }).catch((error) => {
+          if (error.data) {
+            swal(error.data.message);
+          } else {
+            notifyNetworkError(error);
+            throw error;
+          }
+        });
     }
-  })
-    .catch(error => error);
+  });
 }
 
 /**
@@ -172,6 +203,14 @@ export function returnBook(userId, bookId) {
           'Content-Type': 'application/json',
           xaccesstoken: localStorage.token
         },
+      }).catch((error) => {
+        if (error.response) {
+          Materialize.toast(error.response.data.message);
+        } else {
+          notifyNetworkError(error);
+          dispatch(isFetching(false));
+          throw error;
+        }
       });
     const jsonServerResponse = await serverResponse.json()
       .then(jsonData => jsonData);
@@ -204,6 +243,14 @@ export function addBookAction(bookDetails) {
         xaccesstoken: localStorage.token
       },
       body: JSON.stringify(bookDetails)
+    }).catch((error) => {
+      if (error.response) {
+        Materialize.toast(error.response.data.message);
+      } else {
+        notifyNetworkError(error);
+        dispatch(isFetching(false));
+        throw error;
+      }
     });
     const jsonServerResponse = await serverResponse.json()
       .then(jsonData => jsonData);
@@ -237,6 +284,14 @@ export function deleteBookAction(bookId) {
         'Content-Type': 'application/json',
         xaccesstoken: localStorage.token
       }
+    }).catch((error) => {
+      if (error.response) {
+        Materialize.toast(error.response.data.message);
+      } else {
+        notifyNetworkError(error);
+        dispatch(isFetching(false));
+        throw error;
+      }
     });
     const jsonServerResponse = await serverResponse.json()
       .then(jsonData => jsonData);
@@ -262,7 +317,10 @@ export function getAllBorrowed() {
       });
       return res.data;
     })
-    .catch(error => error);
+    .catch((error) => {
+      dispatch(isFetching(false));
+      notifyNetworkError(error);
+    });
 }
 
 /**
@@ -282,6 +340,14 @@ export function addCategoryAction(data) {
         xaccesstoken: localStorage.token
       },
       body: JSON.stringify(data)
+    }).catch((error) => {
+      if (error.response) {
+        Materialize.toast(error.response.data.message);
+      } else {
+        notifyNetworkError(error);
+        dispatch(isFetching(false));
+        throw error;
+      }
     });
     const jsonServerResponse = await serverResponse.json()
       .then(jsonData => jsonData);
@@ -311,6 +377,14 @@ export function getCategoryAction() {
         'Content-Type': 'application/json',
         xaccesstoken: localStorage.token
       },
+    }).catch((error) => {
+      if (error.response) {
+        Materialize.toast(error.response.data.message);
+      } else {
+        notifyNetworkError(error);
+        dispatch(isFetching(false));
+        throw error;
+      }
     });
     const jsonServerResponse = await serverResponse.json()
       .then(jsonData => jsonData);

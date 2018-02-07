@@ -1,4 +1,5 @@
 import axios from 'axios';
+import notifyNetworkError from './notifyNetworkError';
 
 /**
  * @description - Check if user details exists
@@ -16,7 +17,9 @@ export function checkExisting(userData) {
       }
       return 'Not found';
     })
-    .catch(error => (error));
+    .catch(error => (error.response ?
+      error.response.data.message :
+      notifyNetworkError(error)));
 }
 
 /**
@@ -35,7 +38,9 @@ export function checkUser(userData) {
       }
       return 'Not found';
     })
-    .catch(error => (error));
+    .catch(error => (error.response ?
+      error.response.data.message :
+      notifyNetworkError(error)));
 }
 
 /**
