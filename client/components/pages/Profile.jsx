@@ -60,7 +60,7 @@ export class Profile extends Component {
               <p className="title">{this.props.user.membership}</p>
               <p>{this.props.user.email}</p>
               <p>Books yet to return {this.props.book}</p>
-                <p><Link to ="/edit"><button>Edit profile</button></Link></p>
+                <p><Link to ="/edit"><button name="editprofile">Edit profile</button></Link></p>
             </div>
           </div>
         </div>

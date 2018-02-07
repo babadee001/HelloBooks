@@ -219,15 +219,15 @@ input {
   }
   
   .cardbox {
+    text-align: center;
     min-height: 200px !important;
     border-radius: 8px;
-    padding: 10px;
+    padding: 20px !important;
     width: 80%;
     box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
   }
   .card-text{
-    font-size: 70px;
-    margin-left: 60px;
+    font-size: 500%;
   }
   #sidenav-overlay {
     background-color: rgba(0,0,0,0.0);
@@ -355,4 +355,7 @@ input {
   }
   .catbutton {
     width: 50% !important;
+  }
+  .editwrapper {
+    margin-top: 10%;
   }

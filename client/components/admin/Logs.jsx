@@ -123,7 +123,7 @@ export class Logs extends Component {
                           <h5 className="card-title">Add New Category</h5>
                           <p className="card-text">
                             <form onSubmit={ this.onSubmit } className="row">
-                              <div className="form-group input-group">
+                              <div>
                                 <input
                                  className="form-control" value={ this.state.name } onChange={ this.onChange } type="text"
                                  name="name"
@@ -131,7 +131,7 @@ export class Logs extends Component {
                                  required
                                 />
                               </div>
-                              <div className="form-group input-group">
+                              <div>
                                 <input
                                  className="form-control" value={ this.state.description } onChange={ this.onChange } type="text"
                                  name="description"
@@ -140,7 +140,7 @@ export class Logs extends Component {
                                 />
                               </div>
                               <div className="form-group">
-                                <button className="btn btn-success">Add</button>
+                                <button name="addcategory" className="btn btn-success">Add</button>
                               </div>
                             </form>
                           </p>
