@@ -4,14 +4,14 @@ import fetchMock from 'fetch-mock';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import dotenv from 'dotenv';
-import mockData from '../__mocks__/mockData';
+import mockData from '../../__mocks__/mockData';
 import {
   addBookAction,
-} from '../../actions/BooksActions';
+} from '../../../actions/BooksActions';
 
 import {
   ADD_BOOK,
-} from '../../actions/types';
+} from '../../../actions/types';
 
 dotenv.load();
 const middleware = [thunk];

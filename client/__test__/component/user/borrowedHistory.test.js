@@ -37,7 +37,7 @@ const setup = () => {
     getHistory: jest.fn(),
     returnBook: jest.fn(),
   },
-  borrowedBooks: mockData.modifiedBook
+  borrowedBooks: mockData.allBorrowedBooks
 }
 
 describe('Component: Borrowed Books Page', () => {
@@ -80,7 +80,7 @@ describe('Component: Borrowed Books Page', () => {
       auth: { user: {currentUser: 'babadee' }, apiStatus: true }
     };
     expect(mapStateToProps(storeState).user).toHaveLength(7);
-    expect(mapStateToProps(storeState).borrowedBooks).toHaveLength(1);
+    expect(mapStateToProps(storeState).borrowedBooks).toHaveLength(2);
   });
   it('Should return no borrow book message when borrowed book is null', () => {
     const wrapper = setup()

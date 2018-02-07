@@ -1,16 +1,18 @@
 import expect from 'expect';
 import hammerjs from 'hammerjs';
+import { browserHistory } from 'react-router';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
 import dotenv from 'dotenv';
 import fetchMock from 'fetch-mock';
 import mockData from '../__mocks__/mockData';
-import { setCurrentUser,
+import {
   userSignupRequest,
   editProfileAction,
   userSigninRequest,
-  googleSigninRequest
+  googleSigninRequest,
+  logout
 } from '../../actions/AuthActions';
 import { SET_CURRENT_USER,
   EDIT_PROFILE,
@@ -18,6 +20,10 @@ import { SET_CURRENT_USER,
 } from '../../actions/types';
 
 dotenv.load();
+
+browserHistory.push = jest.fn();
+
+const { googleUser, updated, user } = mockData;
 
 const middlewares = [thunk];
 
@@ -29,113 +35,96 @@ window.localStorage = {
 };
 
 
-describe('Auth actions', () => {
+describe('Given userActions', () => {
   beforeEach(() => {
     global.Materialize = { toast: jest.fn(Promise.resolve(1)) };
+    global.browserHistory = { push: jest.fn(Promise.resolve()) };
     moxios.install();
     global.Materialize = { toast: jest.fn(() => Promise.resolve(1)) };
   });
   afterEach(() => moxios.uninstall());
+  describe('When I call the signin action ', () => {
+    it('should dispatch SET_CURRENT_USER when successful', () => {
+      fetchMock.post('api/v1/users/signin',
+        { status: 200,
+          body: JSON.stringify(user)
+        });
 
-  it('should create SET_CURRENT_USER', () => {
-    const user = {
-      username: 'babadee',
-      email: 'babadee@gmail.com',
-    };
+      const expectedActions = {
+        type: SET_CURRENT_USER,
+        user
+      };
 
-    const expectedAction = {
-      decoded: {
-        currentUser:
-          {
-            type: SET_CURRENT_USER,
-            user,
-            authenticated: true
-          }
-      }
-    };
-    expect(setCurrentUser(user))
-      .toEqual(expectedAction.decoded.currentUser);
-  });
-
-  it('should create SET_CURRENT_USER when login action is successful', () => {
-    fetchMock.post('api/v1/users/signin',
-      { status: 200,
-        body: JSON.stringify(mockData.user)
-      });
-
-    const expectedActions = {
-      type: SET_CURRENT_USER,
-      user: mockData.user
-    };
-
-    const store = mockStore({});
-    store.dispatch(userSigninRequest(mockData.user))
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-      })
-      .catch(error => error);
-  });
-
-  it('should create SET_CURRENT_USER when on googleSigninRequest success ',
-    () => {
-      const { authResponse } = mockData;
-      moxios.stubRequest('/api/v1/users/signin', {
-        status: 200,
-        response: authResponse
-      });
       const store = mockStore({});
-      store.dispatch(googleSigninRequest({}));
+      store.dispatch(userSigninRequest(user))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        })
+        .catch(error => error);
     });
-
-
-  it('should set UNAUTH_USER when user logs out of the application', () => {
-    const expectedActions = {
-      type: UNAUTH_USER,
-      user: { },
-      authenticated: false
-    };
-
-    const store = mockStore({});
-    store.dispatch(expectedActions);
-    expect(store.getActions()[0]).toEqual(expectedActions);
   });
+  describe('When I call googleSigninRequest action', () => {
+    it('should dispatch SET_CURRENT_USER on success ',
+      () => {
+        const store = mockStore({});
+        store.dispatch(googleSigninRequest(process.env.googleToken));
+        expect(store.getActions()).toEqual(googleUser);
+      });
+  });
+  describe('When I call the logout action', () => {
+    it('should dispatch UNAUTH_USER', () => {
+      const expectedActions = [{
+        type: UNAUTH_USER,
+        user: { },
+        authenticated: false
+      }];
 
-  it('should create SET_CURRENT_USER when signup action is successful', () => {
-    fetchMock.post('api/v1/users/signup',
-      { status: 201,
-        body: JSON.stringify(mockData.user)
+      const store = mockStore({});
+      store.dispatch(logout());
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+  describe('When I call the signup action', () => {
+    it('should dispatch SET_CURRENT_USER when successful', () => {
+      fetchMock.post('api/v1/users/signup',
+        { status: 201,
+          body: JSON.stringify(user)
+        });
+
+      const expectedActions = {
+        type: SET_CURRENT_USER,
+        user
+      };
+
+      const store = mockStore({});
+      store.dispatch(userSignupRequest(user))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        })
+        .catch(error => error);
+    });
+  });
+  describe('When i call the edit action', () => {
+    it('should dispatch EDIT_PROFILE when successful', () => {
+      moxios.stubRequest('/api/v1/users/edit/1', {
+        status: 200,
+        response: {
+          updated
+        }
+
       });
 
-    const expectedActions = {
-      type: SET_CURRENT_USER,
-      user: mockData.user
-    };
+      const expectedActions = {
+        type: EDIT_PROFILE,
+        updated
+      };
 
-    const store = mockStore({});
-    store.dispatch(userSignupRequest(mockData.user))
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-      })
-      .catch(error => error);
-  });
-
-  it('should create EDIT_PROFILE when user edit profile', () => {
-    moxios.stubRequest('/api/v1/users/edit/1', {
-      status: 200,
-      response: {
-        token: process.env.testToken
-      }
-
+      const store = mockStore({});
+      store.dispatch(editProfileAction({ username: 'myusername' }))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        })
+        .catch(error => error);
     });
-    const expectedActions = {
-      type: EDIT_PROFILE,
-    };
-
-    const store = mockStore({});
-    store.dispatch(editProfileAction(1, { username: 'james' }))
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-      })
-      .catch(error => error);
   });
 });

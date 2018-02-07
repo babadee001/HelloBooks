@@ -36,7 +36,7 @@ const setup = () => {
 		actions: {
       getBooks, getUsers, logout, deleteBook: jest.fn()
 		},
-		books: mockData.modifiedBook
+		books: mockData.allBooks
 	};
 	return shallow(<AdminHome {...props} />);
 };

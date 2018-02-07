@@ -31,7 +31,7 @@ const setup = () => {
 describe('Component: EditProfile', () => {
   it('should render the component successfully', () => {
     const wrapper = setup();
-    expect(wrapper.find('div').length).toBe(9);
+    expect(wrapper.find('div').length).toBe(10);
     expect(wrapper.find('form').length).toBe(1);
   })
 
@@ -88,12 +88,12 @@ describe('Component: EditProfile', () => {
 
 		const event = {
 			target: {
-				name: 'email',
-				value: 'babadee@test.com'
+				name: 'username',
+				value: 'testusername'
 			}
 		};
 		action.onFocus(event);
-		expect(action.state.emailExist).toEqual('');
+		expect(action.state.usernameError).toEqual('');
   });
   it('should call handleSubmit when edit profile form is submitted', () => {
 		const wrapper = setup();

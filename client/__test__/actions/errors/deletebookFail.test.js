@@ -6,11 +6,11 @@ import thunk from 'redux-thunk';
 import dotenv from 'dotenv';
 import {
   deleteBookAction,
-} from '../../actions/BooksActions';
+} from '../../../actions/BooksActions';
 
 import {
   DELETE_BOOK,
-} from '../../actions/types';
+} from '../../../actions/types';
 
 dotenv.load();
 const middleware = [thunk];

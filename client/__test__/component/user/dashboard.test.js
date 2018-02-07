@@ -28,7 +28,7 @@ const set = () => {
       actions: {
         getBooks: jest.fn()
       },
-      books: null
+      books: mockData.allBooks
   }
   return mount(<Dashboard {...props} />)
 }
@@ -43,7 +43,7 @@ const setup = () => {
       actions: {
         getBooks: jest.fn()
       },
-      books: mockData.modifiedBook,
+      books: mockData.allBooks,
       isFetching: true
   }
   return mount(<Dashboard {...props} />)
@@ -67,8 +67,8 @@ describe('Component: Dashboard', () => {
 
     expect(wrapper.props().actions.getBooks).toHaveBeenCalled();
     expect(wrapper.props().books.length).toBe(2);
-    expect(wrapper.props().books[0].title).toBe('This is a test');
-    expect(wrapper.props().books[0].author).toBe('babadee');
+    expect(wrapper.props().books[0].title).toBe('HarryPorterrrr');
+    expect(wrapper.props().books[0].author).toBe('babadeewwww');
   })
 
   it('should render NavigationBar component', () => {
@@ -79,8 +79,8 @@ describe('Component: Dashboard', () => {
 it('should receive the book props', () => {
   const wrapper = setup();
   expect(wrapper.props().books.length).toBe(2);
-  expect(wrapper.props().books[0].title).toBe('This is a test');
-  expect(wrapper.props().books[0].author).toBe('babadee');
+  expect(wrapper.props().books[0].title).toBe('HarryPorterrrr');
+  expect(wrapper.props().books[0].author).toBe('babadeewwww');
 })
 it('should ensure mapDispatchToProps returns binded actions', () => {
   const dispatch = jest.fn();

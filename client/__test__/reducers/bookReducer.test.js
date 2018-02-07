@@ -10,22 +10,20 @@ import { GET_ALL_BOOKS,
   GET_ALL_TIME_BORROWED,
   ADD_CATEGORY,
   GET_CATEGORY,
-  GET_UNRETURNED_BOOKS,
   SET_API_STATUS
 } from '../../actions/types';
 
 describe('Book Reducer:', () => {
   it('Should return list of books for GET_ALL_BOOKS', () => {
-    const data = mockData.returnedBook;
+    const data = mockData.allBooks;
     const initialState = {
-      data
+      data: []
     };
     const action = {
       type: GET_ALL_BOOKS,
-      data
+      data: mockData.allBooks
     };
     const newState = bookReducer(initialState, action);
-    expect(newState.data.count).toEqual(5);
     expect(newState.data).toEqual(data);
   });
 
@@ -135,19 +133,6 @@ describe('Book Reducer:', () => {
     };
     const state = bookReducer(initialState, action);
     expect(state.data[0].title).toEqual('test me');
-  });
-  it('Should return list of unreturned books for GET_UNRETURNED_BOOKS', () => {
-    const data = mockData.returnedBook;
-    const initialState = {
-      data
-    };
-    const action = {
-      type: GET_UNRETURNED_BOOKS,
-      data
-    };
-    const newState = bookReducer(initialState, action);
-    expect(newState.data.count).toEqual(5);
-    expect(newState.data).toEqual(data);
   });
   it('Should set isFetching for SET_API_STATUS', () => {
     const initialState = {

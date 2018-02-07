@@ -28,7 +28,7 @@ const setup = () => {
       actions: {
         getBorrowed: jest.fn()
       },
-      books: mockData.modifiedBook
+      books: mockData.allBooks
   }
   return mount(<Profile {...props} />)
 }
@@ -51,8 +51,8 @@ describe('Component: Profile', () => {
 
     expect(wrapper.props().actions.getBorrowed).toHaveBeenCalled();
     expect(wrapper.props().books.length).toBe(2);
-    expect(wrapper.props().books[0].title).toBe('This is a test');
-    expect(wrapper.props().books[0].author).toBe('babadee');
+    expect(wrapper.props().books[0].title).toBe('HarryPorterrrr');
+    expect(wrapper.props().books[0].author).toBe('babadeewwww');
   })
 
   it('should render NavigationBar component', () => {
@@ -63,8 +63,8 @@ describe('Component: Profile', () => {
 it('should receive the book props', () => {
   const wrapper = setup();
   expect(wrapper.props().books.length).toBe(2);
-  expect(wrapper.props().books[0].title).toBe('This is a test');
-  expect(wrapper.props().books[0].author).toBe('babadee');
+  expect(wrapper.props().books[0].title).toBe('HarryPorterrrr');
+  expect(wrapper.props().books[0].author).toBe('babadeewwww');
 })
 it('should ensure mapDispatchToProps returns binded actions', () => {
   const dispatch = jest.fn();

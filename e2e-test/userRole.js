@@ -52,6 +52,7 @@ module.exports = {
       .click('button[name=signup]')
       .waitForElementVisible('.toast', 5000)
       .assert.containsText('.toast', 'Username or email already exists')
+      .assert.urlContains('http://localhost:8000/signup')
       .url('http://localhost:8000/signup')
       .waitForElementVisible('body', 5000)
       .setValue('input[name=username]', 'ba')
@@ -63,6 +64,7 @@ module.exports = {
       .waitForElementVisible('.toast', 5000)
       .assert
       .containsText('.toast', 'Username cannot be less than three characters')
+      .assert.urlContains('http://localhost:8000/signup')
       .pause(1000),
 
   'Users should be able to borrow and return book': browser =>
@@ -76,17 +78,30 @@ module.exports = {
       .click('#borrow')
       .waitForElementVisible('.swal-button--confirm', 5000)
       .click('.swal-button--confirm')
+      .waitForElementVisible('.toast', 5000)
+      .assert.containsText('.toast', 'You have successfully borrowed the book')
+      .click('.swal-button--confirm')
+      .waitForElementVisible('#bookList', 5000)
+      .click('#borrow')
       .waitForElementVisible('.swal-button--confirm', 5000)
       .click('.swal-button--confirm')
+      .waitForElementVisible('.toast', 5000)
+      .assert.containsText('.toast',
+        'You cant borrow this book again till you return')
       .waitForElementVisible('#bookList', 5000)
       .url('http://localhost:8000/history')
       .waitForElementVisible('#history', 5000)
       .click('#returnBook')
       .waitForElementVisible('.swal-button--confirm', 5000)
       .click('.swal-button--confirm')
+      .waitForElementVisible('.toast', 5000)
+      .assert.containsText('.toast',
+        'Book returned successfully')
+      .waitForElementNotVisible('#returnBook')
+      .assert.urlContains('http://localhost:8000/history')
       .end(),
 
-  'Users should be able to view their profile': browser =>
+  'Users can view their profile and edit their username': browser =>
     browser
       .url('http://localhost:8000/signin')
       .waitForElementVisible('body', 5000)
@@ -96,6 +111,81 @@ module.exports = {
       .waitForElementVisible('#bookList', 5000)
       .url('http://localhost:8000/profile')
       .waitForElementVisible('#profile', 5000)
+      .assert.containsText('#editprofile',
+        'Edit profile')
+      .click('#editprofile')
+      .assert.urlContains('http://localhost:8000/edit')
+      .waitForElementVisible('.editprofile', 5000)
+      .setValue('input[name=username]', 'newUsername')
+      .click('button[name=submit]')
+      .waitForElementVisible('.toast', 5000)
+      .assert.containsText('.toast', 'profile updated successfully')
+      .assert.urlContains('http://localhost:8000/signin')
+      .setValue('input[name=username]', 'newUsername')
+      .setValue('input[name=password]', randomName)
+      .click('button[name=signin]')
+      .waitForElementVisible('.toast', 5000)
+      .assert.containsText('.toast', 'Logged in Successfully')
+      .waitForElementVisible('#bookList', 5000)
+      .end(),
+
+  'Users should be able to change their password': browser =>
+    browser
+      .url('http://localhost:8000/signin')
+      .waitForElementVisible('body', 5000)
+      .setValue('input[name=username]', username)
+      .setValue('input[name=password]', randomName)
+      .click('button[name=signin]')
+      .waitForElementVisible('#bookList', 5000)
+      .url('http://localhost:8000/profile')
+      .waitForElementVisible('#profile', 5000)
+      .assert.containsText('#editprofile',
+        'Edit profile')
+      .click('#editprofile')
+      .assert.urlContains('http://localhost:8000/edit')
+      .waitForElementVisible('.editprofile', 5000)
+      .setValue('input[name=oldPassword]', randomName)
+      .setValue('input[name=newPassword]', 'newpassword')
+      .click('button[name=submit]')
+      .waitForElementVisible('.toast', 5000)
+      .assert.containsText('.toast', 'profile updated successfully')
+      .assert.urlContains('http://localhost:8000/signin')
+      .setValue('input[name=username]', username)
+      .setValue('input[name=password]', 'newpassword')
+      .click('button[name=signin]')
+      .waitForElementVisible('.toast', 5000)
+      .assert.containsText('.toast', 'Logged in Successfully')
+      .waitForElementVisible('#bookList', 5000)
+      .end(),
+
+  'Users should not update their password with wrong details': browser =>
+    browser
+      .url('http://localhost:8000/signin')
+      .waitForElementVisible('body', 5000)
+      .setValue('input[name=username]', username)
+      .setValue('input[name=password]', randomName)
+      .click('button[name=signin]')
+      .waitForElementVisible('#bookList', 5000)
+      .url('http://localhost:8000/profile')
+      .waitForElementVisible('#profile', 5000)
+      .assert.containsText('#editprofile',
+        'Edit profile')
+      .click('#editprofile')
+      .assert.urlContains('http://localhost:8000/edit')
+      .waitForElementVisible('.editprofile', 5000)
+      .setValue('input[name=oldPassword]', 'wrongpassword')
+      .setValue('input[name=newPassword]', 'newpassword')
+      .click('button[name=submit]')
+      .waitForElementVisible('.toast', 5000)
+      .assert.containsText('.toast', 'old password is incorrect')
+      .assert.urlContains('http://localhost:8000/edit')
+      .click('button[name=logout]')
+      .click('button[name=signin]')
+      .setValue('input[name=username]', username)
+      .setValue('input[name=password]', 'wrongpassword')
+      .click('button[name=signin]')
+      .waitForElementVisible('.toast', 5000)
+      .assert.containsText('.toast', 'Invalid username or password')
       .end(),
 
   'Users should get a not found page when wrong url is visited': browser =>

@@ -37,114 +37,127 @@ jest.mock('react-router');
 const middleware = [thunk];
 
 const mockStore = configureMockStore(middleware);
+const {
+  bookData,
+  allBooks,
+  modifiedBook,
+  allCategory,
+  returnedBook,
+  history,
+  allTimeBorrowed
+} = mockData;
 
 window.localStorage = {};
 
-describe('Book actions', () => {
-  beforeEach(() => moxios.install());
-  afterEach(() => moxios.uninstall());
-
-  it('should create ADD_BOOK when a new book is added', () => {
-    fetchMock.post('/api/v1/books',
-      { status: 201,
-        body: JSON.stringify({ message: 'Book added Successfully' })
-      });
-    const expectedActions = [
-      {
-        type: ADD_BOOK,
-        message: 'Book added Successfully'
-      }
-    ];
-    const store = mockStore({});
-    store.dispatch(addBookAction(mockData.bookData))
-      .then(() => {
-        expect(store.getActions()).to.eql(expectedActions);
-      })
-      .catch(error => error);
+describe('Given book actions', () => {
+  describe('When I call the add book action', () => {
+    beforeEach(() => moxios.install());
+    afterEach(() => moxios.uninstall());
+    it('Then it should dispatch an action to add book', () => {
+      fetchMock.post('/api/v1/books',
+        { status: 201,
+          body: JSON.stringify({
+            message: 'Book added Successfully',
+            newBook: bookData
+          })
+        });
+      const expectedActions = [
+        {
+          type: ADD_BOOK,
+          message: 'Book added Successfully',
+          newBook: bookData
+        }
+      ];
+      const store = mockStore({});
+      store.dispatch(addBookAction(bookData))
+        .then(() => {
+          expect(store.getActions()).to.eql(expectedActions);
+        })
+        .catch(error => error);
+    });
   });
+  describe('When I call the get all books action', () => {
+    it('Then it should dispatch an action that get all books', () => {
+      fetchMock.get('/api/v1/books',
+        {
+          status: 200,
+          body: JSON.stringify(
+            allBooks
+          ) });
 
-  it('should create GET_ALL_BOOKS when trying to get all books', () => {
-    fetchMock.get('/api/v1/books',
-      { status: 200, body: JSON.stringify(mockData.returnedBook) });
+      const expectedActions = [{
+        type: GET_ALL_BOOKS,
+        data: allBooks
+      }];
 
-    const expectedActions = [{
-      type: GET_ALL_BOOKS,
-      data: mockData.returnedBook
-    }];
-
-    const store = mockStore({});
-    store.dispatch(getBooks())
-      .then(() => {
-        expect(store.getActions()).to.eql(expectedActions);
-      })
-      .catch(error => error);
+      const store = mockStore({});
+      store.dispatch(getBooks())
+        .then(() => {
+          expect(store.getActions()).to.eql(expectedActions);
+        })
+        .catch(error => error);
+    });
   });
+  describe('When I call the edit book action', () => {
+    it('Then it should dispatch an action that edits a book', () => {
+      fetchMock.put('/api/v1/books/1',
+        { status: 200,
+          body: JSON.stringify({
+            book: modifiedBook,
+            message: modifiedBook.message
+          })
+        });
 
-  it('should create EDIT_BOOK when a book is successfully edited', () => {
-    fetchMock.put('/api/v1/books/1',
-      { status: 200, body: JSON.stringify(mockData.modifiedBook) });
+      const expectedActions = [{
+        type: EDIT_BOOK,
+        book: modifiedBook
+      }];
 
-    const expectedActions = [{
-      type: EDIT_BOOK,
-      data: mockData.modifiedBook
-    }];
-
-    const store = mockStore({});
-    store.dispatch(editBook(mockData.bookData, 1))
-      .then(() => {
-        expect(store.getActions()).to.eql(expectedActions);
-      })
-      .catch(error => error);
+      const store = mockStore({});
+      store.dispatch(editBook(bookData, 1))
+        .then(() => {
+          expect(store.getActions()).to.eql(expectedActions);
+        })
+        .catch(error => error);
+    });
   });
+  describe('When I call the add category action', () => {
+    it('should dispatch ADD_CATEGORY', () => {
+      fetchMock.post('/api/v1/books/category',
+        { status: 201,
+          body: JSON.stringify({
+            name: 'drama',
+            description: 'Badass'
+          }) });
+      const expectedActions = [{
+        type: ADD_CATEGORY,
+        data: {
+          name: 'science',
+          description: 'Hello world'
+        }
+      }];
 
-  it('should create ADD_CATEGORY when category is successfully added', () => {
-    fetchMock.post('/api/v1/books/category',
-      { status: 201,
-        body: JSON.stringify({
-          name: 'drama', description: 'Badass'
-        }) });
-    const expectedActions = [{
-      type: ADD_CATEGORY,
-      data: { name: 'science', description: 'Hello world' }
-    }];
-
-    const store = mockStore({});
-    store.dispatch(addCategoryAction({
-      name: 'science',
-      description: 'Hello world'
-    }))
-      .then(() => {
-        expect(store.getActions()).to.eql(expectedActions);
-      })
-      .catch(error => error);
+      const store = mockStore({});
+      store.dispatch(addCategoryAction({
+        name: 'science',
+        description: 'Hello world'
+      }))
+        .then(() => {
+          expect(store.getActions()).to.eql(expectedActions);
+        })
+        .catch(error => error);
+    });
   });
-
-  it('should create RETURN_BOOK when returning a book', () => {
-    fetchMock.put('/api/v1/users/1/books/1',
-      { status: 201 });
-
-    const expectedActions = [{
-      type: RETURN_BOOK,
-    }];
-    const bookId = { bookId: 1 };
-    const store = mockStore({});
-    store.dispatch(returnBook(1, bookId))
-      .then(() => {
-        expect(store.getActions()).to.eql(expectedActions);
-      })
-      .catch(error => error);
-  });
-
-  it('should create GET_CATEGORY when getting all category', () => {
+  it('should dispatch GET_CATEGORY when getting all category', () => {
     fetchMock.get('/api/v1/books/category',
       { status: 200,
         body: JSON.stringify({
-          name: 'drama', description: 'Badass'
+          data: allCategory
         }) });
 
     const expectedActions = [{
       type: GET_CATEGORY,
-      data: [{ name: 'drama', description: 'Badass' }]
+      data: allCategory
     }];
 
     const store = mockStore({});
@@ -154,59 +167,87 @@ describe('Book actions', () => {
       })
       .catch(error => error);
   });
-
-  it('should create GET_ALL_TIME_BORROWED when getting all time borrowed',
-    () => {
-      fetchMock.get('api/v1/books/borrowed',
-        { status: 200
+  describe('when I call the return book action', () => {
+    it('should dispatch RETURN_BOOK when returning a book', () => {
+      fetchMock.put('/api/v1/users/1/books/1',
+        {
+          status: 201,
+          body: JSON.stringify({
+            book: returnedBook
+          })
         });
 
       const expectedActions = [{
-        type: GET_ALL_TIME_BORROWED,
-        data: {}
+        type: RETURN_BOOK,
+        book: returnedBook
       }];
-
+      const bookId = { bookId: 1 };
       const store = mockStore({});
-      store.dispatch(getAllBorrowed())
+      store.dispatch(returnBook(1, bookId))
         .then(() => {
           expect(store.getActions()).to.eql(expectedActions);
         })
         .catch(error => error);
     });
-
-  it('should create GET_BORROWED_HISTORY when getting history', () => {
-    fetchMock.get('/api/v1/users/1',
-      { status: 200,
-        body: JSON.stringify(mockData.returnedBook)
-      });
-
-    const expectedActions = [{
-      type: GET_BORROWED_HISTORY,
-      data: mockData.returnedBook
-    }];
-
-    const store = mockStore({});
-    store.dispatch(getHistory(1))
-      .then(() => {
-        expect(store.getActions()).to.eql(expectedActions);
-      })
-      .catch(error => error);
   });
+  describe('when I call the getAllBorrowed book action', () => {
+    it('should dispatch GET_ALL_TIME_BORROWED',
+      () => {
+        fetchMock.get('api/v1/books/borrowed',
+          { status: 200
+          });
 
-  it('should create DELETE_BOOK when a book is successfully deleted', () => {
-    fetchMock.deleteOnce('/api/v1/books/1',
-      { status: 200, body: JSON.stringify({ id: 1 }) });
-    const expectedActions = [
-      {
-        type: DELETE_BOOK,
-        data: 1,
-      }
-    ];
-    const store = mockStore({});
-    store.dispatch(deleteBookAction(1))
-      .then(() => {
-        expect(store.getActions()).to.eql(expectedActions);
-      })
-      .catch(error => error);
+        const expectedActions = [{
+          type: GET_ALL_TIME_BORROWED,
+          data: allTimeBorrowed
+        }];
+
+        const store = mockStore({});
+        store.dispatch(getAllBorrowed())
+          .then(() => {
+            expect(store.getActions()).to.eql(expectedActions);
+          })
+          .catch(error => error);
+      });
+  });
+  describe('when I call the getHistory action', () => {
+    it('should dispatch GET_BORROWED_HISTORY', () => {
+      fetchMock.get('/api/v1/users/1',
+        { status: 200,
+          body: JSON.stringify(history)
+        });
+
+      const expectedActions = [{
+        type: GET_BORROWED_HISTORY,
+        data: history
+      }];
+
+      const store = mockStore({});
+      store.dispatch(getHistory(1))
+        .then(() => {
+          expect(store.getActions()).to.eql(expectedActions);
+        })
+        .catch(error => error);
+    });
+  });
+  describe('When I call the deleteBookAction', () => {
+    it('should dispatch DELETE_BOOK', () => {
+      fetchMock.deleteOnce('/api/v1/books/1',
+        {
+          status: 200,
+          body: JSON.stringify({ id: 1 }) });
+      const expectedActions = [
+        {
+          type: DELETE_BOOK,
+          id: 1,
+        }
+      ];
+      const store = mockStore({});
+      store.dispatch(deleteBookAction(1))
+        .then(() => {
+          expect(store.getActions()).to.eql(expectedActions);
+        })
+        .catch(error => error);
+    });
   });
 });

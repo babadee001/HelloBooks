@@ -32,7 +32,7 @@ const setup = () => {
     getAllBooksAction: jest.fn(),
     editBook: jest.fn(),
     deleteBookAction: jest.fn(() => Promise.resolve(1)),
-    books: mockData.modifiedBook
+    books: mockData.allBooks
   }
   return mount(<AllBooks {...props} />)
 }
@@ -61,8 +61,8 @@ describe('Component: AllBooks', () => {
     expect(wrapper.props().books.length).toBe(2);
     expect(wrapper.state().edit).toBeFalsy;
     expect(wrapper.state().displayBook).toBeTruthy;
-    expect(wrapper.props().books[0].title).toBe('This is a test');
-    expect(wrapper.props().books[0].author).toBe('babadee');
+    expect(wrapper.props().books[0].title).toBe('HarryPorterrrr');
+    expect(wrapper.props().books[0].author).toBe('babadeewwww');
   })
 
 it('should call handleClick to delete book', () => {

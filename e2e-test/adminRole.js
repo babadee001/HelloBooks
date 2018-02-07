@@ -1,7 +1,4 @@
 const path = require('path');
-const faker = require('faker');
-
-const randomName = faker.name.findName();
 
 module.exports = {
   'Admin should be able to sign in': browser =>
@@ -28,7 +25,7 @@ module.exports = {
       .waitForElementVisible('#adminhome', 5000)
       .url('http://localhost:8000/add')
       .waitForElementVisible('#add', 5000)
-      .setValue('input[name=title]', 'This is just a test')
+      .setValue('input[name=title]', 'Saworoide')
       .setValue('.input-field textarea', 'This is just a test')
       .setValue('input[name=isbn]', 'isbn-test')
       .setValue('input[name=author]', 'babadee')
@@ -40,6 +37,14 @@ module.exports = {
       .waitForElementVisible('.toast', 10000)
       .assert.containsText('.toast', 'Book added successfully')
       .assert.urlContains('http://localhost:8000/admin')
+      .assert.containsText(
+        '#book_card:first-child div a div div.card-title',
+        'Saworoide',
+      )
+      .assert.containsText(
+        '#book_card:first-child div a div div.card-content',
+        'This is just a test',
+      )
       .end(),
 
   'Admin should be able to add category': browser =>
@@ -52,14 +57,41 @@ module.exports = {
       .waitForElementVisible('#adminhome', 5000)
       .url('http://localhost:8000/logs')
       .waitForElementVisible('#logs', 5000)
-      .setValue('input[name=name]', randomName)
-      .setValue('.textarea textarea', 'This is just a test')
-      .click('input[name=description]', 'test description')
+      .setValue('input[name=name]', 'Drama')
+      .setValue('input[name=description]', 'category description')
+      .click('button[name=addcategory]')
       .pause(1000)
       .waitForElementVisible('.toast', 5000)
       .assert.containsText('.toast', 'Category added successfully')
-      .assert.urlContains('http://localhost:8000/admin')
+      .assert.urlContains('http://localhost:8000/logs')
+      .url('http://localhost:8000/add')
+      .waitForElementVisible('#add', 5000)
+      .assert.containsText(
+        '#catId option:nth-child(2n)',
+        'Drama',
+      )
       .end(),
+
+  'it should not add a category if it exists': (browser) => {
+    browser
+      .url('http://localhost:8000/signin')
+      .waitForElementVisible('body', 5000)
+      .setValue('input[name=username]', 'admin1')
+      .setValue('input[name=password]', 1111)
+      .click('button[name=signin]')
+      .waitForElementVisible('#adminhome', 5000)
+      .url('http://localhost:8000/logs')
+      .waitForElementVisible('#logs', 5000)
+      .setValue('input[name=name]', 'Drama')
+      .setValue('input[name=description]', 'category description')
+      .click('button[name=addcategory]')
+      .pause(1000)
+      .waitForElementVisible('.toast', 5000)
+      .assert.containsText('.toast', 'Category with that name exists')
+      .assert.urlContains('http://localhost:8000/logs')
+      .pause(2000)
+      .end();
+  },
 
   'Admin should not be able to add book with the same isbn': browser =>
     browser
@@ -93,9 +125,18 @@ module.exports = {
       .click('#edit_button')
       .clearValue('input[name=title]')
       .setValue('input[name=title]', 'This book has been edited')
+      .setValue('.textarea textarea', 'New description')
       .click('#submit_edit')
       .waitForElementVisible('.headcard', 5000)
       .assert.urlContains('http://localhost:8000/admin')
+      .assert.containsText(
+        '#book_card:first-child div a div div.card-title',
+        'This book has been edited',
+      )
+      .assert.containsText(
+        '#book_card:first-child div a div div.card-content',
+        'New description',
+      )
       .end(),
 
   'Admin should be able to delete a book': browser =>
@@ -106,10 +147,19 @@ module.exports = {
       .setValue('input[name=password]', '1111')
       .click('button[name=signin]')
       .waitForElementVisible('#adminhome', 5000)
-      .click('#delete_button')
+      .assert.containsText(
+        '#book_card:first-child div a div div.card-title',
+        'This book has been edited',
+      )
+      .click('#delete_button#book_card:first-child')
       .waitForElementVisible('.swal-button--confirm', 5000)
       .click('.swal-button--confirm')
+      .waitForElementVisible('.toast', 5000)
+      .assert.containsText('.toast', 'book deleted')
       .waitForElementVisible('#headcard', 5000)
       .assert.urlContains('http://localhost:8000/admin')
+      .waitforElementNotPresent(
+        '#book_card:first-child div a div div.card-title',
+        'This book has been edited')
       .end(),
 };

@@ -5,7 +5,7 @@ import { checkExisting, checkUser, getDetails } from '../../utils/validations';
 
 const error = { response: { data: { message: 'Not found' } } };
 
-describe('Auth actions', () => {
+describe('Validations', () => {
   beforeEach(() => {
     moxios.install();
     global.Materialize = { toast: jest.fn(() => Promise.resolve(1)) };
