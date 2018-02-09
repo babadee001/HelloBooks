@@ -21,7 +21,10 @@ const BookController = {
         message: 'Book added successfully',
         newBook
       }))
-      .catch(error => res.status(500).send(error));
+      .catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -39,7 +42,10 @@ const BookController = {
     return Books
       .all()
       .then(books => res.status(200).send(books))
-      .catch(error => res.status(500).send(error));
+      .catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -106,10 +112,16 @@ const BookController = {
                     id: req.params.bookId,
                   },
                 })
-                .catch(error => error));
+                .catch(error => res.status(500).send({
+                  message: 'An error has occured. Please try again later',
+                  error
+                })));
           });
       })
-      .catch(error => res.status(500).send({ message: error }));
+      .catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -137,7 +149,10 @@ const BookController = {
           });
         });
       })
-      .catch(error => res.status(500).send(error));
+      .catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -172,7 +187,10 @@ const BookController = {
           });
         }
       })
-      .catch(error => res.status(500).send({ message: error }));
+      .catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -216,7 +234,10 @@ const BookController = {
             });
           });
         })
-      ).catch(error => res.status(500).send({ message: error }));
+      ).catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -245,9 +266,15 @@ const BookController = {
             message: 'book deleted',
             id: req.params.bookId
           }))
-          .catch(error => res.status(500).send({ message: error }));
+          .catch(error => res.status(500).send({
+            message: 'An error has occured. Please try again later',
+            error
+          }));
       })
-      .catch(error => res.status(500).send(error));
+      .catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -265,7 +292,10 @@ const BookController = {
     return Borrowed
       .all()
       .then(borrowed => res.status(200).send(borrowed))
-      .catch(error => res.status(500).send({ message: error }));
+      .catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -299,7 +329,10 @@ const BookController = {
         }
       })
       .catch((error) => {
-        res.status(500).send(error);
+        res.status(500).send({
+          message: 'An error has occured. Please try again later',
+          error
+        });
       });
   },
 
@@ -319,7 +352,10 @@ const BookController = {
       .then((category) => {
         res.status(200).send(category);
       })
-      .catch(error => res.status(500).send(error));
+      .catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 };
 export default BookController;

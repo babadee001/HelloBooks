@@ -18,7 +18,8 @@
     "str": "babel-node webpack-dev-server --config webpack.config.js --hot --port 3000",
     "lint": "./node_modules/.bin/eslint .",
     "test": "NODE_ENV=test && ./node_modules/.bin/mocha --timeout 40000 --compilers js:babel-core/register",
-    "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha  -- -R spec --timeout 40000"
+    "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha  -- -R spec --timeout 40000",
+    "db:seed": "DATABASE_URL=$DATABASE_URL sequelize db:seed --seed server/seeders/20180209124637-users.js"
   },
   "engines": {
     "node": "8.9.4"
