@@ -49,12 +49,10 @@ export const getBooks = () => async (dispatch) => {
       xaccesstoken: localStorage.token
     },
   }).catch((error) => {
-    if (error.response) {
-      Materialize.toast(error.response.data.message);
+    if (error.data) {
+      swal(error.data.message);
     } else {
       notifyNetworkError(error);
-      dispatch(isFetching(false));
-      throw error;
     }
   });
   const jsonServerResponse = await serverResponse.json()
@@ -87,12 +85,10 @@ export const getHistory = userId => async (dispatch) => {
       xaccesstoken: localStorage.token
     },
   }).catch((error) => {
-    if (error.response) {
-      Materialize.toast(error.response.data.message);
+    if (error.data) {
+      swal(error.data.message);
     } else {
       notifyNetworkError(error);
-      dispatch(isFetching(false));
-      throw error;
     }
   });
   const jsonServerResponse = await serverResponse.json()
@@ -126,12 +122,10 @@ export function editBook(details, bookId) {
       },
       body: JSON.stringify(details)
     }).catch((error) => {
-      if (error.response) {
-        Materialize.toast(error.response.data.message);
+      if (error.data) {
+        swal(error.data.message);
       } else {
         notifyNetworkError(error);
-        dispatch(isFetching(false));
-        throw error;
       }
     });
     const jsonServerResponse = await serverResponse.json()
@@ -204,17 +198,16 @@ export function returnBook(userId, bookId) {
           xaccesstoken: localStorage.token
         },
       }).catch((error) => {
-        if (error.response) {
-          Materialize.toast(error.response.data.message);
+        if (error.data) {
+          swal(error.data.message);
         } else {
           notifyNetworkError(error);
-          dispatch(isFetching(false));
-          throw error;
         }
       });
     const jsonServerResponse = await serverResponse.json()
       .then(jsonData => jsonData);
     if (serverResponse.status === 201) {
+      console.log(jsonServerResponse);
       dispatch({
         type: RETURN_BOOK,
         data: jsonServerResponse.book
@@ -244,12 +237,10 @@ export function addBookAction(bookDetails) {
       },
       body: JSON.stringify(bookDetails)
     }).catch((error) => {
-      if (error.response) {
-        Materialize.toast(error.response.data.message);
+      if (error.data) {
+        swal(error.data.message);
       } else {
         notifyNetworkError(error);
-        dispatch(isFetching(false));
-        throw error;
       }
     });
     const jsonServerResponse = await serverResponse.json()
@@ -285,12 +276,13 @@ export function deleteBookAction(bookId) {
         xaccesstoken: localStorage.token
       }
     }).catch((error) => {
-      if (error.response) {
-        Materialize.toast(error.response.data.message);
+      if (error.data) {
+        Materialize.toast(error.data.message,
+          4000,
+          'red');
       } else {
         notifyNetworkError(error);
         dispatch(isFetching(false));
-        throw error;
       }
     });
     const jsonServerResponse = await serverResponse.json()
@@ -318,8 +310,11 @@ export function getAllBorrowed() {
       return res.data;
     })
     .catch((error) => {
-      dispatch(isFetching(false));
-      notifyNetworkError(error);
+      if (error.data) {
+        swal(error.data.message);
+      } else {
+        notifyNetworkError(error);
+      }
     });
 }
 
@@ -341,12 +336,10 @@ export function addCategoryAction(data) {
       },
       body: JSON.stringify(data)
     }).catch((error) => {
-      if (error.response) {
-        Materialize.toast(error.response.data.message);
+      if (error.data) {
+        swal(error.data.message);
       } else {
         notifyNetworkError(error);
-        dispatch(isFetching(false));
-        throw error;
       }
     });
     const jsonServerResponse = await serverResponse.json()
@@ -378,12 +371,10 @@ export function getCategoryAction() {
         xaccesstoken: localStorage.token
       },
     }).catch((error) => {
-      if (error.response) {
-        Materialize.toast(error.response.data.message);
+      if (error.data) {
+        swal(error.data.message);
       } else {
         notifyNetworkError(error);
-        dispatch(isFetching(false));
-        throw error;
       }
     });
     const jsonServerResponse = await serverResponse.json()

@@ -142,7 +142,7 @@ const userRouter = express.Router();
 userRouter.route('/') // Get all users
 /**
  * @swagger
- * /users:
+ * /api/v1/users:
  *   get:
  *     tags:
  *       - Users & Authentication
@@ -205,7 +205,7 @@ userRouter.route('/') // Get all users
 userRouter.route('/:userId')
 /**
  * @swagger
- * /{userId}:
+ * /api/v1/{userId}:
  *   get:
  *     tags:
  *       - Users & Authentication
@@ -275,7 +275,7 @@ userRouter.route('/:userId')
 userRouter.route('/signup')
 /**
  * @swagger
- * /users/signup:
+ * /api/v1/users/signup:
  *   post:
  *     tags:
  *       - Users & Authentication
@@ -319,7 +319,7 @@ userRouter.route('/signup')
 userRouter.route('/signin')
 /**
  * @swagger
- * /users/signin:
+ * /api/v1/users/signin:
  *   post:
  *     tags:
  *       - Users & Authentication
@@ -353,12 +353,10 @@ userRouter.route('/signin')
  *         }
  */
   .post(validateLogin, signin);
-userRouter.route(adminRoute)
-  .post(validateInput, admin);
 userRouter.route('/:userId/books/:bookId')
 /**
  * @swagger
- * /users/{userId}/books/{bookId}:
+ * /api/v1/users/{userId}/books/{bookId}:
  *   post:
  *     tags:
  *       - Borrowing Operations
@@ -428,7 +426,7 @@ userRouter.route('/:userId/books/:bookId')
 userRouter.route('/:userId/books/:bookId')
 /**
  * @swagger
- * /users/{userId}/books/{bookId}:
+ * /api/v1/users/{userId}/books/{bookId}:
  *   put:
  *     tags:
  *       - Borrowing Operations
@@ -487,7 +485,7 @@ userRouter.route('/:userId/books/:bookId')
 userRouter.route('/:userId/books')
 /**
  * @swagger
- * /users/{userId}/books?returned=false:
+ * /api/v1/users/{userId}/books?returned=false:
  *   get:
  *     tags:
  *       - Borrowing Operations
@@ -545,7 +543,7 @@ userRouter.route('/checkuser')
 userRouter.route('/existing')
   /**
    * @swagger
-   * /users/Validationsuser:
+   * /api/v1/users/Validationsuser:
    *   post:
    *     tags:
    *       - Users & Authentication

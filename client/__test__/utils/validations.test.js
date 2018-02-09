@@ -1,5 +1,6 @@
 import moxios from 'moxios';
 import expect from 'expect';
+import fetchMock from 'fetch-mock';
 import hammerjs, { Hammer } from 'hammerjs';
 import { checkExisting, checkUser, getDetails } from '../../utils/validations';
 
@@ -13,28 +14,26 @@ describe('Validations', () => {
   afterEach(() => moxios.uninstall());
 
   it('Should get userData from the database', () => {
-    moxios.stubRequest('/api/v1/users/existing', {
-      status: 200,
-      response: { username: 'test', email: 'babadee@gmail.com' }
-    });
-
-    const expectedActions = { email: 'babadee@gmail.com' };
-
-    checkExisting('babadee@gmail.com')
-      .then((data) => {
-        expect(data.email).toEqual(expectedActions);
-      })
-      .catch(error);
+    const expectedActions = {
+      message: {
+        id: 3,
+        username: 'babadee',
+        email: 'babadee@gmail.com',
+        isAdmin: 0,
+        membership: 'Gold'
+      }
+    };
+    const { email } = expectedActions.message;
+    (checkExisting({ searchTerm: 'babadee@gmail.com' }))
+      .then((response) => {
+        expect(response.email).toEqual(email);
+      });
   });
 
-  it('Should validate if username exists', () => {
-    moxios.stubRequest('/api/v1/users/checkuser', {
-      status: 200,
-      response: error
-    });
-
-    const expectedActions = { message: 'Not found' };
-    getDetails({ name: 'BABAdEe' });
+  it('Should return null for non existing username', () => {
+    const expectedActions = {
+      message: null
+    };
     checkUser('babadee')
       .then((data) => {
         expect(data).toEqual(expectedActions);
