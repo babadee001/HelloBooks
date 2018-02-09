@@ -5,7 +5,6 @@ import db from '../models/';
 
 dotenv.load();
 const secret = process.env.SECRETKEY;
-const adminSecret = process.env.ADMINSECRET;
 
 const { Users, Borrowed } = db;
 
@@ -61,7 +60,8 @@ const UserController = {
             });
           } else {
             res.status(500).json({
-              message: 'An error occured',
+              message: 'An error has occured. Please try again later',
+              error
             });
           }
         }
@@ -84,64 +84,10 @@ const UserController = {
       .all()
       .then(users => res.status(200).send({
         users
-      })).catch(error => res.status(500).send(error));
-  },
-
-  /**
-   * @method admin
-   *
-   * @description This method handles creation of new admin users request
-   *
-   * @param { object} req HTTP request
-   *
-   * @param { object} res HTTP response
-   *
-   * @returns { object } response message
-   */
-  admin(req, res) {
-    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
-    return Users
-      .create({
-        username: req.body.username,
-        email: req.body.email,
-        password: hashedPassword,
-        membership: req.body.membership,
-        isAdmin: 1,
-      })
-      .then((user) => {
-        const currentUser = {
-          userId: user.id,
-          username: user.username,
-          email: user.email,
-          membership: user.membership,
-        };
-        const token = jwt.sign(
-          { currentUser,
-          }, adminSecret
-        );
-        return res.status(201).send({
-          message: 'Admin added successfully',
-          Token: token,
-          currentUser
-        });
-      })
-      .catch((error) => {
-        if (error.name === 'SequelizeUniqueConstraintError') {
-          if (error.fields.username) {
-            res.status(409).json({
-              message: 'Username or email already exists',
-            });
-          } else if (error.fields.email) {
-            res.status(409).json({
-              message: 'Username or email already exists',
-            });
-          } else {
-            res.status(500).json({
-              message: 'An error occured',
-            });
-          }
-        }
-      });
+      })).catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -179,7 +125,10 @@ const UserController = {
             message: 'Log in successful',
             Token: token,
           });
-      }).catch(error => res.status(500).send(error));
+      }).catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
   /**
    * @method checkExistingUser
@@ -202,7 +151,10 @@ const UserController = {
         res.status(200).json({
           message: user
         });
-      }).catch(error => res.status(500).send(error));
+      }).catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -231,7 +183,10 @@ const UserController = {
           res.status(200).send(books);
         }
       })
-      .catch(error => res.status(500).send(error));
+      .catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -260,7 +215,10 @@ const UserController = {
         res.status(404).json({
           message: 'Email not found'
         });
-      }).catch(error => res.status(500).send(error));
+      }).catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -314,7 +272,12 @@ const UserController = {
                     message: 'Username exists. Try another one',
                   });
                 }
-              } else { res.status(500).json({ message: 'An error occured' }); }
+              } else {
+                res.status(500).json({
+                  message: 'An error has occured. Please try again later',
+                  error
+                });
+              }
             });
         }
       } else {
@@ -322,7 +285,10 @@ const UserController = {
           message: 'User not in database'
         });
       }
-    }).catch(error => res.status(500).send(error));
+    }).catch(error => res.status(500).send({
+      message: 'An error has occured. Please try again later',
+      error
+    }));
   }
 };
 export default UserController;

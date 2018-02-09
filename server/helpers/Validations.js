@@ -123,7 +123,10 @@ const Validations = {
               message: 'Invalid username or password',
             });
         }
-      });
+      }).catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
   },
 
   /**
@@ -139,10 +142,10 @@ const Validations = {
   validateBook(req, res, next) {
     req.checkBody(
       {
-        // cover: {
-        //   notEmpty: true,
-        //   errorMessage: 'Please upload a cover',
-        // },
+        cover: {
+          notEmpty: true,
+          errorMessage: 'Please upload a cover',
+        },
         catId: {
           notEmpty: true,
           errorMessage: 'Please select a category',
@@ -430,7 +433,10 @@ const Validations = {
             message: 'Book with that ISBN already exist'
           });
         }
-      });
+      }).catch(error => res.status(500).send({
+        message: 'An error has occured. Please try again later',
+        error
+      }));
     req.userInput = {
       title: req.body.title,
       isbn: req.body.isbn,
