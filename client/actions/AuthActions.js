@@ -78,48 +78,26 @@ export const userSignupRequest = userData => async (dispatch) => {
     setAuthorizationToken(jsonServerResponse.Token);
     const decoded = jwt.decode(jsonServerResponse.Token);
     dispatch(setCurrentUser(decoded));
-    Materialize.toast('Signed up Successfully', 1000, 'teal');
-    browserHistory.push('/admin');
+    if (decoded.currentUser.isAdmin === 1) {
+      Materialize.toast('Signed up Successfully', 1000,
+        'teal',
+        () => {
+          browserHistory.push('/admin');
+        }
+      );
+    } else {
+      Materialize.toast('Signed up Successfully', 1000,
+        'teal',
+        () => {
+          browserHistory.push('/dashboard');
+        }
+      );
+    }
   } else {
     Materialize.toast(jsonServerResponse.message, 4000, 'red');
   }
 };
 
-/**
- *
- * @description - RGet all books action
- *
- * @returns { Object } - Dispatches book object to the store
- */
-export const getBooks = () => async (dispatch) => {
-  dispatch(isFetching(true));
-  const serverResponse = await fetch('/api/v1/books', {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-      xaccesstoken: localStorage.token
-    },
-  }).catch((error) => {
-    if (error.response) {
-      Materialize.toast(error.response.data.message);
-    } else {
-      notifyNetworkError(error);
-      dispatch(isFetching(false));
-      throw error;
-    }
-  });
-  const jsonServerResponse = await serverResponse.json()
-    .then(jsonData => jsonData);
-  if (serverResponse.status === 200) {
-    dispatch({
-      type: GET_ALL_BOOKS,
-      data: jsonServerResponse
-    });
-    dispatch(isFetching(false));
-    return jsonServerResponse;
-  }
-};
 
 /**
  * @description - Signin user action
@@ -155,8 +133,21 @@ export const userSigninRequest = userData => async (dispatch) => {
     setAuthorizationToken(jsonServerResponse.Token);
     const decoded = jwt.decode(jsonServerResponse.Token);
     dispatch(setCurrentUser(decoded));
-    Materialize.toast('Logged In Successfully', 1000, 'teal');
-    browserHistory.push('/admin');
+    if (decoded.currentUser.isAdmin === 1) {
+      Materialize.toast('Logged In Successfully', 1000,
+        'teal',
+        () => {
+          browserHistory.push('/admin');
+        }
+      );
+    } else {
+      Materialize.toast('Logged In Successfully', 1000,
+        'teal',
+        () => {
+          browserHistory.push('/dashboard');
+        }
+      );
+    }
   } else {
     Materialize.toast(jsonServerResponse.message, 4000, 'red');
   }

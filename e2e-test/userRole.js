@@ -111,6 +111,8 @@ module.exports = {
       .waitForElementVisible('#bookList', 5000)
       .url('http://localhost:8000/profile')
       .waitForElementVisible('#profile', 5000)
+      .assert.containsText('#profilecard:h1',
+        username)
       .assert.containsText('#editprofile',
         'Edit profile')
       .click('#editprofile')

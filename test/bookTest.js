@@ -45,8 +45,8 @@ describe('Given /POST /api/v1/books', () => {
           res.body.newBook.quantity.should.equal(5);
           res.body.newBook.cover.should.equal('testcover');
           res.body.newBook.isbn.should.equal('123456-555');
-          res.body.newBook.should.have.property('id');
-          res.body.newBook.should.have.property('cover');
+          res.body.newBook.id.should.eql(1);
+          res.body.newBook.cover.should.eql('testcover');
           done();
         });
     });
@@ -271,12 +271,12 @@ describe('Given /api/v1/users/1/books/1', () => {
             .message
             .should
             .equal('You have successfully borrowed the book');
-          res.body.borrowed.should.have.property('title');
-          res.body.borrowed.should.have.property('cover');
-          res.body.borrowed.should.have.property('bookId').eql(1);
-          res.body.borrowed.should.have.property('expires');
-          res.body.borrowed.should.have.property('returnDate');
-          res.body.borrowed.should.have.property('returned').eql(false);
+          res.body.borrowed.title.should.eql('HarryPorter');
+          res.body.borrowed.cover.should.eql('testcover');
+          res.body.borrowed.description.should.eql('A film about magic');
+          res.body.borrowed.bookId.should.eql(1);
+          res.body.borrowed.userId.should.eql(1);
+          res.body.borrowed.returned.should.eql(false);
           done();
         });
     });
@@ -341,13 +341,13 @@ describe('Given /api/v1/users/1/books/1', () => {
         .end((err, res) => {
           res.should.have.status(201);
           res.body.message.should.equal('Book returned successfully');
-          res.body.book.should.have.property('title');
-          res.body.book.should.have.property('cover');
-          res.body.book.should.have.property('description');
-          res.body.book.should.have.property('catId');
-          res.body.book.should.have.property('author');
-          res.body.book.should.have.property('isbn');
-          res.body.book.should.have.property('quantity');
+          res.body.book.title.should.eql('HarryPorter');
+          res.body.book.cover.should.eql('testcover');
+          res.body.book.description.should.eql('A film about magic');
+          res.body.book.catId.should.eql(2);
+          res.body.book.author.should.eql('babadee');
+          res.body.book.isbn.should.eql('123456-555');
+          res.body.book.quantity.should.eql(4);
           done();
         });
     });
@@ -359,6 +359,7 @@ describe('Given /api/v1/users/1/books/1', () => {
         .set('xaccesstoken', userToken)
         .end((err, res) => {
           res.status.should.equals(200);
+          res.body.count.should.eql(0);
           res.body.message.should.equal('All books returned');
           done();
         });

@@ -212,9 +212,8 @@ describe('Given /PUT /api/v1/users/edit', () => {
           res.body.updated.username.should.equals('new');
           res.body.message.should.equal('profile updated succesfully');
           res.body.updated.username.should.equal('new');
-          res.body.updated.should.have.property('password');
-          res.body.updated.should.have.property('email');
-          res.body.updated.should.have.property('membership');
+          res.body.updated.email.should.eql('test@user.co');
+          res.body.updated.membership.should.eql('Gold');
           done();
         });
     });
@@ -261,8 +260,9 @@ describe('Given /PUT /api/v1/users/edit', () => {
           res.should.have.status(200);
           res.body.message.should.equal('profile updated succesfully');
           res.body.updated.username.should.equal('myusername');
-          res.body.updated.should.have.property('email');
-          res.body.updated.should.have.property('membership');
+          res.body.updated.email.should.eql('test@user.co');
+          res.body.updated.membership.should.eql('Gold');
+          res.body.updated.id.should.eql(1);
           done();
         });
     });
@@ -306,6 +306,13 @@ describe('Given /GET /api/v1/users/1', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('array');
+          res.body[0].id.should.eql(1);
+          res.body[0].bookId.should.eql(1);
+          res.body[0].userId.should.eql(1);
+          res.body[0].description.should.eql('A film about magic');
+          res.body[0].title.should.eql('HarryPorter');
+          res.body[0].cover.should.eql('testcover');
+          res.body[0].returned.should.equal(true);
           done();
         });
     });
@@ -331,10 +338,12 @@ describe('Given /GET /api/v1/users', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.users.should.be.a('array');
-          res.body.users[0].should.have.property('password');
-          res.body.users[0].should.have.property('email');
-          res.body.users[0].should.have.property('membership');
-          res.body.users[0].should.have.property('id');
+          res.body.users[0].username.should.eql('myusername');
+          res.body.users[0].membership.should.eql('Gold');
+          res.body.users[0].id.should.eql(1);
+          res.body.users[0].email.should.eql('test@user.co');
+          res.body.users[0].isAdmin.should.eql(0);
+
           done();
         });
     });
@@ -392,10 +401,12 @@ it('Should return null for non existing user', (done) => {
     .post('/api/v1/users/checkuser')
     .set('xaccesstoken', userToken)
     .send({
-      searchTerm: 'myusername'
+      searchTerm: 'wronguser'
     })
     .end((err, res) => {
-      res.should.have.status(200);
+      res.body.should.eql({
+        message: null
+      });
       done();
     });
 });
