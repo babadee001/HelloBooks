@@ -54,7 +54,7 @@ export class Profile extends Component {
           route3={'/profile'}
           />
           <div className="row">
-            <div className="card profilecard col-md-offset-4">
+            <div className="card profilecard col-md-offset-4" id="profilecard">
               <img src="https://cdn4.iconfinder.com/data/icons/thin-people-users/24/thin-1555_user_profile_avatar_unisex-128.png" alt="image" />
               <h1>{this.props.user.username}</h1>
               <p className="title">{this.props.user.membership}</p>
