@@ -1,9 +1,16 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import Materialize from 'materialize-css';
 import { browserHistory } from 'react-router';
 import setAuthorizationToken from '../utils/setAuthorization';
-import { SET_CURRENT_USER, UNAUTH_USER, GET_ALL_USERS, SET_API_STATUS } from './types';
+import notifyNetworkError from '../utils/notifyNetworkError';
+import {
+  SET_CURRENT_USER,
+  UNAUTH_USER,
+  GET_ALL_USERS,
+  SET_API_STATUS,
+  EDIT_PROFILE,
+  GET_ALL_BOOKS
+} from './types';
 
 /**
  * @description -  Sets API status
@@ -44,52 +51,118 @@ export function setCurrentUser(currentUser) {
  *
  * @returns { Object } - Dispatches user object to the store
  */
-export const userSignupRequest = userData => (dispatch) => {
+export const userSignupRequest = userData => async (dispatch) => {
   dispatch(isFetching(true));
-  return axios.post('api/v1/users/signup', userData)
-    .then((response) => {
+  const serverResponse = await fetch('api/v1/users/signup', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      xaccesstoken: localStorage.token
+    },
+    body: JSON.stringify(userData)
+  }).catch((error) => {
+    if (error.response) {
+      Materialize.toast(error.response.data.message);
+    } else {
+      notifyNetworkError(error);
       dispatch(isFetching(false));
-      localStorage.setItem('token', response.data.Token);
-      setAuthorizationToken(response.data.Token);
-      const decoded = jwt.decode(response.data.Token);
-      dispatch(setCurrentUser(decoded));
-    })
-    .catch((error) => {
-      dispatch(isFetching(false));
-      Materialize.toast(error.data.message,
-        4000,
-        'red');
-    });
+      throw error;
+    }
+  });
+  const jsonServerResponse = await serverResponse.json()
+    .then(jsonData => jsonData);
+  dispatch(isFetching(false));
+  if (serverResponse.status === 201) {
+    localStorage.setItem('token', jsonServerResponse.Token);
+    setAuthorizationToken(jsonServerResponse.Token);
+    const decoded = jwt.decode(jsonServerResponse.Token);
+    dispatch(setCurrentUser(decoded));
+    Materialize.toast('Signed up Successfully', 1000, 'teal');
+    browserHistory.push('/admin');
+  } else {
+    Materialize.toast(jsonServerResponse.message, 4000, 'red');
   }
+};
 
-  /**
+/**
  *
+ * @description - RGet all books action
+ *
+ * @returns { Object } - Dispatches book object to the store
+ */
+export const getBooks = () => async (dispatch) => {
+  dispatch(isFetching(true));
+  const serverResponse = await fetch('/api/v1/books', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      xaccesstoken: localStorage.token
+    },
+  }).catch((error) => {
+    if (error.response) {
+      Materialize.toast(error.response.data.message);
+    } else {
+      notifyNetworkError(error);
+      dispatch(isFetching(false));
+      throw error;
+    }
+  });
+  const jsonServerResponse = await serverResponse.json()
+    .then(jsonData => jsonData);
+  if (serverResponse.status === 200) {
+    dispatch({
+      type: GET_ALL_BOOKS,
+      data: jsonServerResponse
+    });
+    dispatch(isFetching(false));
+    return jsonServerResponse;
+  }
+};
+
+/**
  * @description - Signin user action
  *
  * @param {Object} userData - Object containing user details
  *
  * @returns { Object } - Dispatches user object to the store
  */
-export const userSigninRequest = userData => (dispatch) => {
+export const userSigninRequest = userData => async (dispatch) => {
   dispatch(isFetching(true));
-  return axios.post('api/v1/users/signin', userData)
-    .then((response) => {
+  const serverResponse = await fetch('api/v1/users/signin', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      xaccesstoken: localStorage.token
+    },
+    body: JSON.stringify(userData)
+  }).catch((error) => {
+    if (error.response) {
+      Materialize.toast(error.response.data.message);
+    } else {
+      notifyNetworkError(error);
       dispatch(isFetching(false));
-      localStorage.setItem('token', response.data.Token);
-      setAuthorizationToken(response.data.Token);
-      const decoded = jwt.decode(response.data.Token);
-      dispatch(setCurrentUser(decoded));
-    })
-    .catch((error) => {
-      dispatch(isFetching(false));
-      Materialize.toast(error.data.message,
-        4000,
-        'red');
-    });
+      throw error;
+    }
+  });
+  const jsonServerResponse = await serverResponse.json()
+    .then(jsonData => jsonData);
+  dispatch(isFetching(false));
+  if (serverResponse.status === 200) {
+    localStorage.setItem('token', jsonServerResponse.Token);
+    setAuthorizationToken(jsonServerResponse.Token);
+    const decoded = jwt.decode(jsonServerResponse.Token);
+    dispatch(setCurrentUser(decoded));
+    Materialize.toast('Logged In Successfully', 1000, 'teal');
+    browserHistory.push('/admin');
+  } else {
+    Materialize.toast(jsonServerResponse.message, 4000, 'red');
+  }
 };
 
 /**
- *
  * @description - Unauthenticate user action
  *
  * @returns { Object } - Dispatches user object to the store
@@ -122,7 +195,9 @@ export function getUsers() {
       });
       return res.data;
     })
-    .catch(error => error);
+    .catch(error => (error.response ?
+      error.response.data.message :
+      notifyNetworkError(error)));
 }
 
 /**
@@ -133,9 +208,46 @@ export function getUsers() {
  *
  * @returns { Object } - Dispatches user object to the store
  */
-export const googleSigninRequest = token  => (dispatch) => {
+export const googleSigninRequest = token => (dispatch) => {
   localStorage.setItem('token', token);
   setAuthorizationToken(token);
   const decoded = jwt.decode(token);
   dispatch(setCurrentUser(decoded));
+  Materialize.toast('Logged In Successfully', 1000,
+    'teal',
+    () => {
+      browserHistory.push('/dashboard');
+    }
+  );
+};
+
+/**
+ * @description - Edit profile action
+ *
+ * @param {Number} userId - User ID
+ *
+ * @param {Object} userData - User data object
+ *
+ * @returns { String } - JWT Token
+ */
+export function editProfileAction(userId, userData) {
+  return dispatch => axios.put(`api/v1/users/edit/${userId}`, userData)
+    .then((response) => {
+      dispatch({
+        type: EDIT_PROFILE
+      });
+      Materialize.toast(
+        response.data.message,
+        1000, 'teal', () => {
+          localStorage.removeItem('token');
+          setAuthorizationToken(false);
+          browserHistory.push('/signin');
+        }
+      );
+      return response.data.message;
+    })
+    .catch((error) => {
+      dispatch(isFetching(false));
+      notifyNetworkError(error);
+    });
 }

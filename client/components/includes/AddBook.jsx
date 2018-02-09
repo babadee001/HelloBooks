@@ -4,6 +4,9 @@ import Materialize from 'materialize-css';
 import { browserHistory } from 'react-router';
 import ImageUploader from 'react-firebase-image-uploader';
 import swal from 'sweetalert';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { getCategoryAction } from '../../actions/BooksActions';
 
 /**
  * @description - Add book component
@@ -14,7 +17,7 @@ import swal from 'sweetalert';
  * 
  * @extends {Component}
  */
-class AddBook extends Component {
+export class AddBook extends Component {
 
   /**
 	 * @description - Creates an instance of AddBook.
@@ -32,6 +35,7 @@ class AddBook extends Component {
       cover: '',
       author: '',
       quantity: 5,
+      catId: '',
       isLoading: false,
       isUploading: '',
       progress: 0
@@ -39,6 +43,7 @@ class AddBook extends Component {
     this.handleSubmit = this
       .handleSubmit
       .bind(this);
+    this.renderCategory = this.renderCategory.bind(this);
     this.onChange = this
       .onChange
       .bind(this);
@@ -55,6 +60,16 @@ class AddBook extends Component {
       .handleUploadError
       .bind(this);
   }
+
+  /**
+	 * 
+	 * @description - Executes after component is mounted
+	 * 
+	 * @memberOf AddBook
+	 */
+	componentDidMount() {
+		this.props.actions.getCategoryAction();
+	}
 
   /**
 	 * @description - Executes when text is typed in input box
@@ -104,17 +119,6 @@ class AddBook extends Component {
     this
       .props
       .add(this.state)
-      .then((res) => {
-        if (res) {
-          swal(res.data.message);
-        } else {
-          Materialize.toast('Book added Successfully', 2000, '#15b39d', () => {
-            this.setState({ isLoading: false });
-          });
-          browserHistory.push('/admin');
-        }
-      })
-      .catch(err => swal(err));
   }
 
   /**
@@ -127,7 +131,7 @@ class AddBook extends Component {
 	 */
   handleUploadError(error) {
     this.setState({ isUploading: false });
-    console.error(error);}
+    swal(error);}
   
   /**
 	 * 
@@ -147,6 +151,30 @@ class AddBook extends Component {
         this.setState({ cover: url, progress: 100 });
       });
   }
+
+  /**
+	 * 
+	 * @description - Displays the list of category
+	 * 
+	 * @returns {Array} - Array of category
+	 * 
+	 * @memberOf AddBook
+	 */
+	renderCategory() {
+		let allCategory = [];
+		const category = this.props.category;
+		if (!category || category.length < 1) {
+			return '...loading';
+		}
+		category.map((cat) => {
+			allCategory.push(
+				<option key={cat.id} value={cat.id}>
+					{cat.name}
+				</option>
+			);
+		});
+		return allCategory;
+	}
 
   /**
 	 * 
@@ -207,15 +235,12 @@ class AddBook extends Component {
                 <div className="col s6">
                   <select
                     id="catId"
-                    name="category"
+                    name="catId"
                     onChange={ this.onChange }
                     className="browser-default"
                   >
                     <option value="">Select Category</option>
-                    <option value="Epic">Epic</option>
-                    <option value="Drama">Drama</option>
-                    <option value="Action">Action</option>
-                    <option value="Scifi">Sci-fi</option>
+										{this.renderCategory()}
                   </select>
                 </div>
                 <div className="input-field col s6">
@@ -288,9 +313,36 @@ class AddBook extends Component {
     );
   }
 }
+/**
+ * 
+ * @description - Maps the dispatch to component props
+ * 
+ * @param {Function} dispatch 
+ *
+ * @returns {Object} - Object containing functions
+ */
+export function mapDispatchToProps(dispatch) {
+	return {
+		actions: bindActionCreators(
+			{
+				getCategoryAction,
+			},
+			dispatch
+		)
+	};
+}
 
-export default AddBook;
+/**
+ * @description - Maps the redux state to the component props
+ * 
+ * @param {Object} state - Application state
+ *  
+ * @returns {Object} - Selected state
+ */
+export function mapStateToProps(state) {
+	return { 
+		category: state.books.category
+	};
+}
 
-AddBook.propTypes = {
-  add: React.PropTypes.func.isRequired
-};
+export default connect(mapStateToProps, mapDispatchToProps)(AddBook);

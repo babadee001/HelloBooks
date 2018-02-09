@@ -1,3 +1,9 @@
+body, h1, h2, h3, h4, h5, h6, p, div, button{
+  font-family: Nunito;
+}
+body{
+  font-size: 14px;
+}
 input {
   font-size: 14px !important; 
 }
@@ -75,14 +81,16 @@ input {
     text-align: center;
   }
   .col-centered {
+    background-color: rgba(0, 0, 0, 0.3);
+    margin: 6px;
+    border-radius: 10px;
     display: inline-block;
     float: none;
-    top: 300px;
+    top: 246px;
     color: white;
   }
   .col-centered a {
     margin: 5px;
-    width: 20%;
   }
   .navbar a {
     margin: 15px;
@@ -207,19 +215,19 @@ input {
     position: relative;
   }
   .card-wrapper {
-    margin-top: 17%;
+    margin-top: 10%;
   }
   
   .cardbox {
+    text-align: center;
     min-height: 200px !important;
     border-radius: 8px;
-    padding: 10px;
+    padding: 20px !important;
     width: 80%;
     box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
   }
   .card-text{
-    font-size: 70px;
-    margin-left: 60px;
+    font-size: 500%;
   }
   #sidenav-overlay {
     background-color: rgba(0,0,0,0.0);
@@ -291,7 +299,63 @@ input {
     background-color: teal;
     text-align: center;
     cursor: pointer;
-    width: 100%;
+    width: 50%;
     font-size: 18px;
+    margin: 20px;
   }
-  
+  #editbutton {
+    background-color: rgb(21, 179, 157);
+    color: #fff;
+    float: right;
+  }
+  #message {
+    color: #266767;
+  }
+  .nav-wrapper .brand-logo {
+    color: white !important;
+  }
+  .nav-wrapper .brand-logo:hover, .nav-wrapper .brand-logo:focus, .nav-wrapper .brand-logo:visited {
+    color: white !important;
+    text-decoration: none;
+  }
+  .brand-logo {
+    color: white!important;
+  }
+
+  nav ul a{
+    font-size: 14px;
+
+  }
+
+  nav ul a:hover{
+    background-color: transparent !important;
+    text-decoration: none;
+    color: #ccc;
+  }
+
+  .nav-wrapper ul{
+    margin-right: 20px;
+  }
+  .card-content {
+    height: 60px;
+    overflow: scroll;
+  }
+  .catcard {
+    margin-bottom: 50px;
+    margin-top: 30px;
+    margin-left: 5% !important;
+    align-content: center;
+  }
+  .catcard .category {
+    width: 70%;
+  }
+  .catbody {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .catbutton {
+    width: 50% !important;
+  }
+  .editwrapper {
+    margin-top: 10%;
+  }
