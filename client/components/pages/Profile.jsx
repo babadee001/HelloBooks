@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { getBorrowed } from '../../actions/BooksActions';
 import Sidebar from '../includes/SideBar';
@@ -12,7 +13,7 @@ import Navbar from '../NavigationBar';
  * 
  * @extends {Component}
  */
-class Profile extends Component {
+export class Profile extends Component {
   constructor(props) {
     super(props);
   }
@@ -59,7 +60,7 @@ class Profile extends Component {
               <p className="title">{this.props.user.membership}</p>
               <p>{this.props.user.email}</p>
               <p>Books yet to return {this.props.book}</p>
-                <p><button>Info</button></p>
+                <p><Link to ="/edit"><button name="editprofile">Edit profile</button></Link></p>
             </div>
           </div>
         </div>
@@ -81,7 +82,7 @@ Profile.PropTypes = {
  *
  * @return {Object} returns state object
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return { user: state.auth.user.currentUser,
     book: state.books.unreturnedCount
    };
@@ -94,7 +95,7 @@ function mapStateToProps(state) {
  *
  * @returns {Object} - Object containing functions
  */
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
       getBorrowed

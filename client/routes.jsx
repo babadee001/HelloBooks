@@ -15,6 +15,7 @@ import Logs from './components/admin/Logs'
 import NotFound from './components/Pages/NotFound';
 import About from './components/Pages/About';
 import AdminProfile from './components/admin/AdminProfile';
+import Edit from './components/Pages/EditProfile';
 
 export default (
   <Route path="/" component={ App }>
@@ -29,6 +30,7 @@ export default (
     <Route path="/logs" component={ AdminAuthentication(Logs) } />
     <Route path="/about" component={ About } />
     <Route path="/adminprofile" component={ AdminAuthentication(AdminProfile) } />
+    <Route path="/edit" component={ Edit } />
     <Route path="*" component={NotFound} />
   </Route>
 );

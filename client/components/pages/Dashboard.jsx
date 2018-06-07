@@ -15,7 +15,7 @@ import Navbar from '../NavigationBar';
  * 
  * @extends {Component}
  */
-class Dashboard extends Component {
+export class Dashboard extends Component {
 
   /**
 	 * @description - Creates an instance of Dashboard.
@@ -145,7 +145,7 @@ Dashboard.PropTypes = {
  *  
  * @returns {Object} - Selected state
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return { 
     user: state.auth.user.currentUser,
     books: state.books.data,
@@ -161,7 +161,7 @@ function mapStateToProps(state) {
  *
  * @returns {Object} - Object containing functions
  */
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
       getBooks
